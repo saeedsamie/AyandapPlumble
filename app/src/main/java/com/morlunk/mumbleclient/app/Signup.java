@@ -1,7 +1,9 @@
 package com.morlunk.mumbleclient.app;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,8 @@ public class Signup extends AppCompatActivity {
   private TextView textView;
   private BackgroundTask backgroundTask;
   private ProgressDialog pDialog;
+  SharedPreferences sp;
+  public static final String Name = "tHiS_PHoNeNuMbEr";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +54,13 @@ public class Signup extends AppCompatActivity {
     fullname = (EditText) findViewById(R.id.signup_fullname);
     username = (EditText) findViewById(R.id.signup_username);
     signup = (Button) findViewById(R.id.signup_signup);
+    sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
     signup.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-//        if (fullname.getText().equals(null) || username.getText().equals(null))
-//        {
-//          Snackbar
-//            .make(findViewById(android.R.id.content),"لطفا اطلاعات خود را بطور کامل وارد نمایید", Snackbar.LENGTH_SHORT)
-//            .show();
-//        }
-//        else
-//        {
-          backgroundTask = new BackgroundTask(textView);
-          backgroundTask.execute();
-//        }
+        backgroundTask = new BackgroundTask(textView);
+        backgroundTask.execute();
       }
     });
   }
@@ -79,7 +75,6 @@ public class Signup extends AppCompatActivity {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      // Showing progress dialog
       pDialog = new ProgressDialog(Signup.this);
       pDialog.setMessage("لطفا صبر کنید...");
       pDialog.setCancelable(false);
@@ -122,11 +117,13 @@ public class Signup extends AppCompatActivity {
         textView.setText(s);
       }
       pDialog.dismiss();
+      SharedPreferences.Editor sEdit = sp.edit();
+      sEdit.putString(Name, Login.user_phone);
+      sEdit.apply();
       Intent intent = new Intent(Signup.this,PlumbleActivity.class);
       startActivity(intent);
     }
   }
-
 
   public static class InputStreamToStringExample {
 
@@ -143,7 +140,6 @@ public class Signup extends AppCompatActivity {
 
     }
 
-    // convert InputStream to String
     public static String getStringFromInputStream(InputStream is) {
 
       BufferedReader br = null;

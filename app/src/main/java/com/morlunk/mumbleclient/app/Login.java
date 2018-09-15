@@ -1,6 +1,5 @@
 package com.morlunk.mumbleclient.app;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,7 +50,6 @@ public class Login extends AppCompatActivity {
   SharedPreferences sp;
   public static boolean isUser;
 
-  @SuppressLint("NewApi")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -145,32 +143,32 @@ public class Login extends AppCompatActivity {
     @Override
     protected String doInBackground(Void... voids) {
 
-        try {
-          JSONArray loginreponse = jsonresponse.getJSONArray("reslogin");
-          String result = "0";
-          for (int i = 0; i < loginreponse.length(); i++) {
-            ArrayList<Object> mapping = new ArrayList<>();
-            JSONObject c = loginreponse.getJSONObject(i);
-            result = c.getString("result");
-            user_fullname = c.getString("fullName");
-          }
-          if (result.equals("1"))
-          {
-            isUser = true;
-          }
-          else
-          {
-            isUser = false;
-          }
-
-        } catch (final JSONException e) {
-          Log.e("ERROR", "Json parsing error: " + e.getMessage());
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-            }
-          });
+      try {
+        JSONArray loginreponse = jsonresponse.getJSONArray("reslogin");
+        String result = "0";
+        for (int i = 0; i < loginreponse.length(); i++) {
+          ArrayList<Object> mapping = new ArrayList<>();
+          JSONObject c = loginreponse.getJSONObject(i);
+          result = c.getString("result");
+          user_fullname = c.getString("fullName");
         }
+        if (result.equals("1"))
+        {
+          isUser = true;
+        }
+        else
+        {
+          isUser = false;
+        }
+
+      } catch (final JSONException e) {
+        Log.e("ERROR", "Json parsing error: " + e.getMessage());
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+          }
+        });
+      }
 
       return null;
     }

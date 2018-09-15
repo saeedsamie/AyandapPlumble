@@ -18,8 +18,6 @@ import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 
-import java.util.List;
-
 public class Verification extends AppCompatActivity {
 
   public TextView timer;
@@ -147,9 +145,6 @@ public class Verification extends AppCompatActivity {
         }
         else if(Login.isUser) {
           intent = new Intent(Verification.this, PlumbleActivity.class);
-          SharedPreferences.Editor sEdit = sp.edit();
-          sEdit.putString(Name, Login.user_phone);
-          sEdit.apply();
           startActivity(intent);
         }
         finish();
