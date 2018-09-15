@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (C) 2014 Andrew Comminos
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="certificateGenerate"
+        android:summary="@string/certificateGenerateSum"
+        android:title="@string/certificateGenerate">
+        <intent android:action="com.morlunk.mumbleclient.app.CERTIFICATE_GENERATE" />
+    </Preference>
+
+    <Preference
+        android:summary="@string/pref_certificate_summary"
+        android:title="@string/pref_certificate_title">
+        <intent android:action="com.morlunk.mumbleclient.app.CERTIFICATE_SELECT" />
+    </Preference>
+
+    <Preference
+        android:summary="@string/pref_import_certificate_summary"
+        android:title="@string/pref_import_certificate_title">
+        <intent android:action="com.morlunk.mumbleclient.app.CERTIFICATE_IMPORT" />
+    </Preference>
+
+    <Preference
+        android:summary="@string/pref_export_certificate_summary"
+        android:title="@string/pref_export_certificate_title">
+        <intent android:action="com.morlunk.mumbleclient.app.CERTIFICATE_EXPORT" />
+    </Preference>
+
+    <Preference
+        android:key="clearTrust"
+        android:title="@string/clearServerCertificates"
+        android:summary="@string/clearServerCertificatesSum">
+        <intent android:action="com.morlunk.mumbleclient.app.CLEAR_SERVER_CERTIFICATES" />
+    </Preference>
+
+    <EditTextPreference
+        android:key="defaultUsername"
+        android:summary="@string/defaultUsernameSum"
+        android:title="@string/defaultUsername"
+        android:defaultValue="@string/defaultUsernameDefault"/>
+</PreferenceScreen>

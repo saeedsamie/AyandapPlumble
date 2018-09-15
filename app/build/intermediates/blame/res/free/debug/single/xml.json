@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\preference_headers.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\preference_headers.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\preference_headers_legacy.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\preference_headers_legacy.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\settings_general.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\settings_general.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\settings_authentication.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\settings_authentication.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\searchable.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\free\\res\\xml\\searchable.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\settings_audio.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\settings_audio.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\settings_appearance.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\settings_appearance.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\xml\\settings_about.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\xml\\settings_about.xml"
+    }
+]

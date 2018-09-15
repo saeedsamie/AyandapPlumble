@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.googlecode.javacpp:javacpp:0.7@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.javacpp/javacpp/0.7/ff8f2a518e524ae8de093d6556fc21a6ab8f05b2/javacpp-0.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.javacpp/javacpp/0.7/5fa0a3b9a892bf85a8489207cf4c0832f36de2ba/javacpp-0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

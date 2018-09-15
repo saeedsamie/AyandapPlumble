@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Перейти на главный экран"</string>
+    <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
+    <string msgid="6623331958280229229" name="abc_action_bar_home_subtitle_description_format">"%1$s, %2$s, %3$s"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Перейти вверх"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Другие параметры"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Готово"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Показать все"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Выбрать приложение"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"ОТКЛ."</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ВКЛ."</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Поиск"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Удалить запрос"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Поисковый запрос"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Поиск"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Отправить запрос"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Голосовой поиск"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Открыть доступ"</string>
+    <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Открыть доступ пользователю %s"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Свернуть"</string>
+    <string name="about">О программе</string>
+    <string name="aboutSum">Юридическая информация и благодарности</string>
+    <string name="acknowledgements">Благодарности</string>
+    <string name="acknowledgementsSum">Посмотреть кто способствовали развитию Plumble.</string>
+    <string name="advancedAudio">Продвинутые</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="appearanceSum">Измените внешний вид приложения</string>
+    <string name="audio">Звук</string>
+    <string name="audioInput">Аудио вход</string>
+    <string name="audioInputMethod">Режим передачи</string>
+    <string name="audioInputMethodSum">Способ ввода звука.</string>
+    <string name="audioInputVolume">Громкость микрофона</string>
+    <string name="audioInputVolumeSum">Коэффициент громкости микрофона используется для искусственной нормализации звука.</string>
+    <string name="audioOutput">Вывод звука</string>
+    <string name="audioSampleRate">Качество входного сигнала</string>
+    <string name="audioSampleRateSum">Предпочитаемая частота дискретизации. Не все значения поддерживаются на всех устройствах.</string>
+    <string name="audioSum">Отрегулируйте настройки звука</string>
+    <string name="authentication">Идентификация</string>
+    <string name="authenticationSum">Управление и создание сертификатов</string>
+    <string name="autoReconnect">Авто-переподключение</string>
+    <string name="autoReconnectSum">Автоматически пытаться восстановить соединение при обрыве связи.</string>
+    <string name="bluetooth_connected">Bluetooth соединен</string>
+    <string name="bluetooth_disconnected">Bluetooth отсоединен</string>
+    <string name="callMode">Режим вызова</string>
+    <string name="callModeSum">Режим вызова Plumble, выступать в качестве громкой связи или голосовой динамик.</string>
+    <string name="call_mode_speakerphone">Динамик</string>
+    <string name="call_mode_voice_call">Голосовой вызов</string>
+    <string name="certificateFile">Файл сертификата</string>
+    <string name="certificateFileSum">Файл P12 сертификата который вы хотите использовать, размещенные в папке \"Plumble\".</string>
+    <string name="certificateGenerate">Создать сертификат</string>
+    <string name="certificateGenerateSum">Создать новый само-заверенный Plumble сертификат. Рекомендуется для начинающих.</string>
+    <string name="certificatePassword">Пароль сертификата</string>
+    <string name="certificatePasswordSum">Пароль к вашему PKCS12 сертификату. (опционально)</string>
+    <string name="chatNotifications">Уведомления чата</string>
+    <string name="chatNotificationsSum">Показывать уведомления когда пользователь пишет в чат.</string>
+    <string name="chat_notify_connected">%s соеденен(а).</string>
+    <string name="chat_notify_disconnected">%s отсоединен(а).</string>
+    <string name="chat_notify_kick">%3$s исключен(а) с сервера, %1$s: %2$s.</string>
+    <string name="chat_notify_kick_ban">%3$s заблокирован(а) и исключен(а) с сервера, %1$s: %2$s.</string>
+    <string name="chat_notify_kick_ban_self">Вы были исключены и заблокированы на сервера, %1$s: %2$s.</string>
+    <string name="chat_notify_kick_self">Вы были исключены с сервера, %1$s: %2$s.</string>
+    <string name="chat_notify_moved">%1$s перемещен(а) %3$s из %2$s.</string>
+    <string name="chat_notify_muted">Микрофон отключен.</string>
+    <string name="chat_notify_muted_deafened">Звук и микрофон отключен.</string>
+    <string name="chat_notify_muted_deafened_self_by_actor">%s выключил(а) вам звук и микрофон.</string>
+    <string name="chat_notify_muted_self_by_actor">%s выключил(а) вам микрофон.</string>
+    <string name="chat_notify_now_muted">%s выключил(а) микрофон.</string>
+    <string name="chat_notify_now_muted_deafened">%s отключил(а) звук и микрофон.</string>
+    <string name="chat_notify_now_unmuted">%s включил(а) микрофон.</string>
+    <string name="chat_notify_now_unmuted_undeafened">%s включил(а) звук и микрофон.</string>
+    <string name="chat_notify_self_recording_started">Запись начата</string>
+    <string name="chat_notify_self_recording_stopped">Запись остановлена</string>
+    <string name="chat_notify_suppressed_self">Вы были заглушены.</string>
+    <string name="chat_notify_undeafened_self_by_actor">%s включил(а) вам звук.</string>
+    <string name="chat_notify_unmuted">Микрофон включен.</string>
+    <string name="chat_notify_unmuted_self_by_actor">%s включил(а) вам микрофон.</string>
+    <string name="chat_notify_unmuted_undeafened">Микрофон и звук включен.</string>
+    <string name="chat_notify_unmuted_undeafened_self_by_actor">%s включил(а) вам звук и микрофон.</string>
+    <string name="chat_notify_unsuppressed_self">Оглушение снято.</string>
+    <string name="chat_notify_unsuppressed_self_by_actor">%s снял оглушение с вас.</string>
+    <string name="chat_notify_user_joined_channel">%s вошел(а) в канал</string>
+    <string name="chat_notify_user_joined_channel_by">%1$s перемещен(а) %3$s из %2$s.</string>
+    <string name="chat_notify_user_left_channel">%1$s перемещен(а) в %2$s.</string>
+    <string name="chat_notify_user_left_channel_by">%1$s перемещен(а) %3$s в %2$s.</string>
+    <string name="chat_notify_user_recording_started">%s начал(а) запись.</string>
+    <string name="chat_notify_user_recording_stopped">%s остановил(а) запись.</string>
+    <string name="clearServerCertificates">Очистить серверные сертификаты.</string>
+    <string name="clearServerCertificatesSum">Очистить все разрешенные серверные сертификаты из доверенной базы данных Plumble.</string>
+    <string name="defaultUsername">Имя по-умолчанию</string>
+    <string name="defaultUsernameDefault">Пользователь_Plumble</string>
+    <string name="defaultUsernameSum">Имя пользователя по-умолчанию, используемое при подключении к серверам.</string>
+    <string name="deny_reason_channel_full">Канал переполнен.</string>
+    <string name="deny_reason_channel_name">Отказано: Неверное имя канала.</string>
+    <string name="deny_reason_channel_nesting">Достигнул предел вложенности канала.</string>
+    <string name="deny_reason_invalid_username">Неверное имя пользователя.</string>
+    <string name="deny_reason_no_certificate">Вам нужен сертификат для выполнения данной операции.</string>
+    <string name="deny_reason_no_operation_temp">Отказано: Операция не разрешена во временном канале.</string>
+    <string name="deny_reason_other">Причина: %s</string>
+    <string name="deny_reason_text_too_long">Отказано: Текстовое сообщение слишком длинное.</string>
+    <string name="detectionThreshold">Уровень улавливания</string>
+    <string name="detectionThresholdSum">Минимальная амплитуда требуемая для голоса (только для голосовой активации).</string>
+    <string name="disableOpus">Отключить Opus кодек</string>
+    <string name="disableOpusSum">Отключить Opus кодек для Mumble 1.2.4 серверов.</string>
+    <string name="drawer_header_servers">Сервер</string>
+    <string name="drawer_server">Сервер</string>
+    <string name="forceTcp">Принудительное TCP</string>
+    <string name="forceTcpSum">Заставить работать через TCP (отключить UDP).</string>
+    <string name="general">Основные</string>
+    <string name="generalSum">Отрегулируйте общие настройки</string>
+    <string name="generateCert">Создать сертификат</string>
+    <string name="halfDuplex">Полудуплекс</string>
+    <string name="halfDuplexSum">Приглушать звук, когда активирована кнопка вызова, удалить аудио метку для пользователей канала</string>
+    <string name="handsetMode">Режим \"В наушниках\"</string>
+    <string name="handsetModeSum">Использовать передний динамик и датчик близости для симуляции традиционного телефонного вызова.</string>
+    <string name="hidePtt">Скрыть кнопку активации голоса</string>
+    <string name="hidePttSum">Скрывает кнопку для активации голоса. Полезно когда используется отображение в углах или аппаратная кнопка.</string>
+    <string name="hint_ptt">Нажми чтобы говорить</string>
+    <string name="hotCorner">Расположение кнопки</string>
+    <string name="hot_corner_bottom_left">Слева внизу</string>
+    <string name="hot_corner_bottom_right">Справа снизу</string>
+    <string name="hot_corner_none">Ничего</string>
+    <string name="hot_corner_top_left">Слева вверху</string>
+    <string name="hot_corner_top_right">Справа вверху</string>
+    <string name="inputMethodContinuous">Непрерывно</string>
+    <string name="inputMethodPtt">Нажми чтобы говорить</string>
+    <string name="inputMethodVoice">Голосовая активность</string>
+    <string name="inputQuality">Качество звука</string>
+    <string name="inputQualitySum">Качество входящего звука в bps.</string>
+    <string name="licenses">Лицензии</string>
+    <string name="loadImages">Загружать изображения</string>
+    <string name="loadImagesSum">Разрешить загрузку изображений в чате.</string>
+    <string name="noCert">Нет сертификата</string>
+    <string name="perm_denied">Доступ запрещен.</string>
+    <string name="pressKey">Нажмите аппаратную кнопку для установки активации голоса.</string>
+    <string name="pressKeyInfo">Примечание: в связи с ограничениями Android, приложение должно быть открыто для использования кнопки.</string>
+    <string name="pttKey">Кнопка для активации</string>
+    <string name="pttKeySum">Аппаратная кнопка для активации голоса.</string>
+    <string name="pttSettings">Настройки кнопки</string>
+    <string name="pttSettingsSum">Настройки кнопки активации голосом (если включено).</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Поиск"</string>
+    <string name="server">Сервер</string>
+    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">">999"</string>
+    <string name="status_notify_muted">Микрофон отключен.</string>
+    <string name="status_notify_muted_and_deafened">Звук и микрофон отключен.</string>
+    <string name="the_server">сервер</string>
+    <string name="theme">Темы</string>
+    <string name="themeSum">Визуальное оформление</string>
+    <string name="theme_dark">Темный</string>
+    <string name="theme_light">Светлый</string>
+    <string name="theme_solarized_dark">Солнечно темный</string>
+    <string name="theme_solarized_light">Солнечно светлый</string>
+    <string name="togglePtt">Переключить активацию</string>
+    <string name="togglePttSum">Включает или выключает активацию голоса при нажатии.</string>
+    <string name="transmit_mode">Режим передачи</string>
+    <string name="useTor">Подключаться через Tor</string>
+    <string name="useTorSum">Требуется приложение Orbot</string>
+    <string name="useTts">Текст в речь</string>
+    <string name="useTtsSum">Включить преобразование текста в речь для входящих соединений.</string>
+    <string name="version">Версия</string>
+    <string name="voiceActivitySettings">Настройки голосовой активности</string>
+    <string name="voiceActivitySettingsSum">Настроить голосовую активность (если она включена).</string>
+</resources>

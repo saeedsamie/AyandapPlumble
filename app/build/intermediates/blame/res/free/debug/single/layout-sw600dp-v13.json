@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\layout-sw600dp-v13\\fragment_channel.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\layout-sw600dp-v11\\fragment_channel.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\layout-sw600dp-v13\\design_layout_snackbar.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\layout-sw600dp-v13\\design_layout_snackbar.xml"
+    }
+]

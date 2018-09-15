@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/background"
+              android:gravity="center"
+              android:orientation="vertical">
+
+  <android.support.design.widget.TextInputLayout
+    android:id="@+id/usernamem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
+
+    <EditText
+      android:id="@+id/login_phone"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="12dp"
+      android:backgroundTint="#000000"
+      android:gravity="center"
+      android:hint="تلفن همراه"
+      android:inputType="phone"
+      android:lines="1"
+      android:maxLength="11"
+      android:maxLines="1"
+      android:singleLine="true"
+      android:textColor="#000000"
+      android:textColorHint="#000000"/>
+
+  </android.support.design.widget.TextInputLayout>
+
+  <android.support.design.widget.TextInputLayout
+    android:id="@+id/passwordm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+  </android.support.design.widget.TextInputLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="15dp"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/login_continue"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_marginLeft="12dp"
+      android:layout_marginRight="12dp"
+      android:layout_weight="1"
+      android:accessibilityLiveRegion="1"
+      android:text="ادامه"
+      android:theme="@style/PrimaryButton"/>
+
+  </LinearLayout>
+</LinearLayout>
