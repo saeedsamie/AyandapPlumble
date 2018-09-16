@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,18 +40,19 @@ import java.util.List;
 public class Login extends AppCompatActivity {
 
   public static String responseLogin;
-  public static JSONObject jsonresponse;
+  public static JSONObject jsonResponse;
   private TextView textView;
   private BackgroundTask backgroundTask;
   private BackgroundTask1 backgroundTask1;
   public Button loginContinue ;
   public static EditText phone ;
-  public static String responsemain;
+  public static String responseMain;
   public static String user_phone;
-  public static String user_fullname;
+  public static String user_fullName;
   SharedPreferences sp;
   public static boolean isUser;
 
+  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -111,9 +114,9 @@ public class Login extends AppCompatActivity {
         Login.InputStreamToStringExample str = new Login.InputStreamToStringExample();
         responseLogin = str.getStringFromInputStream(inputStream);
         Log.e("response", "response -----" + responseLogin);
-        jsonresponse = new JSONObject(responseLogin);
-        responsemain = jsonresponse.toString();
-        Log.i("SWKJNKJNWQSJKNKJN",responsemain);
+        jsonResponse = new JSONObject(responseLogin);
+        responseMain = jsonResponse.toString();
+        Log.i("SWKJNKJNWQSJKNKJN", responseMain);
 
       } catch (Exception e) {
         e.printStackTrace();
@@ -143,14 +146,16 @@ public class Login extends AppCompatActivity {
     @Override
     protected String doInBackground(Void... voids) {
 
+      JSONArray loginResponse = new JSONArray();
       try {
-        JSONArray loginreponse = jsonresponse.getJSONArray("reslogin");
+        if(jsonResponse!=null)
+        loginResponse = jsonResponse.getJSONArray("reslogin");
         String result = "0";
-        for (int i = 0; i < loginreponse.length(); i++) {
+        for (int i = 0; i < loginResponse.length(); i++) {
           ArrayList<Object> mapping = new ArrayList<>();
-          JSONObject c = loginreponse.getJSONObject(i);
+          JSONObject c = loginResponse.getJSONObject(i);
           result = c.getString("result");
-          user_fullname = c.getString("fullName");
+          user_fullName = c.getString("fullName");
         }
         if (result.equals("1"))
         {
@@ -160,15 +165,10 @@ public class Login extends AppCompatActivity {
         {
           isUser = false;
         }
-
-      } catch (final JSONException e) {
-        Log.e("ERROR", "Json parsing error: " + e.getMessage());
-        runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-          }
-        });
+      } catch (JSONException e) {
+        e.printStackTrace();
       }
+
 
       return null;
     }
