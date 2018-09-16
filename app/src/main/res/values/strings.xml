@@ -62,7 +62,7 @@
     <string name="comment_view">DISPLAY</string>
     <string name="comment_edit_source">EDIT SOURCE</string>
     <string name="comment_view_source">VIEW SOURCE</string>
-    
+
     <!-- Server Info Fragment -->
     <string name="control_channel">Control channel</string>
     <string name="tcp_encryption_mode">Encrypted with 256 bit AES256-SHA</string>

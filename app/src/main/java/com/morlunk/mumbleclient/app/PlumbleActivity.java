@@ -95,6 +95,8 @@ import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
+import static java.util.Objects.requireNonNull;
+
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
         FavouriteServerListFragment.ServerConnectHandler, JumbleServiceProvider, DatabaseProvider,
         SharedPreferences.OnSharedPreferenceChangeListener, DrawerAdapter.DrawerDataProvider,
@@ -291,7 +293,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Tint logo to theme
@@ -528,8 +530,13 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 args.putBoolean("pinned", true);
                 break;
 //            case DrawerAdapter.ITEM_FAVOURITES:
-//                fragmentClass = FavouriteServerListFragment.class;
-//                break;
+////                fragmentClass = FavouriteServerListFragment.class;
+////                break;
+            case DrawerAdapter.ITEM_CHAT:
+                ChatActivity chatActivity = new ChatActivity();
+                Intent intent = new Intent(this, chatActivity.getClass());
+                startActivity(intent);
+                return;
             case DrawerAdapter.ITEM_PUBLIC:
                 fragmentClass = PublicServerListFragment.class;
                 break;

@@ -44,7 +44,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
 }
 
-
 // Keep my credentials private :^)
 def signingFile = file 'signing.gradle';
 if (signingFile.exists()) apply from: 'signing.gradle'
