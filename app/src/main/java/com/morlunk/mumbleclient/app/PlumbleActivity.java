@@ -17,6 +17,7 @@
 
 package com.morlunk.mumbleclient.app;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -88,6 +89,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
@@ -112,6 +114,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private AlertDialog.Builder mDisconnectPromptBuilder;
+    Server server ;
 
     /** List of fragments to be notified about service state changes. */
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
@@ -131,7 +134,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             // Re-show server list if we're showing a fragment that depends on the service.
             if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
                     !mService.isConnected()) {
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
+                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
             }
             updateConnectionState(getService());
         }
@@ -166,7 +169,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         public void onDisconnected(JumbleException e) {
             // Re-show server list if we're showing a fragment that depends on the service.
             if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
+                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
             }
             mDrawerAdapter.notifyDataSetChanged();
             supportInvalidateOptionsMenu();
@@ -176,7 +179,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
         @Override
         public void onTLSHandshakeFailed(X509Certificate[] chain) {
-            final Server lastServer = getService().getTargetServer();
+//            final Server lastServer = getService().getTargetServer();
+
+
+            final Server lastServer = server;
 
             if (chain.length == 0)
                 return;
@@ -235,6 +241,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,
+                "User"+String.valueOf(new Random().nextInt(999)),"");
+
         mSettings = Settings.getInstance(this);
         setTheme(mSettings.getTheme());
 
@@ -288,48 +297,50 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         logo.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
         getSupportActionBar().setLogo(logo);
 
-        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
-        dadb.setMessage(R.string.disconnectSure);
-        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(mService != null) mService.disconnect();
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
-            }
-        });
-        dadb.setNegativeButton(android.R.string.cancel, null);
-        mDisconnectPromptBuilder = dadb;
+//        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
+//        dadb.setMessage(R.string.disconnectSure);
+//        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if(mService != null) mService.disconnect();
+////                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+//            }
+//        });
+//        dadb.setNegativeButton(android.R.string.cancel, null);
+//        mDisconnectPromptBuilder = dadb;
 
         if(savedInstanceState == null) {
             if (getIntent() != null && getIntent().hasExtra(EXTRA_DRAWER_FRAGMENT)) {
                 loadDrawerFragment(getIntent().getIntExtra(EXTRA_DRAWER_FRAGMENT,
-                        DrawerAdapter.ITEM_FAVOURITES));
+                        DrawerAdapter.ITEM_SERVER));
             } else {
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
+                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
             }
         }
 
-        // If we're given a Mumble URL to show, open up a server edit fragment.
-        if(getIntent() != null &&
-                Intent.ACTION_VIEW.equals(getIntent().getAction())) {
-            String url = getIntent().getDataString();
-            try {
-                Server server = MumbleURLParser.parseURL(url);
-
-                // Open a dialog prompting the user to connect to the Mumble server.
-                DialogFragment fragment = (DialogFragment) ServerEditFragment.createServerEditDialog(
-                        PlumbleActivity.this, server, ServerEditFragment.Action.CONNECT_ACTION, true);
-                fragment.show(getSupportFragmentManager(), "url_edit");
-            } catch (MalformedURLException e) {
-                Toast.makeText(this, getString(R.string.mumble_url_parse_failed), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        }
+//        // If we're given a Mumble URL to show, open up a server edit fragment.
+//        if(getIntent() != null &&
+//                Intent.ACTION_VIEW.equals(getIntent().getAction())) {
+//            String url = getIntent().getDataString();
+//            try {
+//                Server server = MumbleURLParser.parseURL(url);
+//
+//                // Open a dialog prompting the user to connect to the Mumble server.
+//                DialogFragment fragment = (DialogFragment) ServerEditFragment.createServerEditDialog(
+//                        PlumbleActivity.this, server, ServerEditFragment.Action.CONNECT_ACTION, true);
+//                fragment.show(getSupportFragmentManager(), "url_edit");
+//            } catch (MalformedURLException e) {
+//                Toast.makeText(this, getString(R.string.mumble_url_parse_failed), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
 
         setVolumeControlStream(mSettings.isHandsetMode() ?
                 AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
 
         if(mSettings.isFirstRun()) showSetupWizard();
+
+        connectToServer(server);
     }
 
     @Override
@@ -439,7 +450,20 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     public void onBackPressed() {
         if(mService != null && mService.isConnected()) {
+
+            AlertDialog.Builder dadb = new AlertDialog.Builder(this);
+            dadb.setMessage(R.string.leave_application_message);
+            dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(mService != null) mService.disconnect();
+                    finish();
+                }
+            });
+            dadb.setNegativeButton(android.R.string.cancel, null);
+            mDisconnectPromptBuilder = dadb;
             mDisconnectPromptBuilder.show();
+
             return;
         }
         super.onBackPressed();
@@ -464,7 +488,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
+                @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
                     @Override
                     protected void onPostExecute(DatabaseCertificate result) {
                         super.onPostExecute(result);
@@ -505,9 +529,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 fragmentClass = ChannelFragment.class;
                 args.putBoolean("pinned", true);
                 break;
-            case DrawerAdapter.ITEM_FAVOURITES:
-                fragmentClass = FavouriteServerListFragment.class;
-                break;
+//            case DrawerAdapter.ITEM_FAVOURITES:
+//                fragmentClass = FavouriteServerListFragment.class;
+//                break;
             case DrawerAdapter.ITEM_PUBLIC:
                 fragmentClass = PublicServerListFragment.class;
                 break;
@@ -605,6 +629,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * connection state updates.
      * @param service A bound IJumbleService.
      */
+    @SuppressLint("StringFormatMatches")
     private void updateConnectionState(IJumbleService service) {
         if (mConnectingDialog != null)
             mConnectingDialog.dismiss();
@@ -757,18 +782,18 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public void onServerEdited(ServerEditFragment.Action action, Server server) {
-        switch (action) {
-            case ADD_ACTION:
-                mDatabase.addServer(server);
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
-                break;
-            case EDIT_ACTION:
-                mDatabase.updateServer(server);
-                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
-                break;
-            case CONNECT_ACTION:
-                connectToServer(server);
-                break;
-        }
+//        switch (action) {
+//            case ADD_ACTION:
+//                mDatabase.addServer(server);
+//                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
+//                break;
+//            case EDIT_ACTION:
+//                mDatabase.updateServer(server);
+//                loadDrawerFragment(DrawerAdapter.ITEM_FAVOURITES);
+//                break;
+//            case CONNECT_ACTION:
+//                connectToServer(server);
+//                break;
+//        }
     }
 }

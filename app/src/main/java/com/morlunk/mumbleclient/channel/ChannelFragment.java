@@ -193,10 +193,10 @@ public class ChannelFragment extends JumbleServiceFragment implements SharedPref
             listFragment.setArguments(listArgs);
             ChannelChatFragment chatFragment = new ChannelChatFragment();
 
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.list_fragment, listFragment)
-                    .replace(R.id.chat_fragment, chatFragment)
-                    .commit();
+//            getChildFragmentManager().beginTransaction()
+//                    .replace(R.id.list_fragment, listFragment)
+//                    .replace(R.id.chat_fragment, chatFragment)
+//                    .commit();
         }
     }
 
@@ -390,7 +390,7 @@ public class ChannelFragment extends JumbleServiceFragment implements SharedPref
                 case 0:
                     return getString(R.string.channel).toUpperCase();
                 case 1:
-                    return getString(R.string.chat).toUpperCase();
+//                    return getString(R.string.chat).toUpperCase();
                 default:
                     return null;
             }
@@ -398,7 +398,7 @@ public class ChannelFragment extends JumbleServiceFragment implements SharedPref
 
         @Override
         public int getCount() {
-            return 2;
+            return 1;
         }
     }
 }

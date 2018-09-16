@@ -41,7 +41,7 @@
       android:supportsRtl="true"
       android:theme="@style/Theme.Plumble"
       android:name="android.support.multidex.MultiDexApplication">
-        <activity android:name=".wizard.WizardActivity" />
+        <!--<activity android:name=".wizard.WizardActivity" />-->
         <activity
           android:name=".preference.Preferences"
           android:parentActivityName=".app.PlumbleActivity" >
@@ -135,11 +135,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.Login"
-                  android:label="@string/Login">
+        <activity android:name=".app.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".app.Verification"
