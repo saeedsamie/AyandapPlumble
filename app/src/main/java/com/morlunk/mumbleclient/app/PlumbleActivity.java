@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -89,6 +90,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
@@ -239,6 +241,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,
@@ -288,7 +291,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Tint logo to theme

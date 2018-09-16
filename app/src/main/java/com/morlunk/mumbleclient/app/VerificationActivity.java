@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 
-public class Verification extends AppCompatActivity {
+public class VerificationActivity extends AppCompatActivity {
 
   public TextView timer;
   public TextView backtologin;
@@ -60,7 +60,7 @@ public class Verification extends AppCompatActivity {
     backtologin.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(Verification.this, Login.class);
+        Intent intent = new Intent(VerificationActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
       }
@@ -95,16 +95,16 @@ public class Verification extends AppCompatActivity {
             public void onClick(View v) {
 
               Intent intent;
-              if (!Login.isUser)
+              if (!LoginActivity.isUser)
               {
-                intent = new Intent(Verification.this, Signup.class);
+                intent = new Intent(VerificationActivity.this, SignupActivity.class);
                 startActivity(intent);
               }
-              else if(Login.isUser) {
+              else if(LoginActivity.isUser) {
                 Log.i("XShBXSHbhXS", "2");
-                intent = new Intent(Verification.this, PlumbleActivity.class);
+                intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
                 SharedPreferences.Editor sEdit = sp.edit();
-                sEdit.putString(Name, Login.user_phone);
+                sEdit.putString(Name, LoginActivity.user_phone);
                 sEdit.apply();
                 startActivity(intent);
               }
@@ -138,13 +138,13 @@ public class Verification extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         Intent intent;
-        if (!Login.isUser)
+        if (!LoginActivity.isUser)
         {
-          intent = new Intent(Verification.this, Signup.class);
+          intent = new Intent(VerificationActivity.this, SignupActivity.class);
           startActivity(intent);
         }
-        else if(Login.isUser) {
-          intent = new Intent(Verification.this, PlumbleActivity.class);
+        else if(LoginActivity.isUser) {
+          intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
           startActivity(intent);
         }
         finish();

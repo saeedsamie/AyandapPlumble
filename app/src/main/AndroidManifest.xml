@@ -135,17 +135,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.Login">
+        <activity android:name=".app.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".app.Verification"
+        <activity android:name=".app.VerificationActivity"
                   android:label="@string/Verification">
         </activity>
-        <activity android:name=".app.Signup"
+        <activity android:name=".app.SignupActivity"
                   android:label="@string/Signup">
         </activity>
 
