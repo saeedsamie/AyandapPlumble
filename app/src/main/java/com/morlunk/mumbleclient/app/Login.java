@@ -67,7 +67,6 @@ public class Login extends AppCompatActivity {
       user_phone = sp.getString(Verification.Name, null);
       Log.i("CDCDK",user_phone);
       Intent intent = new Intent(Login.this,PlumbleActivity.class);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
       startActivity(intent);
       finish();
 
@@ -81,7 +80,6 @@ public class Login extends AppCompatActivity {
         backgroundTask.execute();
         user_phone = phone.getText().toString();
         Intent intent = new Intent(Login.this, Verification.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
       }

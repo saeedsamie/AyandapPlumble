@@ -153,7 +153,7 @@ public class Settings {
     public static final boolean DEFAULT_HANDSET_MODE = false;
 
     public static final String PREF_PTT_SOUND = "ptt_sound";
-    public static final boolean DEFAULT_PTT_SOUND = false;
+    public static final boolean DEFAULT_PTT_SOUND = true;
 
     public static final String PREF_PREPROCESSOR_ENABLED = "preprocessor_enabled";
     public static final boolean DEFAULT_PREPROCESSOR_ENABLED = true;
@@ -229,11 +229,11 @@ public class Settings {
     }
 
     public String getInputMethod() {
-        String method = preferences.getString(PREF_INPUT_METHOD, ARRAY_INPUT_METHOD_VOICE);
-        if(!ARRAY_INPUT_METHODS.contains(method)) {
+        String method = preferences.getString(PREF_INPUT_METHOD, ARRAY_INPUT_METHOD_PTT);
+//        if(!ARRAY_INPUT_METHODS.contains(method)) {
             // Set default method for users who used to use handset mode before removal.
-            method = ARRAY_INPUT_METHOD_VOICE;
-        }
+            method = ARRAY_INPUT_METHOD_PTT;
+//        }
         return method;
     }
 
@@ -242,25 +242,25 @@ public class Settings {
      * @return An input method value used to instantiate a Jumble service.
      */
     public int getJumbleInputMethod() {
-        String inputMethod = getInputMethod();
-        if (ARRAY_INPUT_METHOD_VOICE.equals(inputMethod)) {
-            return Constants.TRANSMIT_VOICE_ACTIVITY;
-        } else if (ARRAY_INPUT_METHOD_PTT.equals(inputMethod)) {
+//        String inputMethod = getInputMethod();
+//        if (ARRAY_INPUT_METHOD_VOICE.equals(inputMethod)) {
+//            return Constants.TRANSMIT_VOICE_ACTIVITY;
+//        } else if (ARRAY_INPUT_METHOD_PTT.equals(inputMethod)) {
             return Constants.TRANSMIT_PUSH_TO_TALK;
-        } else if (ARRAY_INPUT_METHOD_CONTINUOUS.equals(inputMethod)) {
-            return Constants.TRANSMIT_CONTINUOUS;
-        }
-        throw new RuntimeException("Could not convert input method '" + inputMethod + "' to a Jumble input method id!");
+//        } else if (ARRAY_INPUT_METHOD_CONTINUOUS.equals(inputMethod)) {
+//            return Constants.TRANSMIT_CONTINUOUS;
+//        }
+//        throw new RuntimeException("Could not convert input method '" + inputMethod + "' to a Jumble input method id!");
     }
 
     public void setInputMethod(String inputMethod) {
-        if(ARRAY_INPUT_METHOD_VOICE.equals(inputMethod) ||
-                ARRAY_INPUT_METHOD_PTT.equals(inputMethod) ||
-                ARRAY_INPUT_METHOD_CONTINUOUS.equals(inputMethod)) {
-            preferences.edit().putString(PREF_INPUT_METHOD, inputMethod).apply();
-        } else {
-            throw new RuntimeException("Invalid input method " + inputMethod);
-        }
+//        if(ARRAY_INPUT_METHOD_VOICE.equals(inputMethod) ||
+//                ARRAY_INPUT_METHOD_PTT.equals(inputMethod) ||
+//                ARRAY_INPUT_METHOD_CONTINUOUS.equals(inputMethod)) {
+//            preferences.edit().putString(PREF_INPUT_METHOD, inputMethod).apply();
+//        } else {
+//            throw new RuntimeException("Invalid input method " + inputMethod);
+//        }
     }
 
     public int getInputSampleRate() {

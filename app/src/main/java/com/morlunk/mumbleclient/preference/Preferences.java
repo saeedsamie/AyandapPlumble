@@ -106,38 +106,38 @@ public class Preferences extends PreferenceActivity {
     }
 
     private static void configureOrbotPreferences(PreferenceScreen screen) {
-        Preference useOrbotPreference = screen.findPreference(USE_TOR_KEY);
-        useOrbotPreference.setEnabled(OrbotHelper.isOrbotInstalled(screen.getContext()));
+//        Preference useOrbotPreference = screen.findPreference(USE_TOR_KEY);
+//        useOrbotPreference.setEnabled(OrbotHelper.isOrbotInstalled(screen.getContext()));
     }
 
     private static void configureAudioPreferences(final PreferenceScreen screen) {
         ListPreference inputPreference = (ListPreference) screen.findPreference(Settings.PREF_INPUT_METHOD);
-        inputPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateAudioDependents(screen, (String) newValue);
-                return true;
-            }
-        });
+//        inputPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                updateAudioDependents(screen, (String) newValue);
+//                return true;
+//            }
+//        });
 
         // Scan each bitrate and determine if the device supports it
-        ListPreference inputQualityPreference = (ListPreference) screen.findPreference(Settings.PREF_INPUT_RATE);
-        String[] bitrateNames = new String[inputQualityPreference.getEntryValues().length];
-        for(int x=0;x<bitrateNames.length;x++) {
-            int bitrate = Integer.parseInt(inputQualityPreference.getEntryValues()[x].toString());
-            boolean supported = AudioRecord.getMinBufferSize(bitrate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT) > 0;
-            bitrateNames[x] = bitrate+"Hz" + (supported ? "" : " (unsupported)");
-        }
-        inputQualityPreference.setEntries(bitrateNames);
+//        ListPreference inputQualityPreference = (ListPreference) screen.findPreference(Settings.PREF_INPUT_RATE);
+//        String[] bitrateNames = new String[inputQualityPreference.getEntryValues().length];
+//        for(int x=0;x<bitrateNames.length;x++) {
+//            int bitrate = Integer.parseInt(inputQualityPreference.getEntryValues()[x].toString());
+//            boolean supported = AudioRecord.getMinBufferSize(bitrate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT) > 0;
+//            bitrateNames[x] = bitrate+"Hz" + (supported ? "" : " (unsupported)");
+//        }
+//        inputQualityPreference.setEntries(bitrateNames);
 
-        updateAudioDependents(screen, inputPreference.getValue());
+//        updateAudioDependents(screen, inputPreference.getValue());
     }
 
     private static void updateAudioDependents(PreferenceScreen screen, String inputMethod) {
         PreferenceCategory pttCategory = (PreferenceCategory) screen.findPreference("ptt_settings");
-        PreferenceCategory vadCategory = (PreferenceCategory) screen.findPreference("vad_settings");
+//        PreferenceCategory vadCategory = (PreferenceCategory) screen.findPreference("vad_settings");
         pttCategory.setEnabled(Settings.ARRAY_INPUT_METHOD_PTT.equals(inputMethod));
-        vadCategory.setEnabled(Settings.ARRAY_INPUT_METHOD_VOICE.equals(inputMethod));
+//        vadCategory.setEnabled(Settings.ARRAY_INPUT_METHOD_VOICE.equals(inputMethod));
     }
 
     private static void configureAboutPreferences(Context context, PreferenceScreen screen) {

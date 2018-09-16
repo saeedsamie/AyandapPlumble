@@ -449,7 +449,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public void onBackPressed() {
-        if(mService != null && mService.isConnected()) {
 
             AlertDialog.Builder dadb = new AlertDialog.Builder(this);
             dadb.setMessage(R.string.leave_application_message);
@@ -461,11 +460,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 }
             });
             dadb.setNegativeButton(android.R.string.cancel, null);
-            mDisconnectPromptBuilder = dadb;
-            mDisconnectPromptBuilder.show();
-
-            return;
-        }
+           dadb.show();
         super.onBackPressed();
     }
 
