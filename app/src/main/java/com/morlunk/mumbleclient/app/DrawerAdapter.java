@@ -61,6 +61,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public static final int HEADER_GENERAL = 9;
     public static final int ITEM_SETTINGS = 10;
     public static final int ITEM_CHAT = 11;
+    public static final int ITEM_RECENTS = 12;
 
     private static final int HEADER_TYPE = 0;
     private static final int ITEM_TYPE = 1;
@@ -111,6 +112,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         add(new DrawerAdapter.DrawerHeader(HEADER_GENERAL, context.getString(R.string.general)));
         add(new DrawerAdapter.DrawerItem(ITEM_SETTINGS, context.getString(R.string.action_settings), R.drawable.ic_action_settings));
         add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "Chat", R.drawable.ic_action_chat));
+        add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "Recents", R.drawable.ic_action_favourite_on));
     }
 
     @Override

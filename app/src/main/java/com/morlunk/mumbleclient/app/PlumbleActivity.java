@@ -56,6 +56,7 @@ import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
+import com.morlunk.mumbleclient.Chat;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.channel.AccessTokenFragment;
@@ -131,7 +132,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             // Re-show server list if we're showing a fragment that depends on the service.
             if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
                     !mService.isConnected()) {
-                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
             }
             updateConnectionState(getService());
         }
@@ -148,7 +149,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             if (mSettings.shouldStartUpInPinnedMode()) {
                 loadDrawerFragment(DrawerAdapter.ITEM_PINNED_CHANNELS);
             } else {
-                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
             }
 
             mDrawerAdapter.notifyDataSetChanged();
@@ -166,7 +167,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         public void onDisconnected(JumbleException e) {
             // Re-show server list if we're showing a fragment that depends on the service.
             if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
-                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
             }
             mDrawerAdapter.notifyDataSetChanged();
             supportInvalidateOptionsMenu();
@@ -308,9 +309,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if(savedInstanceState == null) {
             if (getIntent() != null && getIntent().hasExtra(EXTRA_DRAWER_FRAGMENT)) {
                 loadDrawerFragment(getIntent().getIntExtra(EXTRA_DRAWER_FRAGMENT,
-                        DrawerAdapter.ITEM_SERVER));
+                        DrawerAdapter.ITEM_RECENTS));
             } else {
-                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
             }
         }
 
@@ -524,10 +525,13 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 ////                fragmentClass = FavouriteServerListFragment.class;
 ////                break;
             case DrawerAdapter.ITEM_CHAT:
-                ChatActivity chatActivity = new ChatActivity();
+                ChatActivity chatActivity = new ChatActivity(new Chat());
                 Intent intent = new Intent(this, chatActivity.getClass());
                 startActivity(intent);
                 return;
+            case DrawerAdapter.ITEM_RECENTS:
+                fragmentClass = RecentChatsFragment.class;
+                break;
             case DrawerAdapter.ITEM_PUBLIC:
                 fragmentClass = PublicServerListFragment.class;
                 break;

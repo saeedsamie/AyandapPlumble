@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 //        backgroundTask.execute();
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("func", "Login"));
+        nameValuePairs.add(new BasicNameValuePair("func", "0"));
         nameValuePairs.add(new BasicNameValuePair("phone", phone.getText().toString()));
         ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
         JSONObject jsonObject;

@@ -269,4 +269,7 @@
     <string name="shout_target">Shouting to %s</string>
     <string name="shout_configure">Configure Voice Target</string>
     <string name="leave_application_message">Do you want to exit?</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

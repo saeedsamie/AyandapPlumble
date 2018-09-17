@@ -12,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.morlunk.mumbleclient.R;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -49,7 +51,7 @@ public class RecentChatsListAdapter extends BaseAdapter {
 
   //
   @Override
-  public View getView(int position, @Nullable View convertView, ViewGroup parent) {
+  public View getView(int position, View convertView, ViewGroup parent) {
 
 
     ViewHolder viewHolder;
@@ -60,23 +62,17 @@ public class RecentChatsListAdapter extends BaseAdapter {
 
       viewHolder = new ViewHolder();
       LayoutInflater inflater = LayoutInflater.from(context);
-//      convertView = inflater.inflate(R.layout.hotel_single_item, parent, false);
-//      viewHolder.txtName = (TextView) convertView.findViewById(R.id.aNametxt);
-//      viewHolder.txtId = (TextView) convertView.findViewById(R.id.aVersiontxt);
-//      viewHolder.txtAddress = (TextView) convertView.findViewById(R.id.aAdrress);
-//      viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
+      convertView = inflater.inflate(R.layout.chat_row, parent, false);
+      viewHolder.txtName = (TextView) convertView.findViewById(R.id.recent_chats_list_row_title);
+      viewHolder.icon = (ImageView) convertView.findViewById(R.id.recent_chats_list_row_image);
 
       result = convertView;
-
       convertView.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
       result = convertView;
     }
-    viewHolder.txtName.setText(values.get(position).get("hotel_id"));
-    viewHolder.txtId.setText(values.get(position).get("hotel_name"));
-    viewHolder.txtAddress.setText(values.get(position).get("hotel_address"));
-    new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("hotel_image"));
+    viewHolder.txtName.setText(values.get(position).get("ChatTitle"));
     return convertView;
   }
 
@@ -84,30 +80,28 @@ public class RecentChatsListAdapter extends BaseAdapter {
   private static class ViewHolder {
 
     TextView txtName;
-    TextView txtId;
-    TextView txtAddress;
     ImageView icon;
   }
-  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
-    private final static String TAG = "AsyncTaskLoadImage";
-    private ImageView imageView;
-    public AsyncTaskLoadImage(ImageView imageView) {
-      this.imageView = imageView;
-    }
-    @Override
-    protected Bitmap doInBackground(String... params) {
-      Bitmap bitmap = null;
-      try {
-        URL url = new URL(params[0]);
-        bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
-      } catch (IOException e) {
-        Log.e(TAG, e.getMessage());
-      }
-      return bitmap;
-    }
-    @Override
-    protected void onPostExecute(Bitmap bitmap) {
-      imageView.setImageBitmap(bitmap);
-    }
-  }
+//  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
+//    private final static String TAG = "AsyncTaskLoadImage";
+//    private ImageView imageView;
+//    public AsyncTaskLoadImage(ImageView imageView) {
+//      this.imageView = imageView;
+//    }
+//    @Override
+//    protected Bitmap doInBackground(String... params) {
+//      Bitmap bitmap = null;
+//      try {
+//        URL url = new URL(params[0]);
+//        bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
+//      } catch (IOException e) {
+//        Log.e(TAG, e.getMessage());
+//      }
+//      return bitmap;
+//    }
+//    @Override
+//    protected void onPostExecute(Bitmap bitmap) {
+//      imageView.setImageBitmap(bitmap);
+//    }
+//  }
 }
