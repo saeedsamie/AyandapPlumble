@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -34,6 +35,7 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.login);
 
-    getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+      getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
     loginContinue = (Button) findViewById(R.id.login_continue);
     phone = (EditText) findViewById(R.id.login_phone);
     sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -78,8 +80,29 @@ public class LoginActivity extends AppCompatActivity {
     loginContinue.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        backgroundTask = new BackgroundTask(textView);
-        backgroundTask.execute();
+//        backgroundTask = new BackgroundTask(textView);
+//        backgroundTask.execute();
+
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("func", "Login"));
+        nameValuePairs.add(new BasicNameValuePair("phone", phone.getText().toString()));
+        ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
+        JSONObject jsonObject;
+
+        serverFetchAsync.execute();
+
+        try {
+          jsonObject = serverFetchAsync.get();
+          isUser = jsonObject.getString("result").equals("1");
+          user_fullName = jsonObject.getString("fullName");
+        } catch (JSONException e) {
+          e.printStackTrace();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        } catch (ExecutionException e) {
+          e.printStackTrace();
+        }
+
         user_phone = phone.getText().toString();
         Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
         startActivity(intent);
@@ -99,8 +122,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected String doInBackground(Void... voids) {
 
-      HttpClient httpclient = new DefaultHttpClient();
-      HttpPost httppost = new HttpPost("http://192.168.2.26/Plumble/fetchData.php");
+      HttpClient httpClient = new DefaultHttpClient();
+      HttpPost httpPost = new HttpPost("http://192.168.2.26/Plumble/fetchData.php");
       try {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "1"));
@@ -112,8 +135,8 @@ public class LoginActivity extends AppCompatActivity {
         form = new UrlEncodedFormEntity(nameValuePairs,"UTF-8");
 
         // Use UrlEncodedFormEntity to send in proper format which we need
-        httppost.setEntity(form);
-        HttpResponse response = httpclient.execute(httppost);
+        httpPost.setEntity(form);
+        HttpResponse response = httpClient.execute(httpPost);
         InputStream inputStream = response.getEntity().getContent();
         LoginActivity.InputStreamToStringExample str = new LoginActivity.InputStreamToStringExample();
         responseLogin = str.getStringFromInputStream(inputStream);

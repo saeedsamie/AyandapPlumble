@@ -94,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
       HttpPost httppost = new HttpPost("http://192.168.2.26/Plumble/fetchData.php");
       try {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("func", "2"));
+        nameValuePairs.add(new BasicNameValuePair("func", "Signup"));
         nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
         nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
         nameValuePairs.add(new BasicNameValuePair("username", username));
