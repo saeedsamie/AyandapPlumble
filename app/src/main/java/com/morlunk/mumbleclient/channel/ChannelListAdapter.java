@@ -43,6 +43,7 @@ import com.morlunk.jumble.model.IUser;
 import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.model.TalkState;
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.app.SignupActivity;
 import com.morlunk.mumbleclient.db.PlumbleDatabase;
 import com.morlunk.mumbleclient.drawable.CircleDrawable;
 import com.morlunk.mumbleclient.drawable.FlipDrawable;
@@ -220,7 +221,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
                 }
             });
 
-            uvh.mUserName.setText(user.getName());
+            uvh.mUserName.setText(SignupActivity.username);
 
             final int typefaceStyle;
             if (mService.isConnected() && mService.getSession().getSessionId() == user.getSession()) {

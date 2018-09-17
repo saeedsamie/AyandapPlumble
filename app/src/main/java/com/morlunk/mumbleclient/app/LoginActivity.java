@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -45,14 +44,13 @@ public class LoginActivity extends AppCompatActivity {
   private BackgroundTask backgroundTask;
   private BackgroundTask1 backgroundTask1;
   public Button loginContinue ;
-  public static EditText phone ;
-  public static String responseMain;
+  public EditText phone ;
+  public String responseMain;
   public static String user_phone;
   public static String user_fullName;
   SharedPreferences sp;
   public static boolean isUser;
 
-  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -63,9 +61,13 @@ public class LoginActivity extends AppCompatActivity {
     phone = (EditText) findViewById(R.id.login_phone);
     sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
-    if (sp.contains(VerificationActivity.Name)) {
-      user_phone = sp.getString(VerificationActivity.Name, null);
-      Log.i("CDCDK",user_phone);
+    if (sp.contains(SignupActivity.Username_Tag))
+    {
+      SignupActivity.username = sp.getString(SignupActivity.Username_Tag,null);
+    }
+
+    if (sp.contains(VerificationActivity.Name_Tag)) {
+      user_phone = sp.getString(VerificationActivity.Name_Tag, null);
       Intent intent = new Intent(LoginActivity.this,PlumbleActivity.class);
       startActivity(intent);
       finish();

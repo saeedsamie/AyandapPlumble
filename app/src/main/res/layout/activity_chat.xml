@@ -68,7 +68,7 @@
                 android:id="@+id/push_button"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:background="@drawable/mic_pic"/>
+                />
         </LinearLayout>
 
         <!--<LinearLayout-->

@@ -20,13 +20,13 @@ package com.morlunk.mumbleclient;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.morlunk.jumble.Constants;
+import com.morlunk.mumbleclient.app.SignupActivity;
 import com.morlunk.mumbleclient.db.DatabaseCertificate;
 import com.morlunk.mumbleclient.db.PlumbleSQLiteDatabase;
 
@@ -49,6 +49,7 @@ import java.util.Set;
  * @author morlunk
  */
 public class Settings {
+    private SharedPreferences sp;
     public static final String PREF_INPUT_METHOD = "audioInputMethod";
     public static final Set<String> ARRAY_INPUT_METHODS;
     /** Voice activity transmits depending on the amplitude of user input. */
@@ -120,7 +121,7 @@ public class Settings {
     public static final String PREF_CERT_ID = "certificateId";
 
     public static final String PREF_DEFAULT_USERNAME = "defaultUsername";
-    public static final String DEFAULT_DEFAULT_USERNAME = "Plumble_User"; // funny var name
+    public static final String DEFAULT_DEFAULT_USERNAME = SignupActivity.username; // funny var name
 
     public static final String PREF_FORCE_TCP = "forceTcp";
     public static final Boolean DEFAULT_FORCE_TCP = false;

@@ -33,8 +33,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -57,7 +55,6 @@ import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
-import com.morlunk.jumble.util.MumbleURLParser;
 import com.morlunk.mumbleclient.BuildConfig;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.Settings;
@@ -82,7 +79,6 @@ import com.morlunk.mumbleclient.util.PlumbleTrustStore;
 
 import org.spongycastle.util.encoders.Hex;
 
-import java.net.MalformedURLException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -90,12 +86,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
-
-import static java.util.Objects.requireNonNull;
 
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
         FavouriteServerListFragment.ServerConnectHandler, JumbleServiceProvider, DatabaseProvider,
@@ -243,7 +236,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,

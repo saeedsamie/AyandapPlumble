@@ -36,7 +36,7 @@ public class VerificationActivity extends AppCompatActivity {
   public String uuid;
   public static String sended ;
   SharedPreferences sp;
-  public static final String Name = "tHiS_PHoNeNuMbEr";
+  public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class VerificationActivity extends AppCompatActivity {
                 Log.i("XShBXSHbhXS", "2");
                 intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
                 SharedPreferences.Editor sEdit = sp.edit();
-                sEdit.putString(Name, LoginActivity.user_phone);
+                sEdit.putString(Name_Tag, LoginActivity.user_phone);
                 sEdit.apply();
                 startActivity(intent);
               }

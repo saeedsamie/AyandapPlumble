@@ -18,11 +18,11 @@
 package com.morlunk.mumbleclient.channel;
 
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.morlunk.mumbleclient.R;
-import com.morlunk.mumbleclient.channel.ChatTargetProvider;
 
 /**
  * A callback that sets the active chat target when activated, and resets when destroyed (usually
@@ -40,6 +40,7 @@ public class ChatTargetActionModeCallback implements ActionMode.Callback {
 
     @Override
     public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        Log.i("TADAAAAAAAAAAAA","TAADAA");
         actionMode.setTitle(mChatTarget.getName());
         actionMode.setSubtitle(R.string.current_chat_target);
         mProvider.setChatTarget(getChatTarget());

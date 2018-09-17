@@ -18,7 +18,6 @@
 package com.morlunk.mumbleclient.channel;
 
 import android.content.Context;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +25,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.morlunk.jumble.model.Channel;
 import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.IUser;
 import com.morlunk.jumble.model.TalkState;
 import com.morlunk.jumble.model.User;
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.app.SignupActivity;
 
 /**
  * Simple adapter to display the users in a single channel.
@@ -74,7 +73,7 @@ public class ChannelAdapter extends BaseAdapter {
         }
         User user = (User) getItem(position);
         TextView titleView = (TextView) v.findViewById(R.id.user_row_name);
-        titleView.setText(user.getName());
+        titleView.setText(SignupActivity.username);
 
         ImageView state = (ImageView) v.findViewById(R.id.user_row_state);
         if (user.isSelfDeafened())

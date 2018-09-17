@@ -35,8 +35,8 @@ import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
-  EditText fullname;
-  EditText username;
+  EditText ed_fullname;
+  EditText ed_username;
   Button signup;
   public static String responseSignup;
   public static JSONObject jsonresponse;
@@ -44,21 +44,26 @@ public class SignupActivity extends AppCompatActivity {
   private BackgroundTask backgroundTask;
   private ProgressDialog pDialog;
   SharedPreferences sp;
-  public static final String Name = "tHiS_PHoNeNuMbEr";
+  public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
+  public static final String Username_Tag = "tHiS_UsErNamE";
+  public static String username;
+  public static String fullname;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.signup);
     getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-    fullname = (EditText) findViewById(R.id.signup_fullname);
-    username = (EditText) findViewById(R.id.signup_username);
+    ed_fullname = (EditText) findViewById(R.id.signup_fullname);
+    ed_username = (EditText) findViewById(R.id.signup_username);
     signup = (Button) findViewById(R.id.signup_signup);
     sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
     signup.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        username = ed_username.getText().toString();
+        fullname = ed_fullname.getText().toString();
         backgroundTask = new BackgroundTask(textView);
         backgroundTask.execute();
       }
@@ -91,8 +96,8 @@ public class SignupActivity extends AppCompatActivity {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "2"));
         nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
-        nameValuePairs.add(new BasicNameValuePair("fullname", fullname.getText().toString()));
-        nameValuePairs.add(new BasicNameValuePair("username", username.getText().toString()));
+        nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
+        nameValuePairs.add(new BasicNameValuePair("username", username));
         Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
         UrlEncodedFormEntity form;
         form = new UrlEncodedFormEntity(nameValuePairs,"UTF-8");
@@ -118,7 +123,8 @@ public class SignupActivity extends AppCompatActivity {
       }
       pDialog.dismiss();
       SharedPreferences.Editor sEdit = sp.edit();
-      sEdit.putString(Name, LoginActivity.user_phone);
+      sEdit.putString(Name_Tag, LoginActivity.user_phone);
+      sEdit.putString(Username_Tag, username);
       sEdit.apply();
       Intent intent = new Intent(SignupActivity.this,PlumbleActivity.class);
       startActivity(intent);
