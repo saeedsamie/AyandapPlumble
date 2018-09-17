@@ -235,7 +235,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             adb.show();
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,
