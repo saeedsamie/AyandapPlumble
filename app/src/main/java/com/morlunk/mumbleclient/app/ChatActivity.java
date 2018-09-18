@@ -9,16 +9,12 @@ import com.morlunk.mumbleclient.R;
 
 public class ChatActivity extends Activity {
 
-    Chat chat;
-    public ChatActivity(Chat chat) {
-        this.chat = chat;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ;
         setContentView(R.layout.activity_chat);
         TextView textView = findViewById(R.id.chat_title);
-        textView.setText(chat.getTitle());
+        textView.setText(getIntent().getStringExtra("ChatId"));
     }
 }

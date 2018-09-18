@@ -525,7 +525,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 ////                fragmentClass = FavouriteServerListFragment.class;
 ////                break;
             case DrawerAdapter.ITEM_CHAT:
-                ChatActivity chatActivity = new ChatActivity(new Chat());
+                ChatActivity chatActivity = new ChatActivity();
                 Intent intent = new Intent(this, chatActivity.getClass());
                 startActivity(intent);
                 return;

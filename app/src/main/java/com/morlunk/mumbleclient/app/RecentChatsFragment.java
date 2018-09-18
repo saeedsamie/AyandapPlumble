@@ -62,6 +62,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
         HashMap hashMap = new HashMap();
         final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
@@ -73,7 +75,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
                 hashMap.put("UserRole",c.getString("UserRole"));
                 hashMap.put("ChatTitle",c.getString("ChatTitle"));
-                hashMap.put("ChatId",c.getInt("ChatId"));
+                hashMap.put("ChatId",c.getString("ChatId"));
                 hashMap.put("ChatBio",c.getString("ChatBio"));
                 hashMap.put("ChatImage",c.getString("ChatImage"));
                 hashMap.put("ChatType",c.getString("ChatType"));
@@ -91,14 +93,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                Chat chat =  new Chat();
-                chat.setId((listValues.get(position).get("ChatId"))+"");
-                chat.setBio(listValues.get(position).get("ChatBio"));
-                chat.setTitle(listValues.get(position).get("ChatTitle"));
-                chat.setImage(listValues.get(position).get("ChatImage"));
-                chat.setImage(listValues.get(position).get("ChatType"));
-                ChatActivity chatActivity = new ChatActivity(chat);
-                Intent intent = new Intent(getContext(),chatActivity.getClass());
+
+
+                Intent intent = new Intent(getContext(),ChatActivity.class);
+
+                HashMap<String,String> map = listValues.get(position);
+                Log.e("map", "map" + map.toString());
+
+                intent.putExtra("ChatId",(listValues.get(position).get("ChatId")));
+                intent.putExtra("ChatBio",(listValues.get(position).get("ChatBio")));
+                intent.putExtra("ChatTitle",(listValues.get(position).get("ChatTitle")));
+                intent.putExtra("ChatImage",(listValues.get(position).get("ChatImage")));
+                intent.putExtra("ChatType",(listValues.get(position).get("ChatType")));
+
                 startActivity(intent);
             }
         });
