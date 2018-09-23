@@ -94,16 +94,10 @@ public class LoginActivity extends AppCompatActivity {
         serverFetchAsync.execute();
 
         try {
-          jsonObject = serverFetchAsync.get();
+          jsonObject = serverFetchAsync.getJsonResponse();
           isUser = jsonObject.getString("result").equals("1");
           user_fullName = jsonObject.getString("fullName");
-        } catch (JSONException e) {
-          e.printStackTrace();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        } catch (ExecutionException e) {
-          e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
           e.printStackTrace();
         }
 

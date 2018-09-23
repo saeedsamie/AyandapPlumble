@@ -83,13 +83,9 @@ public class SignupActivity extends AppCompatActivity {
         ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
         serverFetchAsync.execute();
         try {
-          JSONObject jsonObject = serverFetchAsync.get();
+          JSONObject jsonObject = serverFetchAsync.getJsonResponse();
 //          jsonObject.get
 
-        } catch (ExecutionException e) {
-          e.printStackTrace();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
         } catch (Exception e) {
           e.printStackTrace();
         }
