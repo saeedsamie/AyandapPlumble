@@ -64,7 +64,7 @@ public class RecentChatsListAdapter extends BaseAdapter {
       LayoutInflater inflater = LayoutInflater.from(context);
       convertView = inflater.inflate(R.layout.chat_row, parent, false);
       viewHolder.txtName = (TextView) convertView.findViewById(R.id.recent_chats_list_row_title);
-      viewHolder.icon = (ImageView) convertView.findViewById(R.id.recent_chats_list_row_image);
+//      viewHolder.icon = (ImageView) convertView.findViewById(R.id.recent_chats_list_row_image);
 
       result = convertView;
       convertView.setTag(viewHolder);

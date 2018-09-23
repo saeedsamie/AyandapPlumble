@@ -39,6 +39,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,7 +107,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
 
     private ProgressDialog mConnectingDialog;
@@ -238,6 +238,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.e("ENTERED", "Plumble Activity ----- OnCreate" );
         server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,
                 "User"+String.valueOf(new Random().nextInt(999)),"");
 
@@ -256,7 +258,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         mDatabase.open();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setOnItemClickListener(this);
         mDrawerAdapter = new DrawerAdapter(this, this);
         mDrawerList.setAdapter(mDrawerAdapter);
@@ -458,7 +460,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             });
             dadb.setNegativeButton(android.R.string.cancel, null);
            dadb.show();
-        super.onBackPressed();
+//        super.onBackPressed();
     }
 
     @Override
@@ -749,13 +751,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(Settings.PREF_THEME.equals(key)) {
             // Recreate activity when theme is changed
-            if(Build.VERSION.SDK_INT >= 11)
-                recreate();
-            else {
-                Intent intent = new Intent(this, PlumbleActivity.class);
-                finish();
-                startActivity(intent);
-            }
+            recreate();
         } else if (Settings.PREF_STAY_AWAKE.equals(key)) {
             setStayAwake(mSettings.shouldStayAwake());
         } else if (Settings.PREF_HANDSET_MODE.equals(key)) {

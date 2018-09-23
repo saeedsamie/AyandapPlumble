@@ -8,12 +8,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/chat_frame">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"/>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recent_chats_list">
-
-        </ListView>
+            android:id="@+id/recent_chats_list"/>
     </LinearLayout>
 
 

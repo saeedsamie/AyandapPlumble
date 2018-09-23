@@ -15,6 +15,6 @@ public class ChatActivity extends Activity {
         ;
         setContentView(R.layout.activity_chat);
         TextView textView = findViewById(R.id.chat_title);
-        textView.setText(getIntent().getStringExtra("ChatId"));
+        textView.setText(getIntent().getStringExtra("ChatId")+"\n"+getIntent().getStringExtra("ChatTitle"));
     }
 }

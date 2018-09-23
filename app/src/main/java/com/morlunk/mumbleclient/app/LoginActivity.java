@@ -58,7 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.login);
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+    }
     loginContinue = (Button) findViewById(R.id.login_continue);
     phone = (EditText) findViewById(R.id.login_phone);
     sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -100,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
           e.printStackTrace();
         } catch (ExecutionException e) {
+          e.printStackTrace();
+        }catch (Exception e) {
           e.printStackTrace();
         }
 
