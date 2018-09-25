@@ -57,7 +57,16 @@ import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
 public class ChannelListFragment extends JumbleServiceFragment implements OnChannelClickListener, OnUserClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private IJumbleObserver mServiceObserver = new JumbleObserver() {
+    private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() != null)
+                getActivity().supportInvalidateOptionsMenu(); // Update bluetooth menu item
+        }
+    };
+    private RecyclerView mChannelView;
+    private ChannelListAdapter mChannelListAdapter;
+    private IJumbleObserver mServiceObserver = new JumbleObserver() {
         @Override
         public void onDisconnected(JumbleException e) {
             mChannelView.setAdapter(null);
@@ -67,23 +76,23 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         public void onUserJoinedChannel(IUser user, IChannel newChannel, IChannel oldChannel) {
             mChannelListAdapter.updateChannels();
             mChannelListAdapter.notifyDataSetChanged();
-            if(getService().isConnected() &&
+            if (getService().isConnected() &&
                     getService().getSession().getSessionId() == user.getSession()) {
                 scrollToChannel(newChannel.getId());
             }
         }
 
         @Override
-		public void onChannelAdded(IChannel channel) {
+        public void onChannelAdded(IChannel channel) {
             mChannelListAdapter.updateChannels();
-			mChannelListAdapter.notifyDataSetChanged();
-		}
+            mChannelListAdapter.notifyDataSetChanged();
+        }
 
-		@Override
-		public void onChannelRemoved(IChannel channel) {
+        @Override
+        public void onChannelRemoved(IChannel channel) {
             mChannelListAdapter.updateChannels();
-			mChannelListAdapter.notifyDataSetChanged();
-		}
+            mChannelListAdapter.notifyDataSetChanged();
+        }
 
         @Override
         public void onChannelStateUpdated(IChannel channel) {
@@ -118,18 +127,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         public void onUserTalkStateUpdated(IUser user) {
             mChannelListAdapter.animateUserTalkStateUpdate(user, mChannelView);
         }
-	};
-
-    private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(getActivity() != null)
-                getActivity().supportInvalidateOptionsMenu(); // Update bluetooth menu item
-        }
     };
-
-	private RecyclerView mChannelView;
-	private ChannelListAdapter mChannelListAdapter;
     private ChatTargetProvider mTargetProvider;
     private DatabaseProvider mDatabaseProvider;
     private ActionMode mActionMode;
@@ -147,12 +145,12 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         try {
             mTargetProvider = (ChatTargetProvider) getParentFragment();
         } catch (ClassCastException e) {
-            throw new ClassCastException(getParentFragment().toString()+" must implement ChatTargetProvider");
+            throw new ClassCastException(getParentFragment().toString() + " must implement ChatTargetProvider");
         }
         try {
             mDatabaseProvider = (DatabaseProvider) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()+" must implement DatabaseProvider");
+            throw new ClassCastException(getActivity().toString() + " must implement DatabaseProvider");
         }
         mSettings = Settings.getInstance(activity);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -214,7 +212,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         MenuItem muteItem = menu.findItem(R.id.menu_mute_button);
         MenuItem deafenItem = menu.findItem(R.id.menu_deafen_button);
 
-        if(getService() != null && getService().isConnected()) {
+        if (getService() != null && getService().isConnected()) {
             IJumbleSession session = getService().getSession();
 
             // Color the action bar icons to the primary text color of the theme, TODO move this elsewhere
@@ -238,7 +236,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 
-        final SearchView searchView = (SearchView)MenuItemCompat.getActionView(searchItem);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
@@ -257,14 +255,14 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
                 int itemId = cursor.getInt(dataIdColumn);
 
                 IJumbleSession session = getService().getSession();
-                if(ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
-                    if(session.getSessionChannel().getId() != itemId) {
+                if (ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
+                    if (session.getSessionChannel().getId() != itemId) {
                         session.joinChannel(itemId);
                     } else {
                         scrollToChannel(itemId);
                     }
                     return true;
-                } else if(ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
+                } else if (ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
                     scrollToUser(itemId);
                     return true;
                 }
@@ -323,26 +321,28 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         mChannelListAdapter.setOnUserClickListener(this);
         mChannelView.setAdapter(mChannelListAdapter);
         mChannelListAdapter.notifyDataSetChanged();
-	}
+    }
 
-	/**
-	 * Scrolls to the passed channel.
-	 */
-	public void scrollToChannel(int channelId) {
-		int channelPosition = mChannelListAdapter.getChannelPosition(channelId);
+    /**
+     * Scrolls to the passed channel.
+     */
+    public void scrollToChannel(int channelId) {
+        int channelPosition = mChannelListAdapter.getChannelPosition(channelId);
         mChannelView.smoothScrollToPosition(channelPosition);
     }
-	/**
-	 * Scrolls to the passed user.
-	 */
-	public void scrollToUser(int userId) {
-		int userPosition = mChannelListAdapter.getUserPosition(userId);
-		mChannelView.smoothScrollToPosition(userPosition);
-	}
+
+    /**
+     * Scrolls to the passed user.
+     */
+    public void scrollToUser(int userId) {
+        int userPosition = mChannelListAdapter.getUserPosition(userId);
+        mChannelView.smoothScrollToPosition(userPosition);
+    }
 
     private boolean isShowingPinnedChannels() {
         return getArguments().getBoolean("pinned");
     }
+
     @Override
     public void onChannelClick(IChannel channel) {
         if (mTargetProvider.getChatTarget() != null &&
@@ -358,7 +358,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
                     mActionMode = null;
                 }
             };
-            mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(cb);
+            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(cb);
         }
     }
 
@@ -377,7 +377,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
                     mActionMode = null;
                 }
             };
-            mActionMode = ((ActionBarActivity)getActivity()).startSupportActionMode(cb);
+            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(cb);
         }
     }
 
