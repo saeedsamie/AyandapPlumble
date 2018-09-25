@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,92 +16,88 @@ import android.widget.TextView;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class SignupActivity extends AppCompatActivity {
 
-  EditText ed_fullname;
-  EditText ed_username;
-  Button signup;
-  public static String responseSignup;
-  public static JSONObject jsonresponse;
-  private TextView textView;
-  private ProgressDialog pDialog;
-  SharedPreferences sp;
-  public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
-  public static final String Username_Tag = "tHiS_UsErNamE";
-  public static String username;
-  public static String fullname;
+    public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
+    public static final String Username_Tag = "tHiS_UsErNamE";
+    public static String responseSignup;
+    public static JSONObject jsonresponse;
+    public static String username;
+    public static String fullname;
+    EditText ed_fullname;
+    EditText ed_username;
+    Button signup;
+    SharedPreferences sp;
+    private TextView textView;
+    private ProgressDialog pDialog;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.signup);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-    }
-    ed_fullname = (EditText) findViewById(R.id.signup_fullname);
-    ed_username = (EditText) findViewById(R.id.signup_username);
-    signup = (Button) findViewById(R.id.signup_signup);
-    sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.signup);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        ed_fullname = (EditText) findViewById(R.id.signup_fullname);
+        ed_username = (EditText) findViewById(R.id.signup_username);
+        signup = (Button) findViewById(R.id.signup_signup);
+        sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        final Intent in = getIntent();
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                username = ed_username.getText().toString();
+                fullname = ed_fullname.getText().toString();
 
-    signup.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        username = ed_username.getText().toString();
-        fullname = ed_fullname.getText().toString();
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("func", "1"));
+                nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
+                nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
+                nameValuePairs.add(new BasicNameValuePair("username", username));
+                Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
 
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("func", "1"));
-        nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
-        nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
-        nameValuePairs.add(new BasicNameValuePair("username", username));
-        Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-
-        pDialog = new ProgressDialog(SignupActivity.this);
-        pDialog.setMessage("لطفا صبر کنید...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-        ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
-        serverFetchAsync.execute();
-        try {
-          JSONObject jsonObject = serverFetchAsync.getJsonResponse();
+                pDialog = new ProgressDialog(SignupActivity.this);
+                pDialog.setMessage("لطفا صبر کنید...");
+                pDialog.setCancelable(false);
+                pDialog.show();
+                ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
+                serverFetchAsync.execute();
+                try {
+                    JSONObject jsonObject = serverFetchAsync.getJsonResponse();
 //          jsonObject.get
 
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        pDialog.dismiss();
-        SharedPreferences.Editor sEdit = sp.edit();
-        sEdit.putString(Name_Tag, LoginActivity.user_phone);
-        sEdit.putString(Username_Tag, username);
-        sEdit.apply();
-        Intent intent = new Intent(SignupActivity.this,PlumbleActivity.class);
-        startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                pDialog.dismiss();
+                SharedPreferences.Editor sEdit = sp.edit();
+                sEdit.putString(Name_Tag, LoginActivity.user_phone);
+                sEdit.putString(Username_Tag, username);
+                sEdit.apply();
 
+                Boolean aBoolean = true;
+                try {
+                    aBoolean = !in.getStringExtra("Launcher").equals("main");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (aBoolean) {
+                    Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
+                    startActivity(intent);
+                }
 
 //        backgroundTask = new BackgroundTask(textView);
 //        backgroundTask.execute();
-      }
-    });
-  }
+            }
+        });
+    }
 
 //  private class BackgroundTask extends AsyncTask<Void, Void, String> {
 //

@@ -16,7 +16,7 @@
     android:layout_gravity="center"
     android:layout_marginTop="15dp"
     android:scaleType="centerCrop"
-    android:src="@drawable/imagen"/>
+    android:src="@drawable/default_profile"/>
 
 
   <LinearLayout
@@ -61,7 +61,7 @@
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
         android:accessibilityLiveRegion="1"
-        android:text="Signup"
+        android:text="Submit"
         android:theme="@style/PrimaryButton"/>
     </LinearLayout>
 

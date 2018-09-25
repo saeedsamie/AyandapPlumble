@@ -98,6 +98,7 @@ public class VerificationActivity extends AppCompatActivity {
               if (!LoginActivity.isUser)
               {
                 intent = new Intent(VerificationActivity.this, SignupActivity.class);
+                intent.putExtra("Launcher","verification");
                 startActivity(intent);
               }
               else if(LoginActivity.isUser) {

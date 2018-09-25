@@ -29,7 +29,6 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -41,12 +40,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -57,7 +58,6 @@ import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
-import com.morlunk.mumbleclient.Chat;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.channel.AccessTokenFragment;
@@ -100,49 +100,20 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * If specified, the provided integer drawer fragment ID is shown when the activity is created.
      */
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
-
+    Server server;
     private IPlumbleService mService;
     private PlumbleDatabase mDatabase;
     private Settings mSettings;
-
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mDrawerAdapter;
-
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private AlertDialog.Builder mDisconnectPromptBuilder;
-    Server server ;
-
-    /** List of fragments to be notified about service state changes. */
+    /**
+     * List of fragments to be notified about service state changes.
+     */
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((PlumbleService.PlumbleBinder) service).getService();
-            mService.setSuppressNotifications(true);
-            mService.registerObserver(mObserver);
-            mService.clearChatNotifications(); // Clear chat notifications on resume.
-            mDrawerAdapter.notifyDataSetChanged();
-
-            for(JumbleServiceFragment fragment : mServiceFragments)
-                fragment.setServiceBound(true);
-
-            // Re-show server list if we're showing a fragment that depends on the service.
-            if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
-                    !mService.isConnected()) {
-                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
-            }
-            updateConnectionState(getService());
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
-
     private JumbleObserver mObserver = new JumbleObserver() {
         @Override
         public void onConnected() {
@@ -166,7 +137,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         @Override
         public void onDisconnected(JumbleException e) {
             // Re-show server list if we're showing a fragment that depends on the service.
-            if(getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
+            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
                 loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
             }
             mDrawerAdapter.notifyDataSetChanged();
@@ -178,16 +149,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         @Override
         public void onTLSHandshakeFailed(X509Certificate[] chain) {
 //            final Server lastServer = getService().getTargetServer();
-
-
             final Server lastServer = server;
-
             if (chain.length == 0)
                 return;
-
             try {
                 final X509Certificate x509 = chain[0];
-
                 AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
                 adb.setTitle(R.string.untrusted_certificate);
                 try {
@@ -236,12 +202,38 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             adb.show();
         }
     };
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((PlumbleService.PlumbleBinder) service).getService();
+            mService.setSuppressNotifications(true);
+            mService.registerObserver(mObserver);
+            mService.clearChatNotifications(); // Clear chat notifications on resume.
+            mDrawerAdapter.notifyDataSetChanged();
+
+            for (JumbleServiceFragment fragment : mServiceFragments)
+                fragment.setServiceBound(true);
+
+            // Re-show server list if we're showing a fragment that depends on the service.
+            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
+                    !mService.isConnected()) {
+                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
+            }
+            updateConnectionState(getService());
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.e("ENTERED", "Plumble Activity ----- OnCreate" );
-        server =  new Server(2,"MUMBLE-server","31.184.132.206",64738,
-                "User"+String.valueOf(new Random().nextInt(999)),"");
+        Log.e("ENTERED", "Plumble Activity ----- OnCreate");
+        server = new Server(2, "MUMBLE-server", "31.184.132.206", 64738,
+                "User" + String.valueOf(new Random().nextInt(999)), "");
 
         mSettings = Settings.getInstance(this);
         setTheme(mSettings.getTheme());
@@ -259,8 +251,22 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+
+//        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.profile_layout);
+//        linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getBaseContext(), SignupActivity.class);
+//                intent.putExtra("Launcher", "main");
+//                startActivity(intent);
+//            }
+//        });
+
         mDrawerList.setOnItemClickListener(this);
+
         mDrawerAdapter = new DrawerAdapter(this, this);
+//        mDrawerAdapter.getView()
         mDrawerList.setAdapter(mDrawerAdapter);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
@@ -291,7 +297,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Tint logo to theme
-        int iconColor = getTheme().obtainStyledAttributes(new int[] { android.R.attr.textColorPrimaryInverse }).getColor(0, -1);
+        int iconColor = getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorPrimaryInverse}).getColor(0, -1);
         Drawable logo = getResources().getDrawable(R.drawable.ic_home);
         logo.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
         getSupportActionBar().setLogo(logo);
@@ -308,7 +314,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //        dadb.setNegativeButton(android.R.string.cancel, null);
 //        mDisconnectPromptBuilder = dadb;
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().hasExtra(EXTRA_DRAWER_FRAGMENT)) {
                 loadDrawerFragment(getIntent().getIntExtra(EXTRA_DRAWER_FRAGMENT,
                         DrawerAdapter.ITEM_RECENTS));
@@ -337,7 +343,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         setVolumeControlStream(mSettings.isHandsetMode() ?
                 AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
 
-        if(mSettings.isFirstRun()) showSetupWizard();
+        if (mSettings.isFirstRun()) showSetupWizard();
 
         connectToServer(server);
     }
@@ -363,7 +369,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if (mConnectingDialog != null)
             mConnectingDialog.dismiss();
 
-        if(mService != null) {
+        if (mService != null) {
             for (JumbleServiceFragment fragment : mServiceFragments) {
                 fragment.setServiceBound(false);
             }
@@ -388,11 +394,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
         // Color the action bar icons to the primary text color of the theme.
         int foregroundColor = getSupportActionBar().getThemedContext()
-                .obtainStyledAttributes(new int[] { android.R.attr.textColor })
+                .obtainStyledAttributes(new int[]{android.R.attr.textColor})
                 .getColor(0, -1);
-        for(int x=0;x<menu.size();x++) {
+        for (int x = 0; x < menu.size(); x++) {
             MenuItem item = menu.getItem(x);
-            if(item.getIcon() != null) {
+            if (item.getIcon() != null) {
                 Drawable icon = item.getIcon().mutate(); // Mutate the icon so that the color filter is exclusive to the action bar
                 icon.setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
             }
@@ -410,7 +416,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item))
+        if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
 
         switch (item.getItemId()) {
@@ -449,17 +455,17 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     public void onBackPressed() {
 
-            AlertDialog.Builder dadb = new AlertDialog.Builder(this);
-            dadb.setMessage(R.string.leave_application_message);
-            dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(mService != null) mService.disconnect();
-                    finish();
-                }
-            });
-            dadb.setNegativeButton(android.R.string.cancel, null);
-           dadb.show();
+        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
+        dadb.setMessage(R.string.leave_application_message);
+        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mService != null) mService.disconnect();
+                finish();
+            }
+        });
+        dadb.setNegativeButton(android.R.string.cancel, null);
+        dadb.show();
 //        super.onBackPressed();
     }
 
@@ -475,7 +481,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      */
     private void showSetupWizard() {
         // Prompt the user to generate a certificate.
-        if(mSettings.isUsingCertificate()) return;
+        if (mSettings.isUsingCertificate()) return;
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle(R.string.first_run_generate_certificate_title);
         adb.setMessage(R.string.first_run_generate_certificate);
@@ -486,7 +492,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                     @Override
                     protected void onPostExecute(DatabaseCertificate result) {
                         super.onPostExecute(result);
-                        if(result != null) mSettings.setDefaultCertificateId(result.getId());
+                        if (result != null) mSettings.setDefaultCertificateId(result.getId());
                     }
                 };
                 generateTask.execute();
@@ -506,7 +512,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private void loadDrawerFragment(int fragmentId) {
         Class<? extends Fragment> fragmentClass = null;
         Bundle args = new Bundle();
+        Intent intent;
         switch (fragmentId) {
+            case DrawerAdapter.PROFILE_PROFILE:
+                intent = new Intent(this, SignupActivity.class);
+                startActivity(intent);
+                return;
             case DrawerAdapter.ITEM_SERVER:
                 fragmentClass = ChannelFragment.class;
                 break;
@@ -528,7 +539,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 ////                break;
             case DrawerAdapter.ITEM_CHAT:
                 ChatActivity chatActivity = new ChatActivity();
-                Intent intent = new Intent(this, chatActivity.getClass());
+                intent = new Intent(this, chatActivity.getClass());
                 startActivity(intent);
                 return;
             case DrawerAdapter.ITEM_RECENTS:
@@ -546,15 +557,15 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         }
         Fragment fragment = Fragment.instantiate(this, fragmentClass.getName(), args);
         getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, fragment, fragmentClass.getName())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
+                .replace(R.id.content_frame, fragment, fragmentClass.getName())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
         setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
     }
 
     public void connectToServer(final Server server) {
         // Check if we're already connected to a server; if so, inform user.
-        if(mService != null && mService.isConnected()) {
+        if (mService != null && mService.isConnected()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.reconnect_dialog_message);
             adb.setPositiveButton(R.string.connect, new DialogInterface.OnClickListener() {
@@ -605,7 +616,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 PublicServer newServer = server;
-                if(!usernameField.getText().toString().equals(""))
+                if (!usernameField.getText().toString().equals(""))
                     newServer.setUsername(usernameField.getText().toString());
                 else
                     newServer.setUsername(settings.getDefaultUsername());
@@ -629,6 +640,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * Will show reconnecting dialog if reconnecting, dismiss otherwise, etc.
      * Basically, this service will do catch-up if the activity wasn't bound to receive
      * connection state updates.
+     *
      * @param service A bound IJumbleService.
      */
     @SuppressLint("StringFormatMatches")
@@ -674,8 +686,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                             }
                         });
                     } else if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
-                               (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
-                                error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
+                            (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
+                                    error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
                         // FIXME(acomminos): Long conditional.
                         final EditText passwordField = new EditText(this);
                         passwordField.setInputType(InputType.TYPE_CLASS_TEXT |
@@ -749,7 +761,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(Settings.PREF_THEME.equals(key)) {
+        if (Settings.PREF_THEME.equals(key)) {
             // Recreate activity when theme is changed
             recreate();
         } else if (Settings.PREF_STAY_AWAKE.equals(key)) {
@@ -767,7 +779,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public String getConnectedServerName() {
-        if(mService != null && mService.isConnected()) {
+        if (mService != null && mService.isConnected()) {
             Server server = mService.getTargetServer();
             return server.getName().equals("") ? server.getHost() : server.getName();
         }
