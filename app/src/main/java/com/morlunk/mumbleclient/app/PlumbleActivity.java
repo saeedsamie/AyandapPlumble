@@ -40,14 +40,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,7 +58,6 @@ import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.Settings;
-import com.morlunk.mumbleclient.channel.AccessTokenFragment;
 import com.morlunk.mumbleclient.channel.ChannelFragment;
 import com.morlunk.mumbleclient.channel.ServerInfoFragment;
 import com.morlunk.mumbleclient.db.DatabaseCertificate;
@@ -71,7 +68,6 @@ import com.morlunk.mumbleclient.db.PublicServer;
 import com.morlunk.mumbleclient.preference.PlumbleCertificateGenerateTask;
 import com.morlunk.mumbleclient.preference.Preferences;
 import com.morlunk.mumbleclient.servers.FavouriteServerListFragment;
-import com.morlunk.mumbleclient.servers.PublicServerListFragment;
 import com.morlunk.mumbleclient.servers.ServerEditFragment;
 import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.morlunk.mumbleclient.service.PlumbleService;
@@ -79,12 +75,8 @@ import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 import com.morlunk.mumbleclient.util.JumbleServiceProvider;
 import com.morlunk.mumbleclient.util.PlumbleTrustStore;
 
-import org.spongycastle.util.encoders.Hex;
-
 import java.security.KeyStore;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,19 +101,19 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private DrawerAdapter mDrawerAdapter;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
-    private AlertDialog.Builder mDisconnectPromptBuilder;
     /**
      * List of fragments to be notified about service state changes.
      */
+
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
     private JumbleObserver mObserver = new JumbleObserver() {
         @Override
         public void onConnected() {
-            if (mSettings.shouldStartUpInPinnedMode()) {
-                loadDrawerFragment(DrawerAdapter.ITEM_PINNED_CHANNELS);
-            } else {
-                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
-            }
+//            if (mSettings.shouldStartUpInPinnedMode()) {
+////                loadDrawerFragment(DrawerAdapter.ITEM_PINNED_CHANNELS);
+//            } else {
+            loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
+//            }
 
             mDrawerAdapter.notifyDataSetChanged();
             supportInvalidateOptionsMenu();
@@ -137,11 +129,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         @Override
         public void onDisconnected(JumbleException e) {
             // Re-show server list if we're showing a fragment that depends on the service.
-            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
-                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
-            }
-            mDrawerAdapter.notifyDataSetChanged();
-            supportInvalidateOptionsMenu();
+//            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment) {
+            loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
+//            }
+//            mDrawerAdapter.notifyDataSetChanged();
+//            supportInvalidateOptionsMenu();
 
             updateConnectionState(getService());
         }
@@ -154,42 +146,42 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 return;
             try {
                 final X509Certificate x509 = chain[0];
-                AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
-                adb.setTitle(R.string.untrusted_certificate);
+//                AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+//                adb.setTitle(R.string.untrusted_certificate);
                 try {
                     MessageDigest digest = MessageDigest.getInstance("SHA-1");
                     byte[] certDigest = digest.digest(x509.getEncoded());
-                    String hexDigest = new String(Hex.encode(certDigest));
-                    adb.setMessage(getString(R.string.certificate_info,
-                            x509.getSubjectDN().getName(),
-                            x509.getNotBefore().toString(),
-                            x509.getNotAfter().toString(),
-                            hexDigest));
-                } catch (NoSuchAlgorithmException e) {
+//                    String hexDigest = new String(Hex.encode(certDigest));
+//                    adb.setMessage(getString(R.string.certificate_info,
+//                            x509.getSubjectDN().getName(),
+//                            x509.getNotBefore().toString(),
+//                            x509.getNotAfter().toString(),
+//                            hexDigest));
+                } catch (Exception e) {
                     e.printStackTrace();
-                    adb.setMessage(x509.toString());
+//                    adb.setMessage(x509.toString());
                 }
-                adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Try to add to trust store
-                        try {
-                            String alias = lastServer.getHost();
-                            KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
-                            trustStore.setCertificateEntry(alias, x509);
-                            PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
-                            Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
-                            connectToServer(lastServer);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                adb.setNegativeButton(R.string.wizard_cancel, null);
-                adb.show();
-            } catch (CertificateException e) {
+//                adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+                // Try to add to trust store
+                try {
+                    String alias = lastServer.getHost();
+                    KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
+                    trustStore.setCertificateEntry(alias, x509);
+                    PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
+                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+                    connectToServer(lastServer);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
+                }
+//                    }
+//                });
+//                adb.setNegativeButton(R.string.wizard_cancel, null);
+//                adb.show();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -209,17 +201,22 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             mService.setSuppressNotifications(true);
             mService.registerObserver(mObserver);
             mService.clearChatNotifications(); // Clear chat notifications on resume.
+
+//            User i = new User(((PlumbleService.PlumbleBinder) service).getService().getSession().getSessionId(),"userTest" + new Random(10).nextInt());
+//            plumbleService.registerUser(((PlumbleService) mService).getSessionId());
+
             mDrawerAdapter.notifyDataSetChanged();
 
             for (JumbleServiceFragment fragment : mServiceFragments)
                 fragment.setServiceBound(true);
 
             // Re-show server list if we're showing a fragment that depends on the service.
-            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
-                    !mService.isConnected()) {
-                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
-            }
+//            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) instanceof JumbleServiceFragment &&
+//                    !mService.isConnected()) {
+            loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
+//            }
             updateConnectionState(getService());
+
         }
 
         @Override
@@ -228,12 +225,21 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         }
     };
 
+    public Settings getmSettings() {
+        return mSettings;
+    }
+
+    public PlumbleDatabase getmDatabase() {
+        return mDatabase;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
-        server = new Server(2, "MUMBLE-server", "31.184.132.206", 64738,
+        server = new Server(2, "MUMBLE-server", "192.168.2.37", 64738,
                 "User" + String.valueOf(new Random().nextInt(999)), "");
+
 
         mSettings = Settings.getInstance(this);
         setTheme(mSettings.getTheme());
@@ -315,12 +321,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //        mDisconnectPromptBuilder = dadb;
 
         if (savedInstanceState == null) {
-            if (getIntent() != null && getIntent().hasExtra(EXTRA_DRAWER_FRAGMENT)) {
-                loadDrawerFragment(getIntent().getIntExtra(EXTRA_DRAWER_FRAGMENT,
-                        DrawerAdapter.ITEM_RECENTS));
-            } else {
-                loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
-            }
+//            if (getIntent() != null && getIntent().hasExtra(EXTRA_DRAWER_FRAGMENT)) {
+//                loadDrawerFragment(getIntent().getIntExtra(EXTRA_DRAWER_FRAGMENT,
+//                        DrawerAdapter.ITEM_RECENTS));
+//            } else {
+            loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
+//            }
         }
 
 //        // If we're given a Mumble URL to show, open up a server edit fragment.
@@ -346,6 +352,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if (mSettings.isFirstRun()) showSetupWizard();
 
         connectToServer(server);
+
+
     }
 
     @Override
@@ -462,6 +470,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             public void onClick(DialogInterface dialog, int which) {
                 if (mService != null) mService.disconnect();
                 finish();
+
             }
         });
         dadb.setNegativeButton(android.R.string.cancel, null);
@@ -481,24 +490,25 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      */
     private void showSetupWizard() {
         // Prompt the user to generate a certificate.
+
         if (mSettings.isUsingCertificate()) return;
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.first_run_generate_certificate_title);
-        adb.setMessage(R.string.first_run_generate_certificate);
-        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+//        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+//        adb.setTitle(R.string.first_run_generate_certificate_title);
+//        adb.setMessage(R.string.first_run_generate_certificate);
+//        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+        @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
-                    @Override
-                    protected void onPostExecute(DatabaseCertificate result) {
-                        super.onPostExecute(result);
-                        if (result != null) mSettings.setDefaultCertificateId(result.getId());
-                    }
-                };
-                generateTask.execute();
+            protected void onPostExecute(DatabaseCertificate result) {
+                super.onPostExecute(result);
+                if (result != null) mSettings.setDefaultCertificateId(result.getId());
             }
-        });
-        adb.show();
+        };
+        generateTask.execute();
+//            }
+//        });
+//        adb.show();
         mSettings.setFirstRun(false);
 
         // TODO: finish wizard
@@ -524,30 +534,35 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             case DrawerAdapter.ITEM_INFO:
                 fragmentClass = ServerInfoFragment.class;
                 break;
-            case DrawerAdapter.ITEM_ACCESS_TOKENS:
-                fragmentClass = AccessTokenFragment.class;
-                Server connectedServer = getService().getTargetServer();
-                args.putLong("server", connectedServer.getId());
-                args.putStringArrayList("access_tokens", (ArrayList<String>) mDatabase.getAccessTokens(connectedServer.getId()));
-                break;
-            case DrawerAdapter.ITEM_PINNED_CHANNELS:
-                fragmentClass = ChannelFragment.class;
-                args.putBoolean("pinned", true);
-                break;
+//            case DrawerAdapter.ITEM_ACCESS_TOKENS:
+//                fragmentClass = AccessTokenFragment.class;
+//                Server connectedServer = getService().getTargetServer();
+//                args.putLong("server", connectedServer.getId());
+//                args.putStringArrayList("access_tokens", (ArrayList<String>) mDatabase.getAccessTokens(connectedServer.getId()));
+//                break;
+//            case DrawerAdapter.ITEM_PINNED_CHANNELS:
+//                fragmentClass = ChannelFragment.class;
+//                args.putBoolean("pinned", true);
+//                break;
 //            case DrawerAdapter.ITEM_FAVOURITES:
-////                fragmentClass = FavouriteServerListFragment.class;
-////                break;
+//                fragmentClass = FavouriteServerListFragment.class;
+//                break;
             case DrawerAdapter.ITEM_CHAT:
                 ChatActivity chatActivity = new ChatActivity();
                 intent = new Intent(this, chatActivity.getClass());
                 startActivity(intent);
                 return;
             case DrawerAdapter.ITEM_RECENTS:
-                fragmentClass = RecentChatsFragment.class;
-                break;
-            case DrawerAdapter.ITEM_PUBLIC:
-                fragmentClass = PublicServerListFragment.class;
-                break;
+                RecentChatsFragment recentChatsFragment = new RecentChatsFragment(this);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+                setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
+                return;
+//            case DrawerAdapter.ITEM_PUBLIC:
+//                fragmentClass = PublicServerListFragment.class;
+//                break;
             case DrawerAdapter.ITEM_SETTINGS:
                 Intent prefIntent = new Intent(this, Preferences.class);
                 startActivity(prefIntent);
@@ -804,4 +819,5 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //                break;
 //        }
     }
+
 }

@@ -21,7 +21,7 @@
     android:hint="@string/searchHint"
     android:searchSuggestAuthority="com.morlunk.mumbleclient.channel.ChannelSearchProvider"
     android:searchSuggestSelection=" ?"
-    android:searchSuggestThreshold="1"
+    android:searchSuggestThreshold="2"
     android:searchSuggestIntentAction="android.intent.action.SEARCH"
     android:inputType="textNoSuggestions"
     android:imeOptions="actionNone">

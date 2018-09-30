@@ -1,13 +1,11 @@
 package com.morlunk.mumbleclient.app;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.CursorWrapper;
-import android.graphics.PorterDuff;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.view.MenuItemCompat;
@@ -20,19 +18,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.IUser;
+import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.util.IJumbleObserver;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
+import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.channel.ChannelListAdapter;
 import com.morlunk.mumbleclient.channel.ChannelSearchProvider;
+import com.morlunk.mumbleclient.channel.UserMenu;
+import com.morlunk.mumbleclient.db.PlumbleDatabase;
+import com.morlunk.mumbleclient.service.PlumbleService;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
 import org.apache.http.NameValuePair;
@@ -47,8 +51,19 @@ import java.util.List;
 
 public class RecentChatsFragment extends JumbleServiceFragment {
 
+    PlumbleDatabase mDatabase;
+    PlumbleActivity plumbleActivity;
+    private Settings mSettings;
+
     private ChannelListAdapter mChannelListAdapter;
     private LinearLayout mChannelView;
+
+    public RecentChatsFragment(PlumbleActivity plumbleActivity) {
+        this.plumbleActivity = plumbleActivity;
+        mDatabase = plumbleActivity.getmDatabase();
+        mSettings = plumbleActivity.getmSettings();
+
+    }
 
     private IJumbleObserver mServiceObserver = new JumbleObserver() {
         @Override
@@ -145,6 +160,23 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         mChannelView = view.findViewById(R.id.chat_frame);
 //        mChannelView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        PlumbleService plumbleService = (PlumbleService) getService();
+
+        if (getService() != null && getService().isConnected() && mSettings.isFirstRun()){
+            plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
+        }
+
+        Button button = view.findViewById(R.id.register_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                PlumbleService plumbleService = (PlumbleService) getService();
+                if (getService() != null && getService().isConnected()) {
+                    IJumbleSession session = getService().getSession();
+                    plumbleService.registerUser(session.getSessionId());
+                }
+            }
+        });
         final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
 
 
@@ -219,8 +251,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem muteItem = menu.findItem(R.id.menu_mute_button);
-        MenuItem deafenItem = menu.findItem(R.id.menu_deafen_button);
+//        MenuItem muteItem = menu.findItem(R.id.menu_mute_button);
+//        MenuItem deafenItem = menu.findItem(R.id.menu_deafen_button);
 
         if (getService() != null && getService().isConnected()) {
             IJumbleSession session = getService().getSession();
@@ -229,13 +261,13 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             int foregroundColor = getActivity().getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorPrimaryInverse}).getColor(0, -1);
 
             IUser self = session.getSessionUser();
-            muteItem.setIcon(self.isSelfMuted() ? R.drawable.ic_action_microphone_muted : R.drawable.ic_action_microphone);
-            deafenItem.setIcon(self.isSelfDeafened() ? R.drawable.ic_action_audio_muted : R.drawable.ic_action_audio);
-            muteItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
-            deafenItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
+//            muteItem.setIcon(self.isSelfMuted() ? R.drawable.ic_action_microphone_muted : R.drawable.ic_action_microphone);
+//            deafenItem.setIcon(self.isSelfDeafened() ? R.drawable.ic_action_audio_muted : R.drawable.ic_action_audio);
+//            muteItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
+//            deafenItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
 
-            MenuItem bluetoothItem = menu.findItem(R.id.menu_bluetooth);
-            bluetoothItem.setChecked(session.usingBluetoothSco());
+//            MenuItem bluetoothItem = menu.findItem(R.id.menu_bluetooth);
+//            bluetoothItem.setChecked(session.usingBluetoothSco());
         }
     }
 
@@ -249,6 +281,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         if (searchManager != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
         }
         searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
@@ -291,36 +324,36 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         IJumbleSession session = getService().getSession();
         switch (item.getItemId()) {
-            case R.id.menu_mute_button: {
-                IUser self = session.getSessionUser();
-
-                boolean muted = !self.isSelfMuted();
-                boolean deafened = self.isSelfDeafened();
-                deafened &= muted; // Undeafen if mute is off
-                session.setSelfMuteDeafState(muted, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
-            case R.id.menu_deafen_button: {
-                IUser self = session.getSessionUser();
-
-                boolean deafened = !self.isSelfDeafened();
-                session.setSelfMuteDeafState(deafened, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
+//            case R.id.menu_mute_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean muted = !self.isSelfMuted();
+//                boolean deafened = self.isSelfDeafened();
+//                deafened &= muted; // Undeafen if mute is off
+//                session.setSelfMuteDeafState(muted, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
+//            case R.id.menu_deafen_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean deafened = !self.isSelfDeafened();
+//                session.setSelfMuteDeafState(deafened, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
             case R.id.menu_search:
                 return false;
-            case R.id.menu_bluetooth:
-                item.setChecked(!item.isChecked());
-                if (item.isChecked()) {
-                    session.enableBluetoothSco();
-                } else {
-                    session.disableBluetoothSco();
-                }
-                return true;
+//            case R.id.menu_bluetooth:
+//                item.setChecked(!item.isChecked());
+//                if (item.isChecked()) {
+//                    session.enableBluetoothSco();
+//                } else {
+//                    session.disableBluetoothSco();
+//                }
+//                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -73,9 +73,13 @@ public class ChannelEditFragment extends DialogFragment {
             IJumbleSession session = mServiceProvider.getService().getSession();
             IChannel parentChannel = session.getChannel(getParent());
             int combinedPermissions = session.getPermissions() | parentChannel.getPermissions();
-            boolean canMakeChannel = (combinedPermissions & Permissions.MakeChannel) > 0;
-            boolean canMakeTempChannel = (combinedPermissions & Permissions.MakeTempChannel) > 0;
+//            boolean canMakeChannel = (combinedPermissions & Permissions.MakeChannel) > 0;
+            boolean canMakeChannel = true;
+//            boolean canMakeTempChannel = (combinedPermissions & Permissions.MakeTempChannel) > 0;
+            boolean canMakeTempChannel = true;
+
             boolean onlyTemp = canMakeTempChannel && !canMakeChannel;
+
             mTemporaryBox.setChecked(onlyTemp);
             mTemporaryBox.setEnabled(!onlyTemp);
         }

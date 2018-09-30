@@ -209,8 +209,8 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem muteItem = menu.findItem(R.id.menu_mute_button);
-        MenuItem deafenItem = menu.findItem(R.id.menu_deafen_button);
+//        MenuItem muteItem = menu.findItem(R.id.menu_mute_button);
+//        MenuItem deafenItem = menu.findItem(R.id.menu_deafen_button);
 
         if (getService() != null && getService().isConnected()) {
             IJumbleSession session = getService().getSession();
@@ -219,13 +219,13 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
             int foregroundColor = getActivity().getTheme().obtainStyledAttributes(new int[]{android.R.attr.textColorPrimaryInverse}).getColor(0, -1);
 
             IUser self = session.getSessionUser();
-            muteItem.setIcon(self.isSelfMuted() ? R.drawable.ic_action_microphone_muted : R.drawable.ic_action_microphone);
-            deafenItem.setIcon(self.isSelfDeafened() ? R.drawable.ic_action_audio_muted : R.drawable.ic_action_audio);
-            muteItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
-            deafenItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
+//            muteItem.setIcon(self.isSelfMuted() ? R.drawable.ic_action_microphone_muted : R.drawable.ic_action_microphone);
+//            deafenItem.setIcon(self.isSelfDeafened() ? R.drawable.ic_action_audio_muted : R.drawable.ic_action_audio);
+//            muteItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
+//            deafenItem.getIcon().mutate().setColorFilter(foregroundColor, PorterDuff.Mode.MULTIPLY);
 
-            MenuItem bluetoothItem = menu.findItem(R.id.menu_bluetooth);
-            bluetoothItem.setChecked(session.usingBluetoothSco());
+//            MenuItem bluetoothItem = menu.findItem(R.id.menu_bluetooth);
+//            bluetoothItem.setChecked(session.usingBluetoothSco());
         }
     }
 
@@ -278,36 +278,36 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
 
         IJumbleSession session = getService().getSession();
         switch (item.getItemId()) {
-            case R.id.menu_mute_button: {
-                IUser self = session.getSessionUser();
-
-                boolean muted = !self.isSelfMuted();
-                boolean deafened = self.isSelfDeafened();
-                deafened &= muted; // Undeafen if mute is off
-                session.setSelfMuteDeafState(muted, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
-            case R.id.menu_deafen_button: {
-                IUser self = session.getSessionUser();
-
-                boolean deafened = !self.isSelfDeafened();
-                session.setSelfMuteDeafState(deafened, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
+////            case R.id.menu_mute_button: {
+////                IUser self = session.getSessionUser();
+////
+////                boolean muted = !self.isSelfMuted();
+////                boolean deafened = self.isSelfDeafened();
+////                deafened &= muted; // Undeafen if mute is off
+////                session.setSelfMuteDeafState(muted, deafened);
+////
+////                getActivity().supportInvalidateOptionsMenu();
+////                return true;
+////            }
+//            case R.id.menu_deafen_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean deafened = !self.isSelfDeafened();
+//                session.setSelfMuteDeafState(deafened, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
             case R.id.menu_search:
                 return false;
-            case R.id.menu_bluetooth:
-                item.setChecked(!item.isChecked());
-                if (item.isChecked()) {
-                    session.enableBluetoothSco();
-                } else {
-                    session.disableBluetoothSco();
-                }
-                return true;
+//            case R.id.menu_bluetooth:
+//                item.setChecked(!item.isChecked());
+//                if (item.isChecked()) {
+//                    session.enableBluetoothSco();
+//                } else {
+//                    session.disableBluetoothSco();
+//                }
+//                return true;
         }
 
         return super.onOptionsItemSelected(item);

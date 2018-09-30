@@ -9,6 +9,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/chat_frame">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/register_button"
+            android:text="@string/register"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

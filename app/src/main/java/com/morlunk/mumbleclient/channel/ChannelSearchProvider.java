@@ -129,19 +129,23 @@ public class ChannelSearchProvider extends ContentProvider {
 		
 		query = query.toLowerCase(Locale.getDefault());
 		
-		MatrixCursor cursor = new MatrixCursor(new String[] { "_ID", SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA });
+		MatrixCursor cursor = new MatrixCursor(new String[] { "_ID", SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+                SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_TEXT_2,
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA });
 
         List<IChannel> channels = channelSearch(session.getRootChannel(), query);
         List<IUser> users = userSearch(session.getRootChannel(), query);
 
         for(int x=0;x<channels.size();x++) {
             IChannel channel = channels.get(x);
-            cursor.addRow(new Object[] { x, INTENT_DATA_CHANNEL, channel.getName(), R.drawable.ic_action_channels, getContext().getString(R.string.search_channel_users, channel.getSubchannelUserCount()), channel.getId() });
+            cursor.addRow(new Object[] { x, INTENT_DATA_CHANNEL, channel.getName(), R.drawable.ic_action_channels,
+                    getContext().getString(R.string.search_channel_users, channel.getSubchannelUserCount()), channel.getId() });
         }
 
         for(int x=0;x<users.size();x++) {
             IUser user = users.get(x);
-            cursor.addRow(new Object[] { x, INTENT_DATA_USER, user.getName(), R.drawable.ic_action_user_dark, getContext().getString(R.string.user), user.getSession() });
+            cursor.addRow(new Object[] { x, INTENT_DATA_USER, user.getName(), R.drawable.ic_action_user_dark,
+                    getContext().getString(R.string.user), user.getSession() });
         }
 		return cursor;
 	}
@@ -163,19 +167,19 @@ public class ChannelSearchProvider extends ContentProvider {
      * @see #userSearch(IChannel,String)
      */
     private void userSearch(IChannel root, String str, List<IUser> users) {
-        if (root == null) {
-            return;
-        }
-        for (IUser user : (List<IUser>) root.getUsers()) {
-            if (user != null && user.getName() != null
-                    && user.getName().toLowerCase().contains(str.toLowerCase())) {
-                users.add(user);
-            }
-        }
-        for (IChannel subc : (List<IChannel>) root.getSubchannels()) {
-            if (subc != null)
-                userSearch(subc, str, users);
-        }
+//        if (root == null) {
+//            return;
+//        }
+//        for (IUser user : (List<IUser>) root.getUsers()) {
+//            if (user != null && user.getName() != null
+//                    && user.getName().toLowerCase().contains(str.toLowerCase())) {
+//                users.add(user);
+//            }
+//        }
+//        for (IChannel subc : (List<IChannel>) root.getSubchannels()) {
+//            if (subc != null)
+//                userSearch(subc, str, users);
+//        }
     }
 
     /**

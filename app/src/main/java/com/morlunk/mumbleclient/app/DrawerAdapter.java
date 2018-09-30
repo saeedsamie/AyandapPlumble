@@ -37,15 +37,15 @@ import com.morlunk.mumbleclient.R;
 public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
     // Drawer rows, integer value is id
-    public static final int HEADER_CONNECTED_SERVER = 0;
+//    public static final int HEADER_CONNECTED_SERVER = 0;
     public static final int ITEM_SERVER = 1;
-    public static final int ITEM_PINNED_CHANNELS = 2;
+//    public static final int ITEM_PINNED_CHANNELS = 2;
     public static final int ITEM_INFO = 3;
-    public static final int ITEM_ACCESS_TOKENS = 4;
+//    public static final int ITEM_ACCESS_TOKENS = 4;
     public static final int HEADER_SERVERS = 5;
-    public static final int ITEM_FAVOURITES = 6;
+//    public static final int ITEM_FAVOURITES = 6;
     //    public static final int ITEM_LAN = 7;
-    public static final int ITEM_PUBLIC = 8;
+//    public static final int ITEM_PUBLIC = 8;
     public static final int HEADER_GENERAL = 9;
     public static final int ITEM_SETTINGS = 10;
     public static final int ITEM_CHAT = 11;
@@ -102,16 +102,16 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             DrawerHeader header = (DrawerHeader) getItem(position);
             TextView title = (TextView) v.findViewById(R.id.drawer_header_title);
 
-            switch ((int) getItemId(position)) {
-                case HEADER_CONNECTED_SERVER:
-                    if (mProvider.isConnected()) {
-                        title.setText(mProvider.getConnectedServerName());
-                        break;
-                    }
-                default:
-                    title.setText(header.title);
-                    break;
-            }
+//            switch ((int) getItemId(position)) {
+//                case HEADER_CONNECTED_SERVER:
+//                    if (mProvider.isConnected()) {
+//                        title.setText(mProvider.getConnectedServerName());
+//                        break;
+//                    }
+//                default:
+//                    title.setText(header.title);
+//                    break;
+//            }
         } else if (viewType == ITEM_TYPE) {
             DrawerItem item = (DrawerItem) getItem(position);
             TextView title = (TextView) v.findViewById(R.id.drawer_item_title);
@@ -167,10 +167,10 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         int viewType = getItemViewType(position);
         if (viewType == ITEM_TYPE) {
             switch ((int) getItemId(position)) {
-                case ITEM_SERVER:
+//                case ITEM_SERVER:
                 case ITEM_INFO:
-                case ITEM_ACCESS_TOKENS:
-                case ITEM_PINNED_CHANNELS:
+//                case ITEM_ACCESS_TOKENS:
+//                case ITEM_PINNED_CHANNELS:
                     return mProvider.isConnected();
 //                case ITEM_LAN:
 //                    return false;

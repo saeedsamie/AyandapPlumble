@@ -154,7 +154,7 @@ public class PlumbleConnectionNotification {
         }
 
         Intent channelListIntent = new Intent(mService, PlumbleActivity.class);
-        channelListIntent.putExtra(PlumbleActivity.EXTRA_DRAWER_FRAGMENT, DrawerAdapter.ITEM_SERVER);
+        channelListIntent.putExtra(PlumbleActivity.EXTRA_DRAWER_FRAGMENT, DrawerAdapter.ITEM_RECENTS);
         // FLAG_CANCEL_CURRENT ensures that the extra always gets sent.
         PendingIntent pendingIntent = PendingIntent.getActivity(mService, 0, channelListIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(pendingIntent);
