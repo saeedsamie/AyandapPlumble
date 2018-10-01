@@ -3,6 +3,11 @@ package com.morlunk.mumbleclient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.morlunk.mumbleclient.app.LoginActivity;
+import com.morlunk.mumbleclient.app.RecentChatsFragment;
+import com.morlunk.mumbleclient.app.SignupActivity;
+import com.morlunk.mumbleclient.app.VerificationActivity;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -22,19 +27,35 @@ import java.util.List;
 public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     List<NameValuePair> nameValuePairs = new ArrayList<>();
     String jsonResponse;
+    RecentChatsFragment recentChatsFragment = null;
+    private SignupActivity signupActivity;
+    private VerificationActivity verificationActivity;
+    private LoginActivity loginActivity;
 
     public ServerFetchAsync(List<NameValuePair> nameValuePairs) {
         this.nameValuePairs = nameValuePairs;
     }
 
-    public JSONObject getJsonResponse() {
-        try {
-            return new JSONObject(jsonResponse);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs, RecentChatsFragment recentChatsFragment) {
+        this.recentChatsFragment = recentChatsFragment;
+        this.nameValuePairs = nameValuePairs;
     }
+
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs, LoginActivity loginActivity) {
+        this.loginActivity = loginActivity;
+        this.nameValuePairs = nameValuePairs;
+    }
+
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs, VerificationActivity verificationActivity) {
+        this.nameValuePairs = nameValuePairs;
+        this.verificationActivity = verificationActivity;
+    }
+
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs, SignupActivity signupActivity) {
+        this.nameValuePairs = nameValuePairs;
+        this.signupActivity = signupActivity;
+    }
+
 
     private static String getStringFromInputStream(InputStream is) {
 
@@ -60,11 +81,12 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
         return sb.toString();
     }
 
+
     @Override
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost("http://192.168.2.26/Plumble/fetchData.php");
+        HttpPost httpPost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
         try {
 
             UrlEncodedFormEntity form;
@@ -86,7 +108,31 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject s) {
+        if (loginActivity != null) {
+            try {
+                loginActivity.onTaskExecuted(new JSONObject(jsonResponse));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (verificationActivity != null) {
+            try {
+                verificationActivity.onTaskExecuted((jsonResponse));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (signupActivity != null) {
+            try {
+                signupActivity.onTaskExecuted(new JSONObject(jsonResponse));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (recentChatsFragment != null) {
+            try {
+                recentChatsFragment.onTaskExecuted(new JSONObject(jsonResponse));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onPostExecute(s);
-
     }
 }

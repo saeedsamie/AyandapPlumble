@@ -73,7 +73,8 @@ public class ChannelAdapter extends BaseAdapter {
         }
         User user = (User) getItem(position);
         TextView titleView = (TextView) v.findViewById(R.id.user_row_name);
-        titleView.setText(SignupActivity.username);
+//        titleView.setText(SignupActivity.username);
+        titleView.setText("username");
 
         ImageView state = (ImageView) v.findViewById(R.id.user_row_state);
         if (user.isSelfDeafened())

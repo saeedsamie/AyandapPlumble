@@ -272,4 +272,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="verificationPageNote">برای ادامه لطفا کدی که برای شما ارسال کرده ایم را وارد نمایید</string>
+    <string name="EnterVerificationCode">برای ادامه لطفا کد جدیدی که برای شما ارسال کرده ایم را وارد نمایید</string>
 </resources>

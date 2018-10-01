@@ -3,11 +3,9 @@ package com.morlunk.mumbleclient.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,94 +14,74 @@ import android.widget.TextView;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 public class LoginActivity extends AppCompatActivity {
 
-  public static String responseLogin;
-  public static JSONObject jsonResponse;
-  private TextView textView;
-  public Button loginContinue ;
-  public EditText phone ;
-  public String responseMain;
-  public static String user_phone;
-  public static String user_fullName;
-  SharedPreferences sp;
-  public static boolean isUser;
+    private String user_phone_number;
+    private boolean isUser;
+    public Button loginContinue;
+    public EditText phone;
+    SharedPreferences sharedPreferences;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.login);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-    }
-    loginContinue = (Button) findViewById(R.id.login_continue);
-    phone = (EditText) findViewById(R.id.login_phone);
-    sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("isLoggedIn")) {
+            Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
+            startActivity(intent);
+            finish();
 
-    if (sp.contains(SignupActivity.Username_Tag))
-    {
-      SignupActivity.username = sp.getString(SignupActivity.Username_Tag,null);
-    }
-
-    if (sp.contains(VerificationActivity.Name_Tag)) {
-      user_phone = sp.getString(VerificationActivity.Name_Tag, null);
-      Intent intent = new Intent(LoginActivity.this,PlumbleActivity.class);
-      startActivity(intent);
-      finish();
-
-    }
-
-
-    loginContinue.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-//        backgroundTask = new BackgroundTask(textView);
-//        backgroundTask.execute();
-
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("func", "0"));
-        nameValuePairs.add(new BasicNameValuePair("phone", phone.getText().toString()));
-        ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
-        JSONObject jsonObject;
-
-        serverFetchAsync.execute();
-
-        try {
-          jsonObject = serverFetchAsync.getJsonResponse();
-          isUser = jsonObject.getString("result").equals("1");
-          user_fullName = jsonObject.getString("fullName");
-        } catch (Exception e) {
-          e.printStackTrace();
         }
 
-        user_phone = phone.getText().toString();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        loginContinue = (Button) findViewById(R.id.login_continue);
+        phone = (EditText) findViewById(R.id.login_phone);
+
+//        if (sharedPreferences.contains(VerificationActivity.Name_Tag)) {
+//            user_phone_number = sharedPreferences.getString(VerificationActivity.Name_Tag, null);
+//            Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+
+        final LoginActivity loginActivity = this;
+
+        loginContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("func", "isUser"));
+                user_phone_number = phone.getText().toString();
+                nameValuePairs.add(new BasicNameValuePair("phone",user_phone_number ));
+                new ServerFetchAsync(nameValuePairs,loginActivity).execute();
+            }
+        });
+    }
+
+    public void onTaskExecuted(JSONObject jsonObject) {
+        try {
+            isUser = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("isUser").equals("1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
+        intent.putExtra("isUser",isUser);
+        intent.putExtra("Phone_number",user_phone_number);
         startActivity(intent);
-        finish();
-      }
-    });
-  }
+//        finish();
+
+    }
 }

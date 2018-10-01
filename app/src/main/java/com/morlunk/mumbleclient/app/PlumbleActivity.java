@@ -84,6 +84,8 @@ import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
+import static com.morlunk.mumbleclient.app.VerificationActivity.Name_Tag;
+
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
         FavouriteServerListFragment.ServerConnectHandler, JumbleServiceProvider, DatabaseProvider,
         SharedPreferences.OnSharedPreferenceChangeListener, DrawerAdapter.DrawerDataProvider,
@@ -92,7 +94,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * If specified, the provided integer drawer fragment ID is shown when the activity is created.
      */
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
-    Server server;
+    private Server server;
     private IPlumbleService mService;
     private PlumbleDatabase mDatabase;
     private Settings mSettings;
@@ -237,7 +239,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
-        server = new Server(2, "MUMBLE-server", "192.168.2.37", 64738,
+        server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
                 "User" + String.valueOf(new Random().nextInt(999)), "");
 
 
@@ -250,7 +252,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         setStayAwake(mSettings.shouldStayAwake());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        preferences.edit().putBoolean("isLoggedIn", true).apply();
         preferences.registerOnSharedPreferenceChangeListener(this);
+
+        SharedPreferences.Editor sEdit = preferences.edit();
+        sEdit.putBoolean("isLoggedIn",true);
+        sEdit.apply();
 
         mDatabase = new PlumbleSQLiteDatabase(this); // TODO add support for cloud storage
         mDatabase.open();
@@ -615,32 +622,37 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         connectTask.execute(server);
     }
 
-    public void connectToPublicServer(final PublicServer server) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+    @Override
+    public void connectToPublicServer(PublicServer server) {
 
-        final Settings settings = Settings.getInstance(this);
-
-        // Allow username entry
-        final EditText usernameField = new EditText(this);
-        usernameField.setHint(settings.getDefaultUsername());
-        alertBuilder.setView(usernameField);
-
-        alertBuilder.setTitle(R.string.connectToServer);
-
-        alertBuilder.setPositiveButton(R.string.connect, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                PublicServer newServer = server;
-                if (!usernameField.getText().toString().equals(""))
-                    newServer.setUsername(usernameField.getText().toString());
-                else
-                    newServer.setUsername(settings.getDefaultUsername());
-                connectToServer(newServer);
-            }
-        });
-
-        alertBuilder.show();
     }
+
+//    public void connectToPublicServer(final PublicServer server) {
+//        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+//
+//        final Settings settings = Settings.getInstance(this);
+//
+//        // Allow username entry
+//        final EditText usernameField = new EditText(this);
+//        usernameField.setHint(settings.getDefaultUsername());
+//        alertBuilder.setView(usernameField);
+//
+//        alertBuilder.setTitle(R.string.connectToServer);
+//
+//        alertBuilder.setPositiveButton(R.string.connect, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                PublicServer newServer = server;
+//                if (!usernameField.getText().toString().equals(""))
+//                    newServer.setUsername(usernameField.getText().toString());
+//                else
+//                    newServer.setUsername(settings.getDefaultUsername());
+//                connectToServer(newServer);
+//            }
+//        });
+
+//        alertBuilder.show();
+//    }
 
     private void setStayAwake(boolean stayAwake) {
         if (stayAwake) {

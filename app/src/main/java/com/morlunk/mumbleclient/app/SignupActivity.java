@@ -1,7 +1,9 @@
 package com.morlunk.mumbleclient.app;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -18,6 +20,7 @@ import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,18 +28,12 @@ import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
 
-    public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
-    public static final String Username_Tag = "tHiS_UsErNamE";
-    public static String responseSignup;
-    public static JSONObject jsonresponse;
-    public static String username;
-    public static String fullname;
-    EditText ed_fullname;
-    EditText ed_username;
     Button signup;
     SharedPreferences sp;
-    private TextView textView;
+    private EditText ed_fullname;
+    private EditText ed_username;
     private ProgressDialog pDialog;
+    AlertDialog.Builder alertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,155 +46,97 @@ public class SignupActivity extends AppCompatActivity {
         ed_username = (EditText) findViewById(R.id.signup_username);
         signup = (Button) findViewById(R.id.signup_signup);
         sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        final Intent in = getIntent();
+        pDialog = new ProgressDialog(SignupActivity.this);
+        pDialog.setMessage("لطفا صبر کنید...");
+        pDialog.setCancelable(false);
+        alertBuilder = new AlertDialog.Builder(SignupActivity.this);
+        final SignupActivity signupActivity = this;
+
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = ed_username.getText().toString();
-                fullname = ed_fullname.getText().toString();
 
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("func", "1"));
-                nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
-                nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
-                nameValuePairs.add(new BasicNameValuePair("username", username));
-                Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SignupActivity.this);
+                if (ed_fullname.getText().toString().matches("")) {
 
-                pDialog = new ProgressDialog(SignupActivity.this);
-                pDialog.setMessage("لطفا صبر کنید...");
-                pDialog.setCancelable(false);
-                pDialog.show();
-                ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
-                serverFetchAsync.execute();
-                try {
-                    JSONObject jsonObject = serverFetchAsync.getJsonResponse();
-//          jsonObject.get
+                    alertBuilder.setMessage("نام خود را وارد کنید!");
+                    alertBuilder.setCancelable(false);
+                    alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    alertBuilder.show();
+                } else if (ed_username.getText().toString().matches("")) {
+                    alertBuilder.setMessage("نام کاربری خود را وارد کنید!");
+                    alertBuilder.setCancelable(false);
+                    alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    alertBuilder.show();
+                } else {
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                    nameValuePairs.add(new BasicNameValuePair("func", "register"));
+                    nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
+                    nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
+                    nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
+                    nameValuePairs.add(new BasicNameValuePair("image", ""));
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+
+
+                    pDialog.show();
+                    new ServerFetchAsync(nameValuePairs, signupActivity).execute();
+
                 }
-                pDialog.dismiss();
-                SharedPreferences.Editor sEdit = sp.edit();
-                sEdit.putString(Name_Tag, LoginActivity.user_phone);
-                sEdit.putString(Username_Tag, username);
-                sEdit.apply();
-
-                Boolean aBoolean = true;
-                try {
-                    aBoolean = !in.getStringExtra("Launcher").equals("main");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (aBoolean) {
-                    Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
-                    startActivity(intent);
-                }
-
-//        backgroundTask = new BackgroundTask(textView);
-//        backgroundTask.execute();
             }
         });
     }
 
-//  private class BackgroundTask extends AsyncTask<Void, Void, String> {
-//
-//    private final WeakReference<TextView> messageViewReference;
-//    private BackgroundTask(TextView textView) {
-//      this.messageViewReference = new WeakReference<>(textView);
-//    }
-//
-//    @Override
-//    protected void onPreExecute() {
-//      super.onPreExecute();
-////      pDialog = new ProgressDialog(SignupActivity.this);
-////      pDialog.setMessage("لطفا صبر کنید...");
-////      pDialog.setCancelable(false);
-////      pDialog.show();
-//
-//    }
-//
-//    @Override
-//    protected String doInBackground(Void... voids) {
-//
-//      HttpClient httpclient = new DefaultHttpClient();
-//      HttpPost httppost = new HttpPost("http://192.168.2.26/Plumble/fetchData.php");
-//      try {
-////        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-////        nameValuePairs.add(new BasicNameValuePair("func", "1"));
-////        nameValuePairs.add(new BasicNameValuePair("phone", LoginActivity.user_phone));
-////        nameValuePairs.add(new BasicNameValuePair("fullname", fullname));
-////        nameValuePairs.add(new BasicNameValuePair("username", username));
-////        Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-////        UrlEncodedFormEntity form;
-////        form = new UrlEncodedFormEntity(nameValuePairs,"UTF-8");
-////        httppost.setEntity(form);
-////        HttpResponse response = httpclient.execute(httppost);
-////        InputStream inputStream = response.getEntity().getContent();
-////        SignupActivity.InputStreamToStringExample str = new SignupActivity.InputStreamToStringExample();
-////        responseSignup = str.getStringFromInputStream(inputStream);
-////        Log.e("response", "response -----" + responseSignup);
-////        jsonresponse = new JSONObject(responseSignup);
-//      } catch (Exception e) {
-////        e.printStackTrace();
-//      }
-//      return null;
-//    }
-//
-//    @Override
-//    protected void onPostExecute(String s) {
-//      super.onPostExecute(s);
-//      TextView textView = messageViewReference.get();
-//      if(textView != null) {
-//        textView.setText(s);
-//      }
-////      pDialog.dismiss();
-////      SharedPreferences.Editor sEdit = sp.edit();
-////      sEdit.putString(Name_Tag, LoginActivity.user_phone);
-////      sEdit.putString(Username_Tag, username);
-////      sEdit.apply();
-////      Intent intent = new Intent(SignupActivity.this,PlumbleActivity.class);
-////      startActivity(intent);
-//    }
-//  }
-//
-//  public static class InputStreamToStringExample {
-//
-//    public static void main(String[] args) throws IOException {
-//
-//      // intilize an InputStream
-//      InputStream is =
-//        new ByteArrayInputStream("file content..blah blah".getBytes());
-//
-//      String result = getStringFromInputStream(is);
-//
-//      System.out.println(result);
-//      System.out.println("Done");
-//
-//    }
-//
-//    public static String getStringFromInputStream(InputStream is) {
-//
-//      BufferedReader br = null;
-//      StringBuilder sb = new StringBuilder();
-//      String line;
-//      try {
-//        br = new BufferedReader(new InputStreamReader(is));
-//        while ((line = br.readLine()) != null) {
-//          sb.append(line);
-//        }
-//      } catch (IOException e) {
-//        e.printStackTrace();
-//      } finally {
-//        if (br != null) {
-//          try {
-//            br.close();
-//          } catch (IOException e) {
-//            e.printStackTrace();
-//          }
-//        }
-//      }
-//      return sb.toString();
-//    }
-//  }
+    public void onTaskExecuted(JSONObject jsonObject) {
+
+        pDialog.dismiss();
+
+        try {
+            if (jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").isEmpty()) {
+                alertBuilder.setMessage("دوباره سعی کنید!");
+                alertBuilder.setCancelable(false);
+                alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alertBuilder.show();
+            } else {
+                alertBuilder.setMessage("ثبت شد!");
+                alertBuilder.setCancelable(false);
+                alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!getIntent().getStringExtra("Launcher").equals("main")) {
+                            Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
+                alertBuilder.show();
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        SharedPreferences.Editor sEdit = sp.edit();
+////      sEdit.putString(Name_Tag, LoginActivity.user_phone_number);
+//        sEdit.putString(Username_Tag, username);
+//        sEdit.apply();
+
+
+    }
+
 
 }

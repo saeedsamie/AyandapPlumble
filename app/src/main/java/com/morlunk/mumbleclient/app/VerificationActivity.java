@@ -1,15 +1,19 @@
 package com.morlunk.mumbleclient.app;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,140 +21,143 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.ServerFetchAsync;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VerificationActivity extends AppCompatActivity {
 
-  public TextView timer;
-  public TextView backtologin;
-  public Button enter;
-  public String body;
-  public String numInsideSms;
-  public EditText vcode;
-  public int flag = 0;
-  public int isFinished = 0;
-  Context context;
-  String sender,fakebody,defaultSmsApp;
+    public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
+    public TextView timer;
+    public EditText vcode;
+    public int isFinished = 0;
+    boolean isUser;
+    String user_phone_number;
+    Context context;
+    SharedPreferences sharedPreferences;
+    private String c = "";
 
-  private static final int PERMISSION_REQUEST_CODE = 1;
-  public String android_id;
-  public String uuid;
-  public static String sended ;
-  SharedPreferences sp;
-  public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.verification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.verification);
-    getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    timer = (TextView) findViewById(R.id.timer);
-    backtologin = (TextView) findViewById(R.id.backtologin);
-    enter = (Button) findViewById(R.id.enter);
-    vcode = (EditText) findViewById(R.id.vcode);
-    sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        timer = (TextView) findViewById(R.id.timer);
+//        backtologin = (TextView) findViewById(R.id.backtologin);
+        vcode = (EditText) findViewById(R.id.vcode);
+        sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        Intent intent = getIntent();
+        isUser = intent.getBooleanExtra("isUser", false);
+        user_phone_number = intent.getStringExtra("Phone_number");
+        context = this;
 
-    context = this;
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("func", "verification"));
+        new ServerFetchAsync(nameValuePairs, this).execute();
 
-    SpannableString content = new SpannableString("تغییر شماره");
-    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-    backtologin.setText(content);
-    backtologin.setTextColor(Color.parseColor("#000000"));
+//        SpannableString content = new SpannableString("تغییر شماره");
+//        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 
-    backtologin.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(VerificationActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-      }
-    });
-    timer.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (isFinished == 1) {
-          new CountDownTimer(60000, 1000) {
+//        backtologin.setText(content);
+//        backtologin.setTextColor(Color.parseColor("#000000"));
+//        backtologin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(VerificationActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFinished == 1) {
+                    finish();
+                }
+            }
+
+        });
+
+        new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-
-              timer.setTextColor(Color.parseColor("#000000"));
-              timer.setText("برای ادامه لطفا کد جدیدی که برای شما ارسال کرده ایم را وارد نمایید" + " " + "(" + millisUntilFinished / 1000 + ")");
-              isFinished = 0;
-              //here you can have your logic to set text to edittext
+                timer.setTextColor(Color.parseColor("#000000"));
+                timer.setText(String.format("%s (%d)  ", getString(R.string.verificationPageNote), millisUntilFinished / 1000));
             }
 
             public void onFinish() {
-              SpannableString content = new SpannableString("کدی دریافت نکردید ؟");
-              content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-              timer.setText(content);
-              timer.setTextColor(Color.parseColor("#132273"));
-              isFinished = 1;
-              Log.i("testti", "" + isFinished);
+                SpannableString content = new SpannableString("کدی دریافت نکردید ؟");
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                timer.setText(content);
+                timer.setTextColor(Color.parseColor("#132273"));
+                isFinished = 1;
             }
-
-          }.start();
-
-          enter.setOnClickListener(new View.OnClickListener() {
+        }.start();
+        vcode.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-
-              Intent intent;
-              if (!LoginActivity.isUser)
-              {
-                intent = new Intent(VerificationActivity.this, SignupActivity.class);
-                intent.putExtra("Launcher","verification");
-                startActivity(intent);
-              }
-              else if(LoginActivity.isUser) {
-                Log.i("XShBXSHbhXS", "2");
-                intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
-                SharedPreferences.Editor sEdit = sp.edit();
-                sEdit.putString(Name_Tag, LoginActivity.user_phone);
-                sEdit.apply();
-                startActivity(intent);
-              }
-              finish();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-          });
 
+            @Override
+            public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 4) {
+                    AlertDialog.Builder alertBuilder;
+                    Intent intent;
+                    String enteredCode = vcode.getText().toString().trim();
+                        if (enteredCode.equals(c) && !isUser) {
+                            intent = new Intent(VerificationActivity.this, SignupActivity.class);
+                            intent.putExtra("phone_number",user_phone_number);
+                            intent.putExtra("Launcher", "verification");
+                            startActivity(intent);
+                            finish();
+                        } else if (enteredCode.equals(c) && isUser) {
+                            intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
+                            SharedPreferences.Editor sEdit = sharedPreferences.edit();
+                            sEdit.putString(Name_Tag, user_phone_number);
+                            sEdit.apply();
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            alertBuilder = new AlertDialog.Builder(VerificationActivity.this);
+                            alertBuilder.setMessage("کد وارد شده معتبر نیست!");
+                            alertBuilder.setCancelable(false);
+                            alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    vcode.setText("");
+                                }
+                            });
+                            alertBuilder.show();
+                        }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+    }
+
+    public void onTaskExecuted(String code) {
+        try {
+//            c = jsonObject.getString("vcode");
+            c = code;
+            TextView textView = (TextView) findViewById(R.id.verification_code_holder);
+            textView.setText(code);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-      }
-
-    });
-
-    new CountDownTimer(60000, 1000) {
-
-      public void onTick(long millisUntilFinished) {
-        timer.setTextColor(Color.parseColor("#000000"));
-        timer.setText("   برای ادامه لطفا کدی که برای شما ارسال کرده ایم را وارد نمایید" + " " + "(" + millisUntilFinished / 1000 + ")  ");
-      }
-
-      public void onFinish() {
-        SpannableString content = new SpannableString("کدی دریافت نکردید ؟");
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        timer.setText(content);
-        timer.setTextColor(Color.parseColor("#132273"));
-        isFinished = 1;
-      }
-    }.start();
-
-    enter.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent;
-        if (!LoginActivity.isUser)
-        {
-          intent = new Intent(VerificationActivity.this, SignupActivity.class);
-          startActivity(intent);
-        }
-        else if(LoginActivity.isUser) {
-          intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
-          startActivity(intent);
-        }
-        finish();
-
-      }
-    });
-  }
+    }
 }
