@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -30,10 +29,10 @@ public class SignupActivity extends AppCompatActivity {
 
     Button signup;
     SharedPreferences sp;
+    AlertDialog.Builder alertBuilder;
     private EditText ed_fullname;
     private EditText ed_username;
     private ProgressDialog pDialog;
-    AlertDialog.Builder alertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +83,9 @@ public class SignupActivity extends AppCompatActivity {
                     nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
                     nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
                     nameValuePairs.add(new BasicNameValuePair("image", ""));
-
                     Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-
-
                     pDialog.show();
                     new ServerFetchAsync(nameValuePairs, signupActivity).execute();
-
                 }
             }
         });
@@ -98,19 +93,17 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onTaskExecuted(JSONObject jsonObject) {
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
+        editor.putString(getString(R.string.PREF_TAG_phonenumber), getIntent().getStringExtra("phone_number"));
+        editor.putString(getString(R.string.PREF_TAG_fullname), ed_fullname.getText().toString());
+        editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
+        editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
+        Boolean isSavedInPref = editor.commit();
         pDialog.dismiss();
-
         try {
-            if (jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").isEmpty()) {
-                alertBuilder.setMessage("دوباره سعی کنید!");
-                alertBuilder.setCancelable(false);
-                alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                alertBuilder.show();
-            } else {
+            if (isSavedInPref && !jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").isEmpty()) {
                 alertBuilder.setMessage("ثبت شد!");
                 alertBuilder.setCancelable(false);
                 alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
@@ -124,19 +117,18 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
                 alertBuilder.show();
-
+            } else {
+                alertBuilder.setMessage("دوباره سعی کنید!");
+                alertBuilder.setCancelable(false);
+                alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alertBuilder.show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        SharedPreferences.Editor sEdit = sp.edit();
-////      sEdit.putString(Name_Tag, LoginActivity.user_phone_number);
-//        sEdit.putString(Username_Tag, username);
-//        sEdit.apply();
-
-
     }
-
-
 }

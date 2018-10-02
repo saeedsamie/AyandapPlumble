@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,15 +30,13 @@ import java.util.List;
 
 public class VerificationActivity extends AppCompatActivity {
 
-    public static final String Name_Tag = "tHiS_PHoNeNuMbEr";
     public TextView timer;
     public EditText vcode;
     public int isFinished = 0;
     boolean isUser;
     String user_phone_number;
-    Context context;
-    SharedPreferences sharedPreferences;
     private String c = "";
+    VerificationActivity verificationActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +50,10 @@ public class VerificationActivity extends AppCompatActivity {
         timer = (TextView) findViewById(R.id.timer);
 //        backtologin = (TextView) findViewById(R.id.backtologin);
         vcode = (EditText) findViewById(R.id.vcode);
-        sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         Intent intent = getIntent();
         isUser = intent.getBooleanExtra("isUser", false);
         user_phone_number = intent.getStringExtra("Phone_number");
-        context = this;
+        verificationActivity = this;
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "verification"));
@@ -118,13 +114,12 @@ public class VerificationActivity extends AppCompatActivity {
                             intent.putExtra("phone_number",user_phone_number);
                             intent.putExtra("Launcher", "verification");
                             startActivity(intent);
+                            verificationActivity.setResult(RESULT_OK);
                             finish();
                         } else if (enteredCode.equals(c) && isUser) {
                             intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
-                            SharedPreferences.Editor sEdit = sharedPreferences.edit();
-                            sEdit.putString(Name_Tag, user_phone_number);
-                            sEdit.apply();
                             startActivity(intent);
+                            verificationActivity.setResult(RESULT_OK);
                             finish();
                         } else {
                             alertBuilder = new AlertDialog.Builder(VerificationActivity.this);

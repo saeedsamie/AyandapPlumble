@@ -84,7 +84,6 @@ import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
-import static com.morlunk.mumbleclient.app.VerificationActivity.Name_Tag;
 
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
         FavouriteServerListFragment.ServerConnectHandler, JumbleServiceProvider, DatabaseProvider,
@@ -252,12 +251,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         setStayAwake(mSettings.shouldStayAwake());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        preferences.edit().putBoolean("isLoggedIn", true).apply();
         preferences.registerOnSharedPreferenceChangeListener(this);
 
-        SharedPreferences.Editor sEdit = preferences.edit();
-        sEdit.putBoolean("isLoggedIn",true);
-        sEdit.apply();
 
         mDatabase = new PlumbleSQLiteDatabase(this); // TODO add support for cloud storage
         mDatabase.open();
