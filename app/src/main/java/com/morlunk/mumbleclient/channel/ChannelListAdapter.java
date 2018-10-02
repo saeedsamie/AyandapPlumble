@@ -18,6 +18,7 @@
 package com.morlunk.mumbleclient.channel;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,6 +56,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.morlunk.mumbleclient.R.string.PREF_TAG_username;
 
 /**
  * Created by andrew on 31/07/13.
@@ -223,7 +226,8 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
             });
 
 //            uvh.mUserName.setText(PlumbleActivity.username);
-            uvh.mUserName.setText("username");
+            uvh.mUserName.setText(mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                    .getString(mContext.getString(R.string.PREF_TAG_username),"User"));
 
 
             final int typefaceStyle;

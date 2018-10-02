@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -46,8 +47,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
@@ -93,6 +94,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * If specified, the provided integer drawer fragment ID is shown when the activity is created.
      */
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
+    SharedPreferences sharedPreferences;
     private Server server;
     private IPlumbleService mService;
     private PlumbleDatabase mDatabase;
@@ -102,6 +104,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private DrawerAdapter mDrawerAdapter;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
+    private Fragment currentFragment;
     /**
      * List of fragments to be notified about service state changes.
      */
@@ -172,11 +175,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                     KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
                     trustStore.setCertificateEntry(alias, x509);
                     PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
-                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
                     connectToServer(lastServer);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
                 }
 //                    }
 //                });
@@ -237,9 +240,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-                "User" + String.valueOf(new Random().nextInt(999)), "");
+                "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
+                        "user" + new Random().nextInt(1000)), "");
 
 
         mSettings = Settings.getInstance(this);
@@ -465,19 +471,29 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     public void onBackPressed() {
 
-        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
-        dadb.setMessage(R.string.leave_application_message);
-        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (mService != null) mService.disconnect();
-                finish();
-
-            }
-        });
-        dadb.setNegativeButton(android.R.string.cancel, null);
-        dadb.show();
+        if (!currentFragment.getClass().getName().equals(RecentChatsFragment.class.getName())) {
+            RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
+            recentChatsFragment.setPlumbleActivity(this);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+            setTitle("Recents");
+            setCurrentFragment(recentChatsFragment);
+        } else {
+            AlertDialog.Builder dadb = new AlertDialog.Builder(this);
+            dadb.setMessage(R.string.leave_application_message);
+            dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (mService != null) mService.disconnect();
+                    finish();
+                }
+            });
+            dadb.setNegativeButton(android.R.string.cancel, null);
+            dadb.show();
 //        super.onBackPressed();
+        }
     }
 
     @Override
@@ -518,6 +534,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //        startActivity(intent);
     }
 
+    public void setCurrentFragment(Fragment currentFragment) {
+        this.currentFragment = currentFragment;
+    }
+
     /**
      * Loads a fragment from the drawer.
      */
@@ -555,12 +575,14 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 startActivity(intent);
                 return;
             case DrawerAdapter.ITEM_RECENTS:
-                RecentChatsFragment recentChatsFragment = new RecentChatsFragment(this);
+                RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
+                recentChatsFragment.setPlumbleActivity(this);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, recentChatsFragment, "Recents")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
+                setCurrentFragment(recentChatsFragment);
                 return;
 //            case DrawerAdapter.ITEM_PUBLIC:
 //                fragmentClass = PublicServerListFragment.class;
@@ -577,6 +599,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 .replace(R.id.content_frame, fragment, fragmentClass.getName())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        setCurrentFragment(fragment);
         setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
     }
 
@@ -677,13 +700,13 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 Server server = service.getTargetServer();
                 mConnectingDialog = new ProgressDialog(this);
                 mConnectingDialog.setIndeterminate(true);
-                mConnectingDialog.setCancelable(true);
+                mConnectingDialog.setCancelable(false);
                 mConnectingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         mService.disconnect();
-                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
+//                                Toast.LENGTH_SHORT).show();
                     }
                 });
                 mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),

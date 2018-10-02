@@ -4,10 +4,12 @@ import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.CursorWrapper;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IChannel;
@@ -52,13 +54,14 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     private PlumbleActivity plumbleActivity;
     private Settings mSettings;
     private ListView listView;
+    List<NameValuePair> nameValuePairs;
 
     private ChannelListAdapter mChannelListAdapter;
-    private LinearLayout mChannelView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private IJumbleObserver mServiceObserver = new JumbleObserver() {
         @Override
         public void onDisconnected(JumbleException e) {
-//            mChannelView.setAdapter(null);
+//            mSwipeRefreshLayout.setAdapter(null);
         }
 
         @Override
@@ -108,13 +111,13 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         @Override
         public void onUserStateUpdated(IUser user) {
-//            mChannelListAdapter.animateUserStateUpdate(user, mChannelView);
+//            mChannelListAdapter.animateUserStateUpdate(user, mSwipeRefreshLayout);
             getActivity().supportInvalidateOptionsMenu(); // Update self mute/deafen state
         }
 
         @Override
         public void onUserTalkStateUpdated(IUser user) {
-//            mChannelListAdapter.animateUserTalkStateUpdate(user, mChannelView);
+//            mChannelListAdapter.animateUserTalkStateUpdate(user, mSwipeRefreshLayout);
         }
     };
     private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
@@ -125,11 +128,10 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         }
     };
 
-    public RecentChatsFragment(PlumbleActivity plumbleActivity) {
+    public void setPlumbleActivity(PlumbleActivity plumbleActivity) {
         this.plumbleActivity = plumbleActivity;
         mDatabase = plumbleActivity.getmDatabase();
         mSettings = plumbleActivity.getmSettings();
-
     }
 
     @Override
@@ -146,7 +148,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 //                isShowingPinnedChannels(), mSettings.shouldShowUserCount());
 //        mChannelListAdapter.setOnChannelClickListener(this);
 //        mChannelListAdapter.setOnUserClickListener(this);
-//        mChannelView.setAdapter(mChannelListAdapter);
+//        mSwipeRefreshLayout.setAdapter(mChannelListAdapter);
         mChannelListAdapter.notifyDataSetChanged();
     }
 
@@ -154,31 +156,36 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recent_chats, container, false);
-        mChannelView = view.findViewById(R.id.chat_frame);
+        mSwipeRefreshLayout = view.findViewById(R.id.chat_frame);
         listView = view.findViewById(R.id.recent_chats_list);
-//        mChannelView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mSwipeRefreshLayout.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        PlumbleService plumbleService = (PlumbleService) getService();
-
-        if (getService() != null && getService().isConnected() && mSettings.isFirstRun()) {
-            plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
-        }
-
-        Button button = view.findViewById(R.id.register_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                PlumbleService plumbleService = (PlumbleService) getService();
-                if (getService() != null && getService().isConnected()) {
-                    IJumbleSession session = getService().getSession();
-                    plumbleService.registerUser(session.getSessionId());
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if (!sharedPreferences.getBoolean("isRegistered", false)) {
+            PlumbleService plumbleService = (PlumbleService) getService();
+            if (getService() != null && getService().isConnected()) {
+                plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
+                if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
+                    Toast.makeText(this.getContext(), "Registered :D !", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this.getContext(), "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
                 }
             }
-        });
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        }
+
+
+        nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
 //        nameValuePairs.add(new BasicNameValuePair("userId", LoginActivity.user_phone_number));
         new ServerFetchAsync(nameValuePairs, this).execute();
+        final RecentChatsFragment recentChatsFragment = this;
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new ServerFetchAsync(nameValuePairs, recentChatsFragment).execute();
+            }
+
+        });
         return view;
 
     }
@@ -186,7 +193,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        registerForContextMenu(mChannelView);
+        registerForContextMenu(mSwipeRefreshLayout);
 //        getActivity().registerReceiver(mBluetoothReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
     }
 
@@ -304,13 +311,13 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     public void scrollToUser(int userId) {
         int userPosition = mChannelListAdapter.getUserPosition(userId);
-//        mChannelView.smoothScrollToPosition(userPosition);
+//        mSwipeRefreshLayout.smoothScrollToPosition(userPosition);
         //todo
     }
 
     public void scrollToChannel(int channelId) {
         int channelPosition = mChannelListAdapter.getChannelPosition(channelId);
-//        mChannelView.smoothScrollToPosition(channelPosition);
+//        mSwipeRefreshLayout.smoothScrollToPosition(channelPosition);
         //todo
     }
 
@@ -326,6 +333,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     public void onTaskExecuted(JSONObject jsonObject) {
 
+        mSwipeRefreshLayout.setRefreshing(false);
         final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
         try {
             JSONArray jsonArray;

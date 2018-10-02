@@ -1,5 +1,6 @@
 package com.morlunk.mumbleclient.app;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,17 +10,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,17 +27,17 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public static final int REQUEST_EXIT = 22;
-    private String user_phone_number;
-    private boolean isUser;
     public Button loginContinue;
     public EditText phone;
     SharedPreferences sharedPreferences;
+    private String user_phone_number;
+    private boolean isUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.getBoolean("isLoggedIn",false)) {
+        if (sharedPreferences.getBoolean("isLoggedIn", false)) {
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
             startActivity(intent);
             finish();
@@ -69,8 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("func", "isUser"));
                 user_phone_number = phone.getText().toString();
-                nameValuePairs.add(new BasicNameValuePair("phone",user_phone_number ));
-                new ServerFetchAsync(nameValuePairs,loginActivity).execute();
+                nameValuePairs.add(new BasicNameValuePair("phone", user_phone_number));
+                new ServerFetchAsync(nameValuePairs, loginActivity).execute();
             }
         });
     }
@@ -98,14 +96,17 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Boolean isSavedInPref = editor.commit();
-            if (isSavedInPref){
-            Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
-            intent.putExtra("isUser",isUser);
-            intent.putExtra("Phone_number",user_phone_number);
-            startActivityForResult(intent, REQUEST_EXIT);
-            }else {
+            if (isSavedInPref) {
+                Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
+                intent.putExtra("isUser", isUser);
+                intent.putExtra("Phone_number", user_phone_number);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivityForResult(intent, REQUEST_EXIT, ActivityOptions.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out).toBundle());
+                } else
+                    startActivityForResult(intent, REQUEST_EXIT);
+            } else {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(LoginActivity.this);
-                alertBuilder.setMessage("ثبت نشد!"+"\n"+"دوباره سعی کنید!");
+                alertBuilder.setMessage("ثبت نشد!" + "\n" + "دوباره سعی کنید!");
                 alertBuilder.setCancelable(false);
                 alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
                     @Override
@@ -123,9 +124,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_EXIT)
+        if (requestCode == REQUEST_EXIT)
             if (resultCode == RESULT_OK) {
                 this.finish();
             }
