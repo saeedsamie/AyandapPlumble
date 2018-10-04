@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#454D5E">
+  >
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -10,7 +10,7 @@
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:layout_alignParentTop="true"
-      android:background="#454D5E"
+      android:background="@drawable/rounded_layout"
       android:orientation="horizontal">
 
         <ImageView
@@ -18,31 +18,28 @@
           android:layout_width="100dp"
           android:layout_height="100dp"
           android:background="#00000000"
-          android:padding="3dp"
+          android:padding="10dp"
           android:src="@drawable/ic_launcher"/>
 
         <LinearLayout
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          android:paddingTop="5dp">
 
             <TextView
               android:id="@+id/chatTitle"
               android:layout_width="match_parent"
               android:layout_height="0dp"
               android:layout_alignParentTop="true"
-              android:layout_marginLeft="12dp"
               android:layout_marginStart="12dp"
-              android:layout_marginTop="3dp"
               android:layout_toEndOf="@+id/appIconIV"
               android:layout_toRightOf="@+id/appIconIV"
               android:layout_weight="1"
-              android:gravity="right"
+              android:gravity="bottom|right|center"
               android:maxLines="1"
-              android:paddingLeft="12dp"
-              android:paddingRight="12dp"
-              android:paddingTop="8dp"
+              android:padding="3dp"
               android:text="Chat Title"
               android:textColor="#FFF"
               android:textSize="28sp"
@@ -55,13 +52,11 @@
               android:layout_alignLeft="@+id/roomname"
               android:layout_alignStart="@+id/roomname"
               android:layout_below="@+id/roomname"
-              android:layout_marginLeft="12dp"
               android:layout_marginStart="12dp"
-              android:layout_marginTop="4dp"
               android:layout_weight="1"
-              android:gravity="top|right"
+              android:gravity="top|right|center"
               android:maxLines="1"
-              android:paddingRight="12dp"
+              android:padding="3dp"
               android:text="Chat Bio"
               android:textColor="#FFF"
               android:textSize="16sp"/>
