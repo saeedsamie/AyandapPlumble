@@ -103,8 +103,6 @@ public class SignupActivity extends AppCompatActivity {
         editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
         Boolean isSavedInPref = editor.commit();
         userId = id;
-
-        Log.i("SCAUCSIHSC",userId);
         pDialog.dismiss();
 
             if (isSavedInPref && !userId.isEmpty()) {
