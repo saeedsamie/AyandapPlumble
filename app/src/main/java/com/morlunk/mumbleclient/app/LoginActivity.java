@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
+            SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
             startActivity(intent);
             finish();
@@ -84,14 +85,18 @@ public class LoginActivity extends AppCompatActivity {
             String fullname = null;
             String username = null;
             String image = null;
+            String userId = null;
             try {
                 fullname = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("fullName");
                 username = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("userName");
                 image = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("image");
+                userId = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("userId");
                 editor.putString(getString(R.string.PREF_TAG_phonenumber), user_phone_number);
                 editor.putString(getString(R.string.PREF_TAG_fullname), fullname);
                 editor.putString(getString(R.string.PREF_TAG_username), username);
                 editor.putString(getString(R.string.PREF_TAG_image), image);
+                editor.putString(getString(R.string.PREF_TAG_userid), userId);
+                SignupActivity.userId = userId;
             } catch (Exception e) {
                 e.printStackTrace();
             }

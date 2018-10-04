@@ -279,4 +279,5 @@
     <string name="PREF_TAG_fullname">full_name</string>
     <string name="PREF_TAG_username">username</string>
     <string name="PREF_TAG_image">image</string>
+    <string name="PREF_TAG_userid">userId</string>
 </resources>
