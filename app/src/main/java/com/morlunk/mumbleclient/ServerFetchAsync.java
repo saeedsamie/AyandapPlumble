@@ -121,7 +121,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
             }
         } else if (signupActivity != null) {
             try {
-                signupActivity.onTaskExecuted(new JSONObject(jsonResponse));
+                signupActivity.onTaskExecuted((jsonResponse));
             } catch (Exception e) {
                 e.printStackTrace();
             }

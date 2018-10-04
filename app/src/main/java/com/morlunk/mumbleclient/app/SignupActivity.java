@@ -19,8 +19,6 @@ import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +92,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void onTaskExecuted(JSONObject jsonObject) {
+    public void onTaskExecuted(String id) {
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -104,28 +102,17 @@ public class SignupActivity extends AppCompatActivity {
         editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
         editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
         Boolean isSavedInPref = editor.commit();
-        try {
-            userId = jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        userId = id;
+
         Log.i("SCAUCSIHSC",userId);
         pDialog.dismiss();
-        try {
-            if (isSavedInPref && !jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").isEmpty()) {
-                alertBuilder.setMessage("ثبت شد!");
-                alertBuilder.setCancelable(false);
-                alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!getIntent().getStringExtra("Launcher").equals("main")) {
-                            Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                });
-                alertBuilder.show();
+
+            if (isSavedInPref && !userId.isEmpty()) {
+                if (!getIntent().getStringExtra("Launcher").equals("main")) {
+                    Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             } else {
                 alertBuilder.setMessage("دوباره سعی کنید!");
                 alertBuilder.setCancelable(false);
@@ -136,9 +123,7 @@ public class SignupActivity extends AppCompatActivity {
                 });
                 alertBuilder.show();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

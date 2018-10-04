@@ -150,6 +150,7 @@ public class VerificationActivity extends AppCompatActivity {
         try {
 //            c = jsonObject.getString("vcode");
             c = code;
+
             TextView textView = (TextView) findViewById(R.id.verification_code_holder);
             textView.setText(code);
         } catch (Exception e) {
