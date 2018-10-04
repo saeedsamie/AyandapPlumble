@@ -1,39 +1,58 @@
 package com.morlunk.mumbleclient.app;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button signup;
-    SharedPreferences sp;
-    AlertDialog.Builder alertBuilder;
-    private EditText ed_fullname;
-    private EditText ed_username;
-    private ProgressDialog pDialog;
-    public static String userId;
+  private static final int PICK_FILE_REQUEST = 1;
+  SharedPreferences sp;
+  AlertDialog.Builder alertBuilder;
+  private EditText ed_fullname;
+  private EditText ed_username;
+  private ProgressDialog pDialog;
+  public static String userId;
+  private String SERVER_URL = "http://192.168.2.26/SqliteTest/image.php";
+  ImageView ivAttachment;
+  Button bUpload;
+  private static String selectedFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,55 +61,259 @@ public class SignupActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
-        ed_fullname = (EditText) findViewById(R.id.signup_fullname);
-        ed_username = (EditText) findViewById(R.id.signup_username);
-        signup = (Button) findViewById(R.id.signup_signup);
-        sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        pDialog = new ProgressDialog(SignupActivity.this);
-        pDialog.setMessage("لطفا صبر کنید...");
-        pDialog.setCancelable(false);
-        alertBuilder = new AlertDialog.Builder(SignupActivity.this);
-        final SignupActivity signupActivity = this;
 
 
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+      ActivityCompat.requestPermissions(SignupActivity.this,
+        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SignupActivity.this);
-                if (ed_fullname.getText().toString().matches("")) {
 
-                    alertBuilder.setMessage("نام خود را وارد کنید!");
-                    alertBuilder.setCancelable(false);
-                    alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    alertBuilder.show();
-                } else if (ed_username.getText().toString().matches("")) {
-                    alertBuilder.setMessage("نام کاربری خود را وارد کنید!");
-                    alertBuilder.setCancelable(false);
-                    alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    alertBuilder.show();
-                } else {
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                    nameValuePairs.add(new BasicNameValuePair("func", "register"));
-                    nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
-                    nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
-                    nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
-                    nameValuePairs.add(new BasicNameValuePair("image", ""));
-                    Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-                    pDialog.show();
-                    new ServerFetchAsync(nameValuePairs, signupActivity).execute();
-                }
-            }
-        });
+      bUpload = (Button) findViewById(R.id.signup_signup);
+      ivAttachment = (ImageView) findViewById(R.id.ivAttachment);
+      ivAttachment.setOnClickListener((View.OnClickListener) this);
+      bUpload.setOnClickListener((View.OnClickListener) this);
+      ed_fullname = (EditText) findViewById(R.id.signup_fullname);
+      ed_username = (EditText) findViewById(R.id.signup_username);
+      sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+      pDialog = new ProgressDialog(SignupActivity.this);
+      pDialog.setMessage("لطفا صبر کنید...");
+      pDialog.setCancelable(false);
+      alertBuilder = new AlertDialog.Builder(SignupActivity.this);
+      final SignupActivity signupActivity = this;
+
+
     }
+
+  @Override
+  public void onClick(View v) {
+
+    if(v== ivAttachment){
+
+      //on attachment icon click
+      showFileChooser();
+    }
+    if(v== bUpload){
+//      backgroundTask = new BackgroundTask(textView);
+//      backgroundTask.execute();
+      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+      nameValuePairs.add(new BasicNameValuePair("func", "register"));
+      nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
+      nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
+      nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
+      Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+      pDialog.show();
+      new ServerFetchAsync(nameValuePairs, this).execute();
+      //on upload button Click
+
+
+    }
+
+
+//    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SignupActivity.this);
+//    if (ed_fullname.getText().toString().matches("")) {
+//
+//      alertBuilder.setMessage("نام خود را وارد کنید!");
+//      alertBuilder.setCancelable(false);
+//      alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+//        @Override
+//        public void onClick(DialogInterface dialog, int which) {
+//        }
+//      });
+//      alertBuilder.show();
+//    } else if (ed_username.getText().toString().matches("")) {
+//      alertBuilder.setMessage("نام کاربری خود را وارد کنید!");
+//      alertBuilder.setCancelable(false);
+//      alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
+//        @Override
+//        public void onClick(DialogInterface dialog, int which) {
+//        }
+//      });
+//      alertBuilder.show();
+//    } else {
+//      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+//      nameValuePairs.add(new BasicNameValuePair("func", "register"));
+//      nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
+//      nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
+//      nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
+//      nameValuePairs.add(new BasicNameValuePair("image", ""));
+//      Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+//      pDialog.show();
+//      new ServerFetchAsync(nameValuePairs, signupActivity).execute();
+//    }
+  }
+
+
+
+  private void showFileChooser() {
+    Intent intent = new Intent();
+    intent.setType("*/*");
+    intent.setAction(Intent.ACTION_GET_CONTENT);
+    startActivityForResult(Intent.createChooser(intent,"عکس پروفایل خود انتخاب کنید..."),PICK_FILE_REQUEST);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == Activity.RESULT_OK) {
+      if (requestCode == PICK_FILE_REQUEST) {
+        if (data == null) {
+          //no data present
+          return;
+        }
+
+
+        Uri selectedFileUri = data.getData();
+        selectedFilePath = FilePath.getPath(this, selectedFileUri);
+
+        if (selectedFilePath != null && !selectedFilePath.equals("")) {
+        } else {
+          Toast.makeText(this, "Cannot upload file to server", Toast.LENGTH_SHORT).show();
+        }
+      }
+    }
+  }
+
+
+  public int uploadFile(final String selectedFilePath){
+
+    int serverResponseCode = 0;
+
+    HttpURLConnection connection;
+    DataOutputStream dataOutputStream;
+    String lineEnd = "\r\n";
+    String twoHyphens = "--";
+    String boundary = "*****";
+
+
+    int bytesRead,bytesAvailable,bufferSize;
+    byte[] buffer;
+    int maxBufferSize = 1 * 1024 * 1024;
+    File selectedFile = new File(selectedFilePath);
+
+
+    String[] parts = selectedFilePath.split("/");
+    final String fileName = parts[parts.length-1];
+
+    if (!selectedFile.isFile()){
+
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          Log.i("SPOIMVSDPIM","Source File Doesn't Exist");
+        }
+      });
+      return 0;
+    }else{
+      try{
+        FileInputStream fileInputStream = new FileInputStream(selectedFile);
+        URL url = new URL(SERVER_URL);
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setDoInput(true);//Allow Inputs
+        connection.setDoOutput(true);//Allow Outputs
+        connection.setUseCaches(false);//Don't use a cached Copy
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Connection", "Keep-Alive");
+        connection.setRequestProperty("ENCTYPE", "multipart/form-data");
+        connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+        connection.setRequestProperty("uploaded_file",selectedFilePath);
+
+        //creating new dataoutputstream
+        dataOutputStream = new DataOutputStream(connection.getOutputStream());
+
+        String[] tmp = selectedFilePath.split("/");
+        tmp[tmp.length-1] = userId + ".png";
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < tmp.length; i++) {
+          if (i<tmp.length-1) {
+            result.append(tmp[i] + '/');
+          }
+          else
+          {
+            result.append(tmp[i]);
+          }
+          //result.append( optional separator );
+        }
+        String mynewstring = result.toString();
+
+        Log.i("AKMSAKMSAMK",userId);
+
+        //writing bytes to data outputstream
+        dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+          + mynewstring + "\"" + lineEnd);
+
+//        Log.i("IFHFISEH",selectedFilePath);
+        Log.i("IFHFISEH",lineEnd);
+
+        dataOutputStream.writeBytes(lineEnd);
+
+        //returns no. of bytes present in fileInputStream
+        bytesAvailable = fileInputStream.available();
+        //selecting the buffer size as minimum of available bytes or 1 MB
+        bufferSize = Math.min(bytesAvailable,maxBufferSize);
+        //setting the buffer as byte array of size of bufferSize
+        buffer = new byte[bufferSize];
+
+        //reads bytes from FileInputStream(from 0th index of buffer to buffersize)
+        bytesRead = fileInputStream.read(buffer,0,bufferSize);
+
+        //loop repeats till bytesRead = -1, i.e., no bytes are left to read
+        while (bytesRead > 0){
+          //write the bytes read from inputstream
+          dataOutputStream.write(buffer,0,bufferSize);
+          bytesAvailable = fileInputStream.available();
+          bufferSize = Math.min(bytesAvailable,maxBufferSize);
+          bytesRead = fileInputStream.read(buffer,0,bufferSize);
+        }
+
+        dataOutputStream.writeBytes(lineEnd);
+        dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+        serverResponseCode = connection.getResponseCode();
+        String serverResponseMessage = connection.getResponseMessage();
+
+        Log.i("DAOWADOJI",serverResponseMessage);
+
+        Log.i(TAG, "Server Response is: " + serverResponseMessage + ": " + serverResponseCode);
+
+        //response code of 200 indicates the server status OK
+        if(serverResponseCode == 200){
+          runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              Log.i("SPOIMVSDPIM","UPLOADED SUCCESSFULLY");
+              backgroundTask1 = new BackgroundTask1(textView);
+              backgroundTask1.execute();
+            }
+          });
+        }
+
+        //closing the input and output streams
+        fileInputStream.close();
+        dataOutputStream.flush();
+        dataOutputStream.close();
+
+
+
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(SignupActivity.this,"File Not Found",Toast.LENGTH_SHORT).show();
+          }
+        });
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+        Toast.makeText(SignupActivity.this, "URL error!", Toast.LENGTH_SHORT).show();
+
+      } catch (IOException e) {
+        e.printStackTrace();
+        Toast.makeText(SignupActivity.this, "Cannot Read/Write File!", Toast.LENGTH_SHORT).show();
+      }
+      return serverResponseCode;
+    }
+
+  }
 
     public void onTaskExecuted(String id) {
 
