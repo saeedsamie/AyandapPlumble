@@ -197,6 +197,7 @@
     <string name="fullscreen_channel">کانال</string>
     <string name="fetchingServers">لطفا صبر کنید ، در حال دربافت لیست سرور ها</string>
     <string name="information">اطلاعات</string>
+    <string name="exit">خروج از حساب کاربری</string>
     <string name="register">خود ثبت نامی</string>
     <string name="userControl">User Control</string>
     <string name="registerSelfSuccess">ارسال درخواست ثبت نام</string>

@@ -475,10 +475,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
             recentChatsFragment.setPlumbleActivity(this);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                    .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
-            setTitle("Recents");
+            setTitle("صفحه ی اصلی");
             setCurrentFragment(recentChatsFragment);
         } else {
             AlertDialog.Builder dadb = new AlertDialog.Builder(this);
@@ -578,7 +578,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
                 recentChatsFragment.setPlumbleActivity(this);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                        .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
@@ -591,6 +591,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 Intent prefIntent = new Intent(this, Preferences.class);
                 startActivity(prefIntent);
                 return;
+          case DrawerAdapter.EXIT:
+            sharedPreferences.edit().clear().commit();
+            Intent exitIntent = new Intent(this, LoginActivity.class);
+            startActivity(exitIntent);
+            finish();
+            return;
             default:
                 return;
         }

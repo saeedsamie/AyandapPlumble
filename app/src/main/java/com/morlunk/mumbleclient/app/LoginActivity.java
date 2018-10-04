@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final int REQUEST_EXIT = 22;
     public Button loginContinue;
     public EditText phone;
-    SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     public static String user_phone_number;
     private boolean isUser;
 

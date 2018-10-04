@@ -49,6 +49,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public static final int ITEM_CHAT = 11;
     public static final int ITEM_RECENTS = 12;
     public static final int PROFILE_PROFILE = 13;
+    public static final int EXIT = 14;
 
     private static final int HEADER_TYPE = 0;
     private static final int ITEM_TYPE = 1;
@@ -62,7 +63,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         super(context, 0);
         mProvider = provider;
         add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.ic_user_light));
-        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "Chat", R.drawable.ic_action_chat));
+//        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "Recents", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_CONNECTED_SERVER, context.getString(R.string.drawer_not_connected)));
         add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));
@@ -75,6 +76,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 //        add(new DrawerAdapter.DrawerHeader(HEADER_GENERAL, context.getString(R.string.general)));
         add(new DrawerAdapter.DrawerItem(ITEM_SETTINGS, context.getString(R.string.action_settings), R.drawable.ic_action_settings));
         add(new DrawerAdapter.DrawerItem(ITEM_INFO, context.getString(R.string.information), R.drawable.ic_action_info_dark));
+        add(new DrawerAdapter.DrawerItem(EXIT, context.getString(R.string.exit), R.drawable.exit));
 
 
     }
