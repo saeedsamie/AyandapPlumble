@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -18,20 +20,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -53,6 +66,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
   ImageView ivAttachment;
   Button bUpload;
   private static String selectedFilePath;
+  private TextView textView;
+  private BackgroundTask backgroundTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +107,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
       showFileChooser();
     }
     if(v== bUpload){
-//      backgroundTask = new BackgroundTask(textView);
-//      backgroundTask.execute();
       List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
       nameValuePairs.add(new BasicNameValuePair("func", "register"));
       nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
@@ -102,45 +115,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
       Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
       pDialog.show();
       new ServerFetchAsync(nameValuePairs, this).execute();
-      //on upload button Click
-
-
     }
-
-
-//    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SignupActivity.this);
-//    if (ed_fullname.getText().toString().matches("")) {
-//
-//      alertBuilder.setMessage("نام خود را وارد کنید!");
-//      alertBuilder.setCancelable(false);
-//      alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-//        @Override
-//        public void onClick(DialogInterface dialog, int which) {
-//        }
-//      });
-//      alertBuilder.show();
-//    } else if (ed_username.getText().toString().matches("")) {
-//      alertBuilder.setMessage("نام کاربری خود را وارد کنید!");
-//      alertBuilder.setCancelable(false);
-//      alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-//        @Override
-//        public void onClick(DialogInterface dialog, int which) {
-//        }
-//      });
-//      alertBuilder.show();
-//    } else {
-//      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//      nameValuePairs.add(new BasicNameValuePair("func", "register"));
-//      nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
-//      nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
-//      nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
-//      nameValuePairs.add(new BasicNameValuePair("image", ""));
-//      Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-//      pDialog.show();
-//      new ServerFetchAsync(nameValuePairs, signupActivity).execute();
-//    }
   }
-
 
 
   private void showFileChooser() {
@@ -230,35 +206,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
           {
             result.append(tmp[i]);
           }
-          //result.append( optional separator );
         }
         String mynewstring = result.toString();
-
-        Log.i("AKMSAKMSAMK",userId);
-
-        //writing bytes to data outputstream
         dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
           + mynewstring + "\"" + lineEnd);
-
-//        Log.i("IFHFISEH",selectedFilePath);
-        Log.i("IFHFISEH",lineEnd);
-
         dataOutputStream.writeBytes(lineEnd);
-
-        //returns no. of bytes present in fileInputStream
         bytesAvailable = fileInputStream.available();
-        //selecting the buffer size as minimum of available bytes or 1 MB
         bufferSize = Math.min(bytesAvailable,maxBufferSize);
-        //setting the buffer as byte array of size of bufferSize
         buffer = new byte[bufferSize];
-
-        //reads bytes from FileInputStream(from 0th index of buffer to buffersize)
         bytesRead = fileInputStream.read(buffer,0,bufferSize);
-
-        //loop repeats till bytesRead = -1, i.e., no bytes are left to read
         while (bytesRead > 0){
-          //write the bytes read from inputstream
           dataOutputStream.write(buffer,0,bufferSize);
           bytesAvailable = fileInputStream.available();
           bufferSize = Math.min(bytesAvailable,maxBufferSize);
@@ -270,30 +228,19 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         serverResponseCode = connection.getResponseCode();
         String serverResponseMessage = connection.getResponseMessage();
-
-        Log.i("DAOWADOJI",serverResponseMessage);
-
-        Log.i(TAG, "Server Response is: " + serverResponseMessage + ": " + serverResponseCode);
-
-        //response code of 200 indicates the server status OK
         if(serverResponseCode == 200){
           runOnUiThread(new Runnable() {
             @Override
             public void run() {
               Log.i("SPOIMVSDPIM","UPLOADED SUCCESSFULLY");
-              backgroundTask1 = new BackgroundTask1(textView);
-              backgroundTask1.execute();
+              backgroundTask = new BackgroundTask(textView);
+              backgroundTask.execute();
             }
           });
         }
-
-        //closing the input and output streams
         fileInputStream.close();
         dataOutputStream.flush();
         dataOutputStream.close();
-
-
-
       } catch (FileNotFoundException e) {
         e.printStackTrace();
         runOnUiThread(new Runnable() {
@@ -326,6 +273,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
         Boolean isSavedInPref = editor.commit();
         userId = id;
+      if(selectedFilePath != null){
+        new Thread(new Runnable() {
+          @Override
+          public void run() {
+            //creating new thread to handle Http Operations
+            uploadFile(selectedFilePath);
+          }
+        }).start();
+      }else{
+        Toast.makeText(SignupActivity.this,"برای اضافه کردن عکس به تنظیمات پروفایل بروید",Toast.LENGTH_SHORT).show();
+      }
         pDialog.dismiss();
 
             if (isSavedInPref && !userId.isEmpty()) {
@@ -347,10 +305,134 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+
+  private static class BackgroundTask extends AsyncTask<Void, Void, String> {
+
+    private final WeakReference<TextView> messageViewReference;
+    private BackgroundTask(TextView textView) {
+      this.messageViewReference = new WeakReference<>(textView);
+    }
+
+
+    @Override
+    protected String doInBackground(Void... voids) {
+
+      HttpClient httpclient = new DefaultHttpClient();
+      HttpPost httppost = new HttpPost("http://192.168.2.26/SqliteTest/sqlite.php");
+      try {
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));
+        nameValuePairs.add(new BasicNameValuePair("userId", userId));
+        nameValuePairs.add(new BasicNameValuePair("imageURL", userId+".png"));
+        Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+        UrlEncodedFormEntity form;
+        form = new UrlEncodedFormEntity(nameValuePairs,"UTF-8");
+        // Use UrlEncodedFormEntity to send in proper format which we need
+        httppost.setEntity(form);
+        HttpResponse response = httpclient.execute(httppost);
+        InputStream inputStream = response.getEntity().getContent();
+        InputStreamToStringExample str = new InputStreamToStringExample();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+      super.onPostExecute(s);
+      TextView textView = messageViewReference.get();
+      if(textView != null) {
+        textView.setText(s);
+      }
+    }
+  }
+
+
+
+
+
+  public static class InputStreamToStringExample {
+
+    public static void main(String[] args) throws IOException {
+
+      // intilize an InputStream
+      InputStream is =
+        new ByteArrayInputStream("file content..blah blah".getBytes());
+
+      String result = getStringFromInputStream(is);
+
+      System.out.println(result);
+      System.out.println("Done");
+
+    }
+
+    // convert InputStream to String
+    public static String getStringFromInputStream(InputStream is) {
+
+      BufferedReader br = null;
+      StringBuilder sb = new StringBuilder();
+
+      String line;
+      try {
+
+        br = new BufferedReader(new InputStreamReader(is));
+        while ((line = br.readLine()) != null) {
+          sb.append(line);
+        }
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        if (br != null) {
+          try {
+            br.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      return sb.toString();
+    }
+
+  }
+
+
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case 1: {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          // permission granted and now can proceed
+
+        } else {
+
+          // permission denied, boo! Disable the
+          // functionality that depends on this permission.
+          Toast.makeText(SignupActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+        }
+        return;
+      }
+      // add other cases for more permissions
+    }
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if(backgroundTask != null) {
+      backgroundTask.cancel(true);
+    }
+  }
 
 
 }
