@@ -47,7 +47,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.morlunk.jumble.IJumbleService;
@@ -84,6 +83,7 @@ import java.util.List;
 import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
@@ -848,6 +848,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //                connectToServer(server);
 //                break;
 //        }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

@@ -25,6 +25,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class SignupActivity extends AppCompatActivity {
 
     Button signup;
@@ -33,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText ed_fullname;
     private EditText ed_username;
     private ProgressDialog pDialog;
+    public static String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,12 @@ public class SignupActivity extends AppCompatActivity {
         editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
         editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
         Boolean isSavedInPref = editor.commit();
+        try {
+            userId = jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("SCAUCSIHSC",userId);
         pDialog.dismiss();
         try {
             if (isSavedInPref && !jsonObject.getJSONArray("userId").getJSONObject(0).getString("userId").isEmpty()) {
@@ -131,4 +140,11 @@ public class SignupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+
 }

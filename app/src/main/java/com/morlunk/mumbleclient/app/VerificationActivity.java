@@ -15,7 +15,6 @@ import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,6 +26,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class VerificationActivity extends AppCompatActivity {
 
@@ -155,4 +156,14 @@ public class VerificationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+
+
 }

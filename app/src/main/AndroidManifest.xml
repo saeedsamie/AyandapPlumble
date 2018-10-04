@@ -45,6 +45,7 @@
         <activity
             android:name=".preference.Preferences"
             android:parentActivityName=".app.PlumbleActivity">
+
             <intent-filter>
                 <action android:name="com.morlunk.mumbleclient.app.PREFS_GENERAL" />
 
@@ -80,6 +81,8 @@
             android:name=".app.PlumbleActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
+
+
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 

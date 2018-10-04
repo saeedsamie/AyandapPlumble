@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,6 +45,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class RecentChatsFragment extends JumbleServiceFragment {
@@ -176,7 +177,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
-//        nameValuePairs.add(new BasicNameValuePair("userId", LoginActivity.user_phone_number));
+        nameValuePairs.add(new BasicNameValuePair("userId", LoginActivity.user_phone_number));
         new ServerFetchAsync(nameValuePairs, this).execute();
         final RecentChatsFragment recentChatsFragment = this;
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -323,8 +324,9 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        super.onAttach(CalligraphyContextWrapper.wrap(context));
     }
+
 
     @Override
     public void onDetach() {
@@ -381,4 +383,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         }
 
     }
+
+
+
+
 }

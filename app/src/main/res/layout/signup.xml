@@ -15,8 +15,7 @@
     android:layout_height="160dp"
     android:layout_gravity="center"
     android:layout_marginTop="15dp"
-    android:scaleType="centerCrop"
-    android:src="@drawable/default_profile"/>
+    android:scaleType="centerCrop"/>
 
 
   <LinearLayout

@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     public Button loginContinue;
     public EditText phone;
     SharedPreferences sharedPreferences;
-    private String user_phone_number;
+    public static String user_phone_number;
     private boolean isUser;
 
     @Override

@@ -18,7 +18,6 @@
 package com.morlunk.mumbleclient.app;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
@@ -63,7 +61,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
         mProvider = provider;
-        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.default_profile));
+        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.ic_user_light));
         add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "Chat", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "Recents", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_CONNECTED_SERVER, context.getString(R.string.drawer_not_connected)));
