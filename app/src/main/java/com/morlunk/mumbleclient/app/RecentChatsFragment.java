@@ -178,7 +178,6 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
         nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
-        Log.i("SAnjsaSA",SignupActivity.userId);
         new ServerFetchAsync(nameValuePairs, this).execute();
         final RecentChatsFragment recentChatsFragment = this;
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
