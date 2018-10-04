@@ -54,8 +54,9 @@ public class RecentChatsListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.chat_row, parent, false);
-            viewHolder.txtName = (TextView) convertView.findViewById(R.id.recent_chats_list_row_title);
-//      viewHolder.icon = (ImageView) convertView.findViewById(R.id.recent_chats_list_row_image);
+            viewHolder.chatTitle = (TextView) convertView.findViewById(R.id.chatTitle);
+            viewHolder.chatBio = (TextView) convertView.findViewById(R.id.chatBio);
+//            viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
 
             result = convertView;
             convertView.setTag(viewHolder);
@@ -63,14 +64,16 @@ public class RecentChatsListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
             result = convertView;
         }
-        viewHolder.txtName.setText(values.get(position).get("ChatTitle"));
+        viewHolder.chatTitle.setText(values.get(position).get("title"));
+        viewHolder.chatBio.setText(values.get(position).get("bio"));
         return convertView;
     }
 
     //
     private static class ViewHolder {
 
-        TextView txtName;
+        TextView chatTitle;
+        TextView chatBio;
         ImageView icon;
     }
 //  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {

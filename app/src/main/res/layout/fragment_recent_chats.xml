@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.morlunk.mumbleclient.app.RecentChatsFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.morlunk.mumbleclient.app.RecentChatsFragment">
+
     <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/chat_frame">
+      android:id="@+id/chat_frame"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
         <ListView
           android:id="@+id/recent_chats_list"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"/>
+          android:layout_height="match_parent"
+          android:divider="#00000000"
+          android:dividerHeight="20dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

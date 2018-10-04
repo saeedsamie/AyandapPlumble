@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
             SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
@@ -47,9 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
         loginContinue = (Button) findViewById(R.id.login_continue);
         phone = (EditText) findViewById(R.id.login_phone);
 

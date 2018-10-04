@@ -241,7 +241,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
 
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
                 "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
