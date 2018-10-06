@@ -1,17 +1,23 @@
 package com.morlunk.mumbleclient.app;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
+import android.provider.Telephony;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -19,12 +25,15 @@ import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
+import com.morlunk.mumbleclient.SmsListener;
+import com.morlunk.mumbleclient.SmsReceiver;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -37,8 +46,16 @@ public class VerificationActivity extends AppCompatActivity {
     String user_phone_number;
     private String c = "";
     VerificationActivity verificationActivity;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    public String android_id;
+    public String uuid;
+    public static String sended ;
+    public int flag = 0;
+    Context context;
+    String sender,fakebody,defaultSmsApp;
 
-    @Override
+
+  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verification);
@@ -48,7 +65,6 @@ public class VerificationActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         timer = (TextView) findViewById(R.id.timer);
-//        backtologin = (TextView) findViewById(R.id.backtologin);
         vcode = (EditText) findViewById(R.id.vcode);
         Intent intent = getIntent();
         isUser = intent.getBooleanExtra("isUser", false);
@@ -58,6 +74,26 @@ public class VerificationActivity extends AppCompatActivity {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "verification"));
         new ServerFetchAsync(nameValuePairs, this).execute();
+
+     context = this;
+     defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
+
+
+    SmsReceiver.bindListener(new SmsListener() {
+      @Override
+      public void onMessageReceived(String messageText) {
+        Log.e("Text",messageText);
+        vcode.setText(messageText);
+      }
+    });
+
+
+    android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+      Settings.Secure.ANDROID_ID);
+    uuid = UUID.randomUUID().toString();
+
+    requestPermission();
+
 
 //        SpannableString content = new SpannableString("تغییر شماره");
 //        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
@@ -106,7 +142,6 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 4) {
-                    AlertDialog.Builder alertBuilder;
                     Intent intent;
                     String enteredCode = vcode.getText().toString().trim();
                         if (enteredCode.equals(c) && !isUser) {
@@ -122,16 +157,9 @@ public class VerificationActivity extends AppCompatActivity {
                             verificationActivity.setResult(RESULT_OK);
                             finish();
                         } else {
-                            alertBuilder = new AlertDialog.Builder(VerificationActivity.this);
-                            alertBuilder.setMessage("کد وارد شده معتبر نیست!");
-                            alertBuilder.setCancelable(false);
-                            alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    vcode.setText("");
-                                }
-                            });
-                            alertBuilder.show();
+                          Snackbar
+                            .make(findViewById(android.R.id.content),"کد وارد شده صحیح نیست", Snackbar.LENGTH_SHORT)
+                            .show();
                         }
                 }
             }
@@ -141,23 +169,19 @@ public class VerificationActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     public void onTaskExecuted(String code) {
         try {
 //            c = jsonObject.getString("vcode");
             c = code;
-
             TextView textView = (TextView) findViewById(R.id.verification_code_holder);
             textView.setText(code);
+            sendFakeSms();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -165,5 +189,17 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
 
+  private void requestPermission(){
+    ActivityCompat.requestPermissions(VerificationActivity.this,new String[]{
+      Manifest.permission.SEND_SMS},PERMISSION_REQUEST_CODE);
+  }
 
+
+
+  private void sendFakeSms(){
+    SmsManager sms= SmsManager.getDefault();
+    sended = "Ayandap Plumble - your code is : "+c;
+    sms.sendTextMessage(LoginActivity.user_phone_number,null,
+      String.valueOf(sended),null,null);
+  }
 }
