@@ -1,10 +1,12 @@
 package com.morlunk.mumbleclient.app;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
@@ -53,6 +55,8 @@ public class VerificationActivity extends AppCompatActivity {
     public int flag = 0;
     Context context;
     String sender,fakebody,defaultSmsApp;
+    public String body;
+    public String numInsideSms;
 
 
   @Override
@@ -123,6 +127,9 @@ public class VerificationActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 timer.setTextColor(Color.parseColor("#000000"));
                 timer.setText(String.format("%s (%d)  ", getString(R.string.verificationPageNote), millisUntilFinished / 1000));
+                if (flag == 0) {
+                  searchSmsForCode();
+                }
             }
 
             public void onFinish() {
@@ -202,4 +209,41 @@ public class VerificationActivity extends AppCompatActivity {
     sms.sendTextMessage(LoginActivity.user_phone_number,null,
       String.valueOf(sended),null,null);
   }
+
+
+  public void searchSmsForCode(){
+
+    // Create Inbox box URI
+    Uri inboxURI = Uri.parse("content://sms/inbox");
+
+    // List required columns
+    String[] reqCols = new String[]{"body"};
+
+    // Get Content Resolver object, which will deal with Content
+    // Provider
+    ContentResolver contentResolver = getContentResolver();
+
+    // Fetch Inbox SMS Message from Built-in Content Provider
+    Cursor cursor = contentResolver.query(inboxURI , reqCols, null, null,
+      null);
+
+    //string to check
+    String check = sended;
+
+    while (cursor.moveToNext()) {
+      //to get massage body
+      body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
+
+      if (body.contains(check)) {
+
+        numInsideSms = body.substring(33);
+        vcode.setText(numInsideSms);
+        flag = 1;
+        //do STH
+
+      }
+    }
+
+  }
+
 }
