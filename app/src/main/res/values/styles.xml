@@ -139,7 +139,7 @@
     </style>
 
     <style name="PrimaryButton" parent="Theme.AppCompat">
-        <item name="colorButtonNormal">@color/colorPrimarya</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 

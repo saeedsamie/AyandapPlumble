@@ -61,8 +61,18 @@
     <color name="ripple_talk_state_off">#FFFFFFFF</color>
     <color name="ripple_talk_state_disabled">#FF666666</color>
     <color name="ripple_talk_state_suppressed">@color/holo_green_dark</color>
-    <color name="ripple_talk_state_server_muted">@color/holo_blue_dark</color>
-    <color name="ripple_talk_state_server_deafened">@color/holo_blue_dark</color>
-    <color name="colorPrimarya">#324762</color>
+    <color name="ripple_talk_state_server_muted">@color/colorPrimary</color>
+    <color name="ripple_talk_state_server_deafened">@color/colorPrimary</color>
+    <!--<color name="colorPrimarya">#324762</color>-->
+    <color name="colorPrimarya">#ffff8800</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#fb8c00</color>
+    <color name="colorPrimaryDark">#c25e00</color>
+    <color name="colorPrimaryLight">#ffbd45</color>
+    <color name="colorSecondary">#616161</color>
+    <color name="colorSecondaryLight">#8e8e8e</color>
+    <color name="colorSecondaryDark">#373737</color>
+    <color name="textOnPrimary">#000000</color>
+    <color name="textOnSecondary">#ffffff</color>
+    <color name="transparent">#00ffffff</color>
 </resources>
