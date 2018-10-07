@@ -47,7 +47,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.morlunk.jumble.IJumbleService;
@@ -84,6 +83,7 @@ import java.util.List;
 import java.util.Random;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
@@ -241,7 +241,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
 
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
                 "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
@@ -475,10 +475,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
             recentChatsFragment.setPlumbleActivity(this);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                    .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
-            setTitle("Recents");
+            setTitle("صفحه ی اصلی");
             setCurrentFragment(recentChatsFragment);
         } else {
             AlertDialog.Builder dadb = new AlertDialog.Builder(this);
@@ -578,7 +578,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
                 recentChatsFragment.setPlumbleActivity(this);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, recentChatsFragment, "Recents")
+                        .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
@@ -591,6 +591,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 Intent prefIntent = new Intent(this, Preferences.class);
                 startActivity(prefIntent);
                 return;
+          case DrawerAdapter.EXIT:
+            sharedPreferences.edit().clear().commit();
+            Intent exitIntent = new Intent(this, LoginActivity.class);
+            startActivity(exitIntent);
+            finish();
+            return;
             default:
                 return;
         }
@@ -848,6 +854,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //                connectToServer(server);
 //                break;
 //        }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

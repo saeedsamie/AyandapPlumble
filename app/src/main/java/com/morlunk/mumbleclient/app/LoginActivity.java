@@ -29,15 +29,17 @@ public class LoginActivity extends AppCompatActivity {
     public static final int REQUEST_EXIT = 22;
     public Button loginContinue;
     public EditText phone;
-    SharedPreferences sharedPreferences;
-    private String user_phone_number;
+    public static SharedPreferences sharedPreferences;
+    public static String user_phone_number;
     private boolean isUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
+            SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
             startActivity(intent);
             finish();
@@ -46,9 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
         loginContinue = (Button) findViewById(R.id.login_continue);
         phone = (EditText) findViewById(R.id.login_phone);
 
@@ -84,14 +83,18 @@ public class LoginActivity extends AppCompatActivity {
             String fullname = null;
             String username = null;
             String image = null;
+            String userId = null;
             try {
                 fullname = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("fullName");
                 username = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("userName");
                 image = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("image");
+                userId = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("userId");
                 editor.putString(getString(R.string.PREF_TAG_phonenumber), user_phone_number);
                 editor.putString(getString(R.string.PREF_TAG_fullname), fullname);
                 editor.putString(getString(R.string.PREF_TAG_username), username);
                 editor.putString(getString(R.string.PREF_TAG_image), image);
+                editor.putString(getString(R.string.PREF_TAG_userid), userId);
+                SignupActivity.userId = userId;
             } catch (Exception e) {
                 e.printStackTrace();
             }

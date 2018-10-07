@@ -14,7 +14,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -86,7 +85,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
+        HttpPost httpPost = new HttpPost("http://192.168.2.26/SqliteTest/sqlite.php");
         try {
 
             UrlEncodedFormEntity form;
@@ -122,7 +121,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
             }
         } else if (signupActivity != null) {
             try {
-                signupActivity.onTaskExecuted(new JSONObject(jsonResponse));
+                signupActivity.onTaskExecuted((jsonResponse));
             } catch (Exception e) {
                 e.printStackTrace();
             }

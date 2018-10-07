@@ -3,20 +3,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@drawable/background"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/activity_vertical_margin"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_vertical_margin">
+              android:orientation="vertical">
 
   <ImageView
-    android:id="@+id/usuario_imagen_registro"
+    android:id="@+id/ivAttachment"
     android:layout_width="160dp"
     android:layout_height="160dp"
     android:layout_gravity="center"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="20dp"
     android:scaleType="centerCrop"
-    android:src="@drawable/default_profile"/>
+    android:src="@drawable/user"/>
 
 
   <LinearLayout

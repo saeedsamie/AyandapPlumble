@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,6 +45,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class RecentChatsFragment extends JumbleServiceFragment {
@@ -176,7 +177,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
-//        nameValuePairs.add(new BasicNameValuePair("userId", LoginActivity.user_phone_number));
+        nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
         new ServerFetchAsync(nameValuePairs, this).execute();
         final RecentChatsFragment recentChatsFragment = this;
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -323,8 +324,9 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        super.onAttach(CalligraphyContextWrapper.wrap(context));
     }
+
 
     @Override
     public void onDetach() {
@@ -343,12 +345,12 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                 HashMap hashMap = new HashMap();
                 JSONObject c = jsonArray.getJSONObject(i);
 
-                hashMap.put("UserRole", c.getString("UserRole"));
-                hashMap.put("ChatTitle", c.getString("ChatTitle"));
-                hashMap.put("ChatId", c.getString("ChatId"));
-                hashMap.put("ChatBio", c.getString("ChatBio"));
-                hashMap.put("ChatImage", c.getString("ChatImage"));
-                hashMap.put("ChatType", c.getString("ChatType"));
+                hashMap.put("role", c.getString("role"));
+                hashMap.put("title", c.getString("title"));
+                hashMap.put("type", c.getString("type"));
+                hashMap.put("id", c.getString("id"));
+                hashMap.put("image", c.getString("image"));
+                hashMap.put("bio", c.getString("bio"));
                 listValues.add(hashMap);
             }
 
@@ -368,11 +370,11 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                     HashMap<String, String> map = listValues.get(position);
                     Log.e("map", "map" + map.toString());
 
-                    intent.putExtra("ChatId", (listValues.get(position).get("ChatId")));
-                    intent.putExtra("ChatBio", (listValues.get(position).get("ChatBio")));
-                    intent.putExtra("ChatTitle", (listValues.get(position).get("ChatTitle")));
-                    intent.putExtra("ChatImage", (listValues.get(position).get("ChatImage")));
-                    intent.putExtra("ChatType", (listValues.get(position).get("ChatType")));
+                    intent.putExtra("id", (listValues.get(position).get("id")));
+                    intent.putExtra("bio", (listValues.get(position).get("bio")));
+                    intent.putExtra("title", (listValues.get(position).get("title")));
+                    intent.putExtra("image", (listValues.get(position).get("image")));
+                    intent.putExtra("type", (listValues.get(position).get("type")));
 
                     startActivity(intent);
                 }
@@ -381,4 +383,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         }
 
     }
+
+
+
+
 }
