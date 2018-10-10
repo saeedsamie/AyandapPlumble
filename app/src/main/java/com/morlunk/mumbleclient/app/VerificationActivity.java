@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
@@ -25,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 import com.morlunk.mumbleclient.SmsListener;
@@ -32,6 +34,7 @@ import com.morlunk.mumbleclient.SmsReceiver;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,32 +42,35 @@ import java.util.UUID;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class VerificationActivity extends AppCompatActivity {
+//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+public class VerificationActivity extends AppCompatActivity implements OnTaskCompletedListener {
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    public static String sended;
     public TextView timer;
     public EditText vcode;
     public int isFinished = 0;
-    boolean isUser;
-    String user_phone_number;
-    private String c = "";
-    VerificationActivity verificationActivity;
-    private static final int PERMISSION_REQUEST_CODE = 1;
     public String android_id;
     public String uuid;
-    public static String sended ;
     public int flag = 0;
-    Context context;
-    String sender,fakebody,defaultSmsApp;
     public String body;
     public String numInsideSms;
+    boolean isUser;
+    String user_phone_number;
+    VerificationActivity verificationActivity;
+    Context context;
+    String sender, fakebody, defaultSmsApp;
+    private String c = "";
 
-
-  @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verification);
 
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -79,39 +85,28 @@ public class VerificationActivity extends AppCompatActivity {
         nameValuePairs.add(new BasicNameValuePair("func", "verification"));
         new ServerFetchAsync(nameValuePairs, this).execute();
 
-     context = this;
-     defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
+        context = this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
+        }
 
 
-    SmsReceiver.bindListener(new SmsListener() {
-      @Override
-      public void onMessageReceived(String messageText) {
-        Log.e("Text",messageText);
-        vcode.setText(messageText);
-      }
-    });
+        SmsReceiver.bindListener(new SmsListener() {
+            @Override
+            public void onMessageReceived(String messageText) {
+                Log.e("Text", messageText);
+                vcode.setText(messageText);
+            }
+        });
 
 
-    android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-      Settings.Secure.ANDROID_ID);
-    uuid = UUID.randomUUID().toString();
+        android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        uuid = UUID.randomUUID().toString();
 
-    requestPermission();
+        requestPermission();
 
 
-//        SpannableString content = new SpannableString("تغییر شماره");
-//        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-
-//        backtologin.setText(content);
-//        backtologin.setTextColor(Color.parseColor("#000000"));
-//        backtologin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(VerificationActivity.this, LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
         timer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +123,7 @@ public class VerificationActivity extends AppCompatActivity {
                 timer.setTextColor(Color.parseColor("#000000"));
                 timer.setText(String.format("%s (%d)  ", getString(R.string.verificationPageNote), millisUntilFinished / 1000));
                 if (flag == 0) {
-                  searchSmsForCode();
+                    searchSmsForCode();
                 }
             }
 
@@ -151,23 +146,23 @@ public class VerificationActivity extends AppCompatActivity {
                 if (s.length() == 4) {
                     Intent intent;
                     String enteredCode = vcode.getText().toString().trim();
-                        if (enteredCode.equals(c) && !isUser) {
-                            intent = new Intent(VerificationActivity.this, SignupActivity.class);
-                            intent.putExtra("phone_number",user_phone_number);
-                            intent.putExtra("Launcher", "verification");
-                            startActivity(intent);
-                            verificationActivity.setResult(RESULT_OK);
-                            finish();
-                        } else if (enteredCode.equals(c) && isUser) {
-                            intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
-                            startActivity(intent);
-                            verificationActivity.setResult(RESULT_OK);
-                            finish();
-                        } else {
-                          Snackbar
-                            .make(findViewById(android.R.id.content),"کد وارد شده صحیح نیست", Snackbar.LENGTH_SHORT)
-                            .show();
-                        }
+                    if (enteredCode.equals(c) && !isUser) {
+                        intent = new Intent(VerificationActivity.this, SignupActivity.class);
+                        intent.putExtra("phone_number", user_phone_number);
+                        intent.putExtra("Launcher", "verification");
+                        startActivity(intent);
+                        verificationActivity.setResult(RESULT_OK);
+                        finish();
+                    } else if (enteredCode.equals(c) && isUser) {
+                        intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
+                        startActivity(intent);
+                        verificationActivity.setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        Snackbar
+                                .make(findViewById(android.R.id.content), "کد وارد شده صحیح نیست", Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             }
 
@@ -178,12 +173,70 @@ public class VerificationActivity extends AppCompatActivity {
         });
     }
 
-    public void onTaskExecuted(String code) {
+
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
+
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(VerificationActivity.this, new String[]{
+                Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_CODE);
+    }
+
+
+    private void sendFakeSms() {
+        SmsManager sms = SmsManager.getDefault();
+        sended = "Ayandap Plumble - your code is : " + c;
+        sms.sendTextMessage(LoginActivity.user_phone_number, null,
+                String.valueOf(sended), null, null);
+    }
+
+
+    public void searchSmsForCode() {
+
+        // Create Inbox box URI
+        Uri inboxURI = Uri.parse("content://sms/inbox");
+
+        // List required columns
+        String[] reqCols = new String[]{"body"};
+
+        // Get Content Resolver object, which will deal with Content
+        // Provider
+        ContentResolver contentResolver = getContentResolver();
+
+        // Fetch Inbox SMS Message from Built-in Content Provider
+        Cursor cursor = contentResolver.query(inboxURI, reqCols, null, null,
+                null);
+
+        //string to check
+        String check = sended;
+
+        while (cursor.moveToNext()) {
+            //to get massage body
+            body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
+
+            if (body.contains(check)) {
+
+                numInsideSms = body.substring(33);
+                vcode.setText(numInsideSms);
+                flag = 1;
+                //do STH
+
+            }
+        }
+
+    }
+
+    @Override
+    public void onTaskCompleted(JSONObject jsonObject) {
         try {
-//            c = jsonObject.getString("vcode");
-            c = code;
+            c = jsonObject.getString("vcode");
+//            c = code;
+            //todo change String code to JSONObject
             TextView textView = (TextView) findViewById(R.id.verification_code_holder);
-            textView.setText(code);
+//            textView.setText(code);
             sendFakeSms();
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,56 +247,4 @@ public class VerificationActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-
-  private void requestPermission(){
-    ActivityCompat.requestPermissions(VerificationActivity.this,new String[]{
-      Manifest.permission.SEND_SMS},PERMISSION_REQUEST_CODE);
-  }
-
-
-
-  private void sendFakeSms(){
-    SmsManager sms= SmsManager.getDefault();
-    sended = "Ayandap Plumble - your code is : "+c;
-    sms.sendTextMessage(LoginActivity.user_phone_number,null,
-      String.valueOf(sended),null,null);
-  }
-
-
-  public void searchSmsForCode(){
-
-    // Create Inbox box URI
-    Uri inboxURI = Uri.parse("content://sms/inbox");
-
-    // List required columns
-    String[] reqCols = new String[]{"body"};
-
-    // Get Content Resolver object, which will deal with Content
-    // Provider
-    ContentResolver contentResolver = getContentResolver();
-
-    // Fetch Inbox SMS Message from Built-in Content Provider
-    Cursor cursor = contentResolver.query(inboxURI , reqCols, null, null,
-      null);
-
-    //string to check
-    String check = sended;
-
-    while (cursor.moveToNext()) {
-      //to get massage body
-      body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
-
-      if (body.contains(check)) {
-
-        numInsideSms = body.substring(33);
-        vcode.setText(numInsideSms);
-        flag = 1;
-        //do STH
-
-      }
-    }
-
-  }
-
 }

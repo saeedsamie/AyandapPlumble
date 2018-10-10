@@ -28,9 +28,9 @@
         <item name="android:actionBarStyle">@style/PlumbleDarkActionBar</item>
         <item name="actionBarStyle">@style/PlumbleDarkActionBar</item>
 
-        <item name="colorPrimary">#454D5E</item>
-        <item name="colorPrimaryDark">#2F3440</item>
-        <item name="colorAccent">#454D5E</item>
+        <item name="colorPrimary">#fb8c00</item>
+        <item name="colorPrimaryDark">#c25e00</item>
+        <item name="colorAccent">#616161</item>
 
         <item name="cardStyle">@style/Theme.Plumble.CardView</item>
     </style>

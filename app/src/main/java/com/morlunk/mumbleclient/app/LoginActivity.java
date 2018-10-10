@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 
@@ -23,21 +24,25 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class LoginActivity extends AppCompatActivity {
+
+public class LoginActivity extends AppCompatActivity implements OnTaskCompletedListener {
 
     public static final int REQUEST_EXIT = 22;
-    public Button loginContinue;
-    public EditText phone;
     public static SharedPreferences sharedPreferences;
     public static String user_phone_number;
+    public Button loginContinue;
+    public EditText phone;
     private boolean isUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
             SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
@@ -51,12 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         loginContinue = (Button) findViewById(R.id.login_continue);
         phone = (EditText) findViewById(R.id.login_phone);
 
-//        if (sharedPreferences.contains(VerificationActivity.Name_Tag)) {
-//            user_phone_number = sharedPreferences.getString(VerificationActivity.Name_Tag, null);
-//            Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
 
         final LoginActivity loginActivity = this;
 
@@ -72,8 +71,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void onTaskExecuted(JSONObject jsonObject) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_EXIT)
+            if (resultCode == RESULT_OK) {
+                this.finish();
+            }
+    }
 
+    @Override
+    public void onTaskCompleted(JSONObject jsonObject) {
         try {
             isUser = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("isUser").equals("1");
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -121,18 +128,10 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-//        finish();
-
-
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EXIT)
-            if (resultCode == RESULT_OK) {
-                this.finish();
-            }
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

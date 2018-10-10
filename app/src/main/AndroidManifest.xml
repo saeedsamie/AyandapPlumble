@@ -32,6 +32,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -80,13 +83,14 @@
         <activity
             android:name=".app.PlumbleActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
 
 
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -153,17 +157,22 @@
         <activity android:name=".app.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".app.VerificationActivity"
-            android:label="@string/Verification"></activity>
+            android:label="@string/Verification"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".app.SignupActivity"
-            android:label="@string/Signup"></activity>
-        <activity android:name=".app.ChatActivity"></activity>
+            android:label="@string/Signup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ChatActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

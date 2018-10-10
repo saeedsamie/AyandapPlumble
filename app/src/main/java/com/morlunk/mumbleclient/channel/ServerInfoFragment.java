@@ -63,10 +63,10 @@ public class ServerInfoFragment extends JumbleServiceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_server_info, container, false);
-        mProtocolView = (TextView) view.findViewById(R.id.server_info_protocol);
-        mOSVersionView = (TextView) view.findViewById(R.id.server_info_os_version);
-        mTCPLatencyView = (TextView) view.findViewById(R.id.server_info_tcp_latency);
-        mUDPLatencyView = (TextView) view.findViewById(R.id.server_info_udp_latency);
+//        mProtocolView = (TextView) view.findViewById(R.id.server_info_protocol);
+//        mOSVersionView = (TextView) view.findViewById(R.id.server_info_os_version);
+//        mTCPLatencyView = (TextView) view.findViewById(R.id.server_info_tcp_latency);
+//        mUDPLatencyView = (TextView) view.findViewById(R.id.server_info_udp_latency);
         mHostView = (TextView) view.findViewById(R.id.server_info_host);
         mMaxBandwidthView = (TextView) view.findViewById(R.id.server_info_max_bandwidth);
         mCurrentBandwidthView = (TextView) view.findViewById(R.id.server_info_current_bandwidth);
@@ -83,11 +83,11 @@ public class ServerInfoFragment extends JumbleServiceFragment {
 
         IJumbleSession session = getService().getSession();
 
-        mProtocolView.setText(getString(R.string.server_info_protocol, session.getServerRelease()));
-        mOSVersionView.setText(getString(R.string.server_info_version, session.getServerOSName(), session.getServerOSVersion()));
-        mTCPLatencyView.setText(getString(R.string.server_info_latency, (float)session.getTCPLatency()*Math.pow(10, -3)));
-        mUDPLatencyView.setText(getString(R.string.server_info_latency, (float)session.getUDPLatency()*Math.pow(10, -3)));
-        mHostView.setText(getString(R.string.server_info_host, getService().getTargetServer().getHost(), getService().getTargetServer().getPort()));
+//        mProtocolView.setText(getString(R.string.server_info_protocol, session.getServerRelease()));
+//        mOSVersionView.setText(getString(R.string.server_info_version, session.getServerOSName(), session.getServerOSVersion()));
+//        mTCPLatencyView.setText(getString(R.string.server_info_latency, (float)session.getTCPLatency()*Math.pow(10, -3)));
+//        mUDPLatencyView.setText(getString(R.string.server_info_latency, (float)session.getUDPLatency()*Math.pow(10, -3)));
+//        mHostView.setText(getString(R.string.server_info_host, getService().getTargetServer().getHost(), getService().getTargetServer().getPort()));
 
         String codecName;
         JumbleUDPMessageType codecType = session.getCodec();

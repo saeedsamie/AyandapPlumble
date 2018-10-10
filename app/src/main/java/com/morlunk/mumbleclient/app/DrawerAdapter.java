@@ -37,11 +37,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     // Drawer rows, integer value is id
 //    public static final int HEADER_CONNECTED_SERVER = 0;
     public static final int ITEM_SERVER = 1;
-//    public static final int ITEM_PINNED_CHANNELS = 2;
+    //    public static final int ITEM_PINNED_CHANNELS = 2;
     public static final int ITEM_INFO = 3;
-//    public static final int ITEM_ACCESS_TOKENS = 4;
+    //    public static final int ITEM_ACCESS_TOKENS = 4;
     public static final int HEADER_SERVERS = 5;
-//    public static final int ITEM_FAVOURITES = 6;
+    //    public static final int ITEM_FAVOURITES = 6;
     //    public static final int ITEM_LAN = 7;
 //    public static final int ITEM_PUBLIC = 8;
     public static final int HEADER_GENERAL = 9;
@@ -62,9 +62,9 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
         mProvider = provider;
-        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.ic_user_light));
-//        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "", R.drawable.ic_action_chat));
-        add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "Recents", R.drawable.ic_action_favourite_on));
+        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.default_profile));
+//        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
+        add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "گفتگوها", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_CONNECTED_SERVER, context.getString(R.string.drawer_not_connected)));
         add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));
 //        add(new DrawerAdapter.DrawerItem(ITEM_PINNED_CHANNELS, context.getString(R.string.drawer_pinned), R.drawable.ic_action_comment));
@@ -76,7 +76,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 //        add(new DrawerAdapter.DrawerHeader(HEADER_GENERAL, context.getString(R.string.general)));
         add(new DrawerAdapter.DrawerItem(ITEM_SETTINGS, context.getString(R.string.action_settings), R.drawable.ic_action_settings));
         add(new DrawerAdapter.DrawerItem(ITEM_INFO, context.getString(R.string.information), R.drawable.ic_action_info_dark));
-        add(new DrawerAdapter.DrawerItem(EXIT, context.getString(R.string.exit), R.drawable.exit));
+        add(new DrawerAdapter.DrawerItem(EXIT, context.getString(R.string.exit), R.drawable.ic_action_expanded));
 
 
     }

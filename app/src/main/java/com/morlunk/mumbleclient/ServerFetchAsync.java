@@ -14,46 +14,52 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
-    List<NameValuePair> nameValuePairs = new ArrayList<>();
+    List<NameValuePair> nameValuePairs;
     String jsonResponse;
-    RecentChatsFragment recentChatsFragment = null;
+    RecentChatsFragment recentChatsFragment;
+    OnTaskCompletedListener listener;
     private SignupActivity signupActivity;
     private VerificationActivity verificationActivity;
     private LoginActivity loginActivity;
 
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs) {
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs,OnTaskCompletedListener onTaskCompletedListener) {
         this.nameValuePairs = nameValuePairs;
+        this.listener = onTaskCompletedListener;
     }
+//
+//    public ServerFetchAsync(List<NameValuePair> nameValuePairs) {
+//        this.nameValuePairs = nameValuePairs;
+//    }
 
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs, RecentChatsFragment recentChatsFragment) {
-        this.recentChatsFragment = recentChatsFragment;
-        this.nameValuePairs = nameValuePairs;
-    }
+//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, RecentChatsFragment recentChatsFragment) {
+//        this.recentChatsFragment = recentChatsFragment;
+//        this.nameValuePairs = nameValuePairs;
+//    }
 
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs, LoginActivity loginActivity) {
-        this.loginActivity = loginActivity;
-        this.nameValuePairs = nameValuePairs;
-    }
-
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs, VerificationActivity verificationActivity) {
-        this.nameValuePairs = nameValuePairs;
-        this.verificationActivity = verificationActivity;
-    }
-
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs, SignupActivity signupActivity) {
-        this.nameValuePairs = nameValuePairs;
-        this.signupActivity = signupActivity;
-    }
+//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, LoginActivity loginActivity) {
+//        this.loginActivity = loginActivity;
+//        this.nameValuePairs = nameValuePairs;
+//    }
+//
+//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, VerificationActivity verificationActivity) {
+//        this.nameValuePairs = nameValuePairs;
+//        this.verificationActivity = verificationActivity;
+//    }
+//
+//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, SignupActivity signupActivity) {
+//        this.nameValuePairs = nameValuePairs;
+//        this.signupActivity = signupActivity;
+//    }
 
 
     private static String getStringFromInputStream(InputStream is) {
@@ -85,7 +91,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost("http://192.168.2.26/SqliteTest/sqlite.php");
+        HttpPost httpPost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
         try {
 
             UrlEncodedFormEntity form;
@@ -98,7 +104,6 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
             jsonResponse = getStringFromInputStream(inputStream);
             Log.e("response", "response -----" + jsonResponse);
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,30 +112,10 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject s) {
-        if (loginActivity != null) {
-            try {
-                loginActivity.onTaskExecuted(new JSONObject(jsonResponse));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (verificationActivity != null) {
-            try {
-                verificationActivity.onTaskExecuted((jsonResponse));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (signupActivity != null) {
-            try {
-                signupActivity.onTaskExecuted((jsonResponse));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (recentChatsFragment != null) {
-            try {
-                recentChatsFragment.onTaskExecuted(new JSONObject(jsonResponse));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            listener.onTaskCompleted(new JSONObject(jsonResponse));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         super.onPostExecute(s);
     }

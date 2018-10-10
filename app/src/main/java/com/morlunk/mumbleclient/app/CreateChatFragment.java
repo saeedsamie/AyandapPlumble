@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
@@ -25,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class CreateChatFragment extends JumbleServiceFragment {
+public class CreateChatFragment extends JumbleServiceFragment implements OnTaskCompletedListener{
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class CreateChatFragment extends JumbleServiceFragment {
     nameValuePairs.add(new BasicNameValuePair("func", "4"));
     nameValuePairs.add(new BasicNameValuePair("username", LoginActivity.user_phone_number));
 
-    ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs);
+    ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs,this);
     serverFetchAsync.execute();
     JSONObject jsonObject = new JSONObject();
     JSONArray jsonArray = new JSONArray();
@@ -113,6 +114,12 @@ public class CreateChatFragment extends JumbleServiceFragment {
   public void onDetach() {
     super.onDetach();
   }
+
+  @Override
+  public void onTaskCompleted(JSONObject jsonObject) {
+
+  }
+
   public interface OnFragmentInteractionListener {
     void onFragmentInteraction(Uri uri);
   }

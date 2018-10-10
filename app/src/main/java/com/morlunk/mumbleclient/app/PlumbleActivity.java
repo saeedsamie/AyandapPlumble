@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -123,11 +124,14 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             supportInvalidateOptionsMenu();
 
             updateConnectionState(getService());
+                setTitle(currentFragment.getTag());
+
         }
 
         @Override
         public void onConnecting() {
             updateConnectionState(getService());
+            setTitle("Connecting..");
         }
 
         @Override
@@ -140,6 +144,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //            supportInvalidateOptionsMenu();
 
             updateConnectionState(getService());
+            setTitle("Disconnected");
         }
 
         @Override
@@ -201,6 +206,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            setTitle(currentFragment.getTag());
             mService = ((PlumbleService.PlumbleBinder) service).getService();
             mService.setSuppressNotifications(true);
             mService.registerObserver(mObserver);
@@ -226,6 +232,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mService = null;
+            setTitle("Disconnected");
         }
     };
 
@@ -241,7 +248,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
 
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
                 "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
@@ -307,6 +316,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -555,6 +565,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 break;
             case DrawerAdapter.ITEM_INFO:
                 fragmentClass = ServerInfoFragment.class;
+                setTitle("اطلاعات");
                 break;
 //            case DrawerAdapter.ITEM_ACCESS_TOKENS:
 //                fragmentClass = AccessTokenFragment.class;
@@ -581,7 +592,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                         .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-                setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
+                setTitle("صفحه ی اصلی");
                 setCurrentFragment(recentChatsFragment);
                 return;
 //            case DrawerAdapter.ITEM_PUBLIC:
@@ -591,12 +602,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 Intent prefIntent = new Intent(this, Preferences.class);
                 startActivity(prefIntent);
                 return;
-          case DrawerAdapter.EXIT:
-            sharedPreferences.edit().clear().commit();
-            Intent exitIntent = new Intent(this, LoginActivity.class);
-            startActivity(exitIntent);
-            finish();
-            return;
+            case DrawerAdapter.EXIT:
+                sharedPreferences.edit().clear().commit();
+                Intent exitIntent = new Intent(this, LoginActivity.class);
+                startActivity(exitIntent);
+                finish();
+                return;
             default:
                 return;
         }
@@ -606,7 +617,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         setCurrentFragment(fragment);
-        setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
+//        setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
     }
 
     public void connectToServer(final Server server) {
@@ -703,6 +714,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
         switch (mService.getConnectionState()) {
             case CONNECTING:
+                setTitle("Connecting");
                 Server server = service.getTargetServer();
                 mConnectingDialog = new ProgressDialog(this);
                 mConnectingDialog.setIndeterminate(true);
@@ -721,12 +733,19 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 break;
             case CONNECTION_LOST:
                 // Only bother the user if the error hasn't already been shown.
+                setTitle("Disconnected");
                 if (!getService().isErrorShown()) {
                     JumbleException error = getService().getConnectionError();
                     AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);
                     ab.setTitle(R.string.connectionRefused);
                     if (mService.isReconnecting()) {
-                        ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
+                        try {
+                            ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ab.setMessage(getString(R.string.attempting_reconnect, "we dont know!"));
+
+                        }
                         ab.setPositiveButton(R.string.cancel_reconnect, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -814,12 +833,12 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (Settings.PREF_THEME.equals(key)) {
             // Recreate activity when theme is changed
-            recreate();
-        } else if (Settings.PREF_STAY_AWAKE.equals(key)) {
-            setStayAwake(mSettings.shouldStayAwake());
-        } else if (Settings.PREF_HANDSET_MODE.equals(key)) {
-            setVolumeControlStream(mSettings.isHandsetMode() ?
-                    AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
+//            recreate();
+//        } else if (Settings.PREF_STAY_AWAKE.equals(key)) {
+//            setStayAwake(mSettings.shouldStayAwake());
+//        } else if (Settings.PREF_HANDSET_MODE.equals(key)) {
+//            setVolumeControlStream(mSettings.isHandsetMode() ?
+//                    AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
         }
     }
 

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.CursorWrapper;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
@@ -23,11 +22,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleSession;
-import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.IUser;
-import com.morlunk.jumble.util.IJumbleObserver;
-import com.morlunk.jumble.util.JumbleException;
-import com.morlunk.jumble.util.JumbleObserver;
+import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 import com.morlunk.mumbleclient.Settings;
@@ -46,81 +42,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener {
 
-public class RecentChatsFragment extends JumbleServiceFragment {
-
+    List<NameValuePair> nameValuePairs;
+    Boolean permission = false;
     private PlumbleDatabase mDatabase;
     private PlumbleActivity plumbleActivity;
     private Settings mSettings;
     private ListView listView;
-    List<NameValuePair> nameValuePairs;
-
     private ChannelListAdapter mChannelListAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private IJumbleObserver mServiceObserver = new JumbleObserver() {
-        @Override
-        public void onDisconnected(JumbleException e) {
-//            mSwipeRefreshLayout.setAdapter(null);
-        }
-
-        @Override
-        public void onUserJoinedChannel(IUser user, IChannel newChannel, IChannel oldChannel) {
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-            if (getService().isConnected() &&
-                    getService().getSession().getSessionId() == user.getSession()) {
-                scrollToChannel(newChannel.getId());
-            }
-        }
-
-        @Override
-        public void onChannelAdded(IChannel channel) {
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChannelRemoved(IChannel channel) {
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChannelStateUpdated(IChannel channel) {
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onUserConnected(IUser user) {
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onUserRemoved(IUser user, String reason) {
-            // If we are the user being removed, don't update the channel list.
-            // We won't be in a synchronized state.
-            if (!getService().isConnected())
-                return;
-
-            mChannelListAdapter.updateChannels();
-            mChannelListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onUserStateUpdated(IUser user) {
-//            mChannelListAdapter.animateUserStateUpdate(user, mSwipeRefreshLayout);
-            getActivity().supportInvalidateOptionsMenu(); // Update self mute/deafen state
-        }
-
-        @Override
-        public void onUserTalkStateUpdated(IUser user) {
-//            mChannelListAdapter.animateUserTalkStateUpdate(user, mSwipeRefreshLayout);
-        }
-    };
     private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -128,6 +60,13 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                 getActivity().supportInvalidateOptionsMenu(); // Update bluetooth menu item
         }
     };
+    private AdapterView.OnItemClickListener onItemClickListener;
+    private RecentChatsFragment context;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     public void setPlumbleActivity(PlumbleActivity plumbleActivity) {
         this.plumbleActivity = plumbleActivity;
@@ -137,28 +76,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        permission = false;
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-
-
-    }
-
-    private void setupChannelList() throws RemoteException {
-//        mChannelListAdapter = new ChannelListAdapter(getActivity(), getService(),
-//                mDatabaseProvider.getDatabase(), getChildFragmentManager(),
-//                isShowingPinnedChannels(), mSettings.shouldShowUserCount());
-//        mChannelListAdapter.setOnChannelClickListener(this);
-//        mChannelListAdapter.setOnUserClickListener(this);
-//        mSwipeRefreshLayout.setAdapter(mChannelListAdapter);
-        mChannelListAdapter.notifyDataSetChanged();
+        permission = true;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_recent_chats, container, false);
         mSwipeRefreshLayout = view.findViewById(R.id.chat_frame);
-        listView = view.findViewById(R.id.recent_chats_list);
+
 //        mSwipeRefreshLayout.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -174,19 +104,22 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             }
         }
 
-
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
         nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
         new ServerFetchAsync(nameValuePairs, this).execute();
+        listView = view.findViewById(R.id.recent_chats_list);
         final RecentChatsFragment recentChatsFragment = this;
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new ServerFetchAsync(nameValuePairs, recentChatsFragment).execute();
+                listView.setOnItemClickListener(onItemClickListener);
             }
 
         });
+        context = this;
+
         return view;
 
     }
@@ -322,10 +255,10 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         //todo
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(CalligraphyContextWrapper.wrap(context));
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(CalligraphyContextWrapper.wrap(context));
+//    }
 
 
     @Override
@@ -333,58 +266,72 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         super.onDetach();
     }
 
-    public void onTaskExecuted(JSONObject jsonObject) {
 
-        mSwipeRefreshLayout.setRefreshing(false);
-        final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
-        try {
-            JSONArray jsonArray;
-            jsonArray = jsonObject.getJSONArray("recently");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                HashMap hashMap = new HashMap();
-                JSONObject c = jsonArray.getJSONObject(i);
+    @Override
+    public void onTaskCompleted(JSONObject jsonObject) {
+        if (permission) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
+            try {
+                JSONArray jsonArray;
+                jsonArray = jsonObject.getJSONArray("recently");
 
-                hashMap.put("role", c.getString("role"));
-                hashMap.put("title", c.getString("title"));
-                hashMap.put("type", c.getString("type"));
-                hashMap.put("id", c.getString("id"));
-                hashMap.put("image", c.getString("image"));
-                hashMap.put("bio", c.getString("bio"));
-                listValues.add(hashMap);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    HashMap hashMap = new HashMap();
+                    JSONObject c = jsonArray.getJSONObject(i);
+
+                    hashMap.put("role", c.getString("role"));
+                    hashMap.put("title", c.getString("title"));
+                    hashMap.put("type", c.getString("type"));
+                    hashMap.put("id", c.getString("id"));
+                    hashMap.put("image", c.getString("image"));
+                    hashMap.put("bio", c.getString("bio"));
+                    listValues.add(hashMap);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            HashMap hashMap = new HashMap();
+            hashMap.put("role", "role");
+            hashMap.put("title", "title");
+            hashMap.put("type", "type");
+            hashMap.put("id", "id");
+            hashMap.put("image", "image");
+            hashMap.put("bio", "bio");
+            listValues.add(hashMap);
+
+
+            if (listValues.size() > 0) {
+                RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
+                onItemClickListener = new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Intent intent = new Intent(getContext(), ChatActivity.class);
+
+                        HashMap<String, String> map = listValues.get(position);
+                        Log.e("map", "map" + map.toString());
+
+                        intent.putExtra("id", (listValues.get(position).get("id")));
+                        intent.putExtra("bio", (listValues.get(position).get("bio")));
+                        intent.putExtra("title", (listValues.get(position).get("title")));
+                        intent.putExtra("image", (listValues.get(position).get("image")));
+                        intent.putExtra("type", (listValues.get(position).get("type")));
+
+
+                        try {
+                            context.startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(onItemClickListener);
+            }
         }
-
-
-        if (listValues.size() > 0) {
-            RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    Intent intent = new Intent(getContext(), ChatActivity.class);
-
-                    HashMap<String, String> map = listValues.get(position);
-                    Log.e("map", "map" + map.toString());
-
-                    intent.putExtra("id", (listValues.get(position).get("id")));
-                    intent.putExtra("bio", (listValues.get(position).get("bio")));
-                    intent.putExtra("title", (listValues.get(position).get("title")));
-                    intent.putExtra("image", (listValues.get(position).get("image")));
-                    intent.putExtra("type", (listValues.get(position).get("type")));
-
-                    startActivity(intent);
-                }
-            });
-            listView.setAdapter(adapter);
-        }
-
     }
-
-
-
-
 }

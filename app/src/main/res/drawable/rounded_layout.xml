@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorSecondary"/>
+            <stroke android:width="2dp"
+                android:color="@color/colorPrimary" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorSecondaryDark"/>
+            <stroke android:width="2dp"
+                android:color="@color/colorPrimary" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
 
-  <!-- we define background color -->
-  <solid android:color="#454D5E" />
-
-  <!-- we define border color and thick -->
-
-
-  <!-- add some padding for text inside -->
-
-
-  <!-- we define corner radius, note that radius can be different for each corner -->
-  <corners android:radius="8dp" />
-
-</shape>
+</selector>

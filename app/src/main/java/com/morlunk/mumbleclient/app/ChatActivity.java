@@ -1,39 +1,43 @@
 package com.morlunk.mumbleclient.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.view.View;
 import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.morlunk.mumbleclient.R.*;
+import static com.morlunk.mumbleclient.R.drawable;
+import static com.morlunk.mumbleclient.R.id;
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         setContentView(R.layout.activity_chat);
-        TextView textView = findViewById(R.id.chat_title);
-        textView.setText(getIntent().getStringExtra("ChatId")+"\n"+getIntent().getStringExtra("ChatTitle"));
-        setContentView(layout.activity_chat);
-        TextView textView = findViewById(id.chat_title);
+        TextView textView = (TextView) findViewById(id.chat_title);
         String chatId = getIntent().getStringExtra("ChatId");
         String chatTitle = getIntent().getStringExtra("ChatTitle");
-        if ((chatId != null && chatTitle != null))
-            textView.setText(chatId + "\n" + chatTitle);
-        LinearLayout linearLayout = findViewById(id.chat_header);
+        if ((chatId != null && chatTitle != null)){
+//            textView.setText(chatId + "\n" + chatTitle);
+        }
+        chatTitle = "ChatTitle";
+        this.setTitle(chatTitle);
+        LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         for (int i = 0; i < 10; i++) {
             ImageButton imageButton = new ImageButton(this);
@@ -47,14 +51,30 @@ public class ChatActivity extends Activity {
                 }
             });
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(100, 100);
-            layoutParams.setMargins(5,5,5,5);
+            layoutParams.setMargins(5, 5, 5, 5);
             imageButton.setPadding(3, 3, 3, 3);
             linearLayout.addView(imageButton, layoutParams);
         }
-//        FrameLayout pushButton =(FrameLayout)findViewById(id.push_button);
+        final ImageButton pushButton = (ImageButton) findViewById(id.push_button);
+        final int width =400;
+        final int hight = 400;
+//        pushButton.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                ResizeAnimation resizeAnimation;
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+////                        getService().onTalkKeyDown();
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//
+////                        getService().onTalkKeyUp();
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
     }
-
-
 
 
     @Override

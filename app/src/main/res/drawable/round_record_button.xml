@@ -2,17 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false">
         <shape android:shape="oval">
-            <solid android:color="@color/colorSecondaryLight"
+            <solid android:color="@color/colorSecondary"
                 android:elevation="3dp"/>
-        </shape>
-        <shape android:shape="oval">
-            <solid android:color="@color/colorSecondaryDark">
-            </solid>
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape android:shape="oval">
-            <solid android:color="@color/colorSecondary"/>
+            <solid android:color="@color/colorSecondaryDark"/>
             <stroke android:width="3dp"
                 android:color="@color/colorPrimary"/>
         </shape>
