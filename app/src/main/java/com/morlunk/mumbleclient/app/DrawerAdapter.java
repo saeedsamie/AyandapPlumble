@@ -50,6 +50,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public static final int ITEM_RECENTS = 12;
     public static final int PROFILE_PROFILE = 13;
     public static final int EXIT = 14;
+    public static final int ITEM_CREATE_CHAT = 15;
 
     private static final int HEADER_TYPE = 0;
     private static final int ITEM_TYPE = 1;
@@ -64,6 +65,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         mProvider = provider;
         add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.default_profile));
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
+        add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "گفتگوها", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_CONNECTED_SERVER, context.getString(R.string.drawer_not_connected)));
         add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));

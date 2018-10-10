@@ -555,6 +555,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * Loads a fragment from the drawer.
      */
     private void loadDrawerFragment(int fragmentId) {
+        boolean fragmentchecker = true;
         Class<? extends Fragment> fragmentClass = null;
         Bundle args = new Bundle();
         Intent intent;
@@ -565,6 +566,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 return;
             case DrawerAdapter.ITEM_SERVER:
                 fragmentClass = ChannelFragment.class;
+                break;
+            case DrawerAdapter.ITEM_CREATE_CHAT:
+                fragmentchecker = false;
+                intent = new Intent(this, CreateChatActivity.class);
+                startActivity(intent);
                 break;
             case DrawerAdapter.ITEM_INFO:
                 fragmentClass = ServerInfoFragment.class;
@@ -615,12 +621,14 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             default:
                 return;
         }
-        Fragment fragment = Fragment.instantiate(this, fragmentClass.getName(), args);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment, fragmentClass.getName())
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        setCurrentFragment(fragment);
+        if (fragmentchecker) {
+            Fragment fragment = Fragment.instantiate(this, fragmentClass.getName(), args);
+            getSupportFragmentManager().beginTransaction()
+              .replace(R.id.content_frame, fragment, fragmentClass.getName())
+              .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+              .commit();
+            setCurrentFragment(fragment);
+        }
 //        setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);
     }
 

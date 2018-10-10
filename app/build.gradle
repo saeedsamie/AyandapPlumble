@@ -43,6 +43,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
 
 }
 
@@ -61,7 +62,7 @@ android {
             additionalParameters "--no-version-vectors"
         }
         multiDexEnabled true
-        minSdkVersion 12
+        minSdkVersion 14
         targetSdkVersion 21
         applicationId "com.morlunk.mumbleclient"
         versionCode 73

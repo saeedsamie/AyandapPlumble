@@ -173,6 +173,9 @@
         <activity
             android:name=".app.ChatActivity"
             android:screenOrientation="portrait" />
+      <activity
+        android:name=".app.CreateChatActivity"
+        android:theme="@style/Theme.CreateChat"/>
     </application>
 
 </manifest>
