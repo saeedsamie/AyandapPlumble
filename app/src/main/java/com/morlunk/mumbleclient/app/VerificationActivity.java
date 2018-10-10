@@ -146,15 +146,14 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
 
             @Override
             public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 4) {
+
+                if (s.length() >= 4) {
                     Intent intent;
                     String enteredCode = vcode.getText().toString().trim();
                     if (enteredCode.equals(c) && !isUser) {
                         intent = new Intent(VerificationActivity.this, SignupActivity.class);
                         intent.putExtra("phone_number", user_phone_number);
                         intent.putExtra("Launcher", "verification");
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
                         startActivity(intent);
                         verificationActivity.setResult(RESULT_OK);
                         finish();
@@ -162,13 +161,13 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
                         intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
+                        editor.apply();
                         startActivity(intent);
                         verificationActivity.setResult(RESULT_OK);
                         finish();
                     } else {
-                        Snackbar
-                                .make(findViewById(android.R.id.content), "کد وارد شده صحیح نیست", Snackbar.LENGTH_SHORT)
-                                .show();
+                        Snackbar.make(findViewById(android.R.id.content), "کد وارد شده صحیح نیست", Snackbar.LENGTH_SHORT).show();
+                        vcode.setError("کد وارد شده صحیح نیست!");
                     }
                 }
             }
@@ -180,11 +179,6 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
         });
     }
 
-
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-//    }
 
 
     private void requestPermission() {

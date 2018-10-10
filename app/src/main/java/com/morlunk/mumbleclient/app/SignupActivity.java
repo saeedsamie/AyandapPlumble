@@ -35,6 +35,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -57,15 +58,16 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SignupActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompletedListener {
+
+public class SignupActivity extends AppCompatActivity implements OnTaskCompletedListener {
 
     private static final int PICK_FILE_REQUEST = 1;
-    public static String userId;
-    private static String selectedFilePath;
+    public String userId;
     SharedPreferences sp;
     AlertDialog.Builder alertBuilder;
     ImageView ivAttachment;
     Button bUpload;
+    private String selectedFilePath;
     private EditText ed_fullname;
     private EditText ed_username;
     private ProgressDialog pDialog;
@@ -86,10 +88,35 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
 
-        bUpload = (Button) findViewById(R.id.signup_signup);
         ivAttachment = (ImageView) findViewById(R.id.ivAttachment);
-        ivAttachment.setOnClickListener((View.OnClickListener) this);
-        bUpload.setOnClickListener((View.OnClickListener) this);
+        ivAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+        final SignupActivity signupActivity = this;
+        bUpload = (Button) findViewById(R.id.signup_signup);
+        bUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ed_fullname.getText().toString().isEmpty()) {
+                    ed_fullname.setError("نام خود را وارد کنید!");
+                } else if (ed_username.getText().toString().isEmpty()) {
+                    ed_username.setError("نام کاربری وارد کنید!");
+                } else {
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                    nameValuePairs.add(new BasicNameValuePair("func", "register"));
+                    nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
+                    nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
+                    nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
+                    Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
+                    pDialog.show();
+                    new ServerFetchAsync(nameValuePairs, signupActivity).execute();
+                }
+            }
+        });
         ed_fullname = (EditText) findViewById(R.id.signup_fullname);
         ed_username = (EditText) findViewById(R.id.signup_username);
         sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -97,31 +124,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         pDialog.setMessage("لطفا صبر کنید...");
         pDialog.setCancelable(false);
         alertBuilder = new AlertDialog.Builder(SignupActivity.this);
-        final SignupActivity signupActivity = this;
-
-
     }
-
-    @Override
-    public void onClick(View v) {
-
-        if (v == ivAttachment) {
-
-            //on attachment icon click
-            showFileChooser();
-        }
-        if (v == bUpload) {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("func", "register"));
-            nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
-            nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
-            Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-            pDialog.show();
-            new ServerFetchAsync(nameValuePairs, this).execute();
-        }
-    }
-
 
     private void showFileChooser() {
         Intent intent = new Intent();
@@ -139,7 +142,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     //no data present
                     return;
                 }
-
 
                 Uri selectedFileUri = data.getData();
                 selectedFilePath = FilePath.getPath(this, selectedFileUri);
@@ -298,8 +300,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onTaskCompleted(JSONObject jsonObject) {
-        // TODO: 10/9/2018 change String id to JSON Object
 
+        String user_id = "";
+        try {
+            user_id = jsonObject.getString("userId");
+            userId = user_id;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         SharedPreferences sharedPreferences = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
@@ -307,8 +315,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         editor.putString(getString(R.string.PREF_TAG_fullname), ed_fullname.getText().toString());
         editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
         editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
+        editor.putString(getString(R.string.PREF_TAG_userid), user_id);
         Boolean isSavedInPref = editor.commit();
-//        userId = id;
+
         if (selectedFilePath != null) {
             new Thread(new Runnable() {
                 @Override
@@ -348,7 +357,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    private static class BackgroundTask extends AsyncTask<Void, Void, String> {
+
+    private class BackgroundTask extends AsyncTask<Void, Void, String> {
 
         private final WeakReference<TextView> messageViewReference;
 
@@ -389,51 +399,50 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 textView.setText(s);
             }
         }
-    }
 
-    public static class InputStreamToStringExample {
 
-        public static void main(String[] args) throws IOException {
+        public class InputStreamToStringExample {
 
-            // intilize an InputStream
-            InputStream is = new ByteArrayInputStream("file content..blah blah".getBytes());
+            public void main(String[] args) throws IOException {
 
-            String result = getStringFromInputStream(is);
+                // intilize an InputStream
+                InputStream is = new ByteArrayInputStream("file content..blah blah".getBytes());
 
-            System.out.println(result);
-            System.out.println("Done");
+                String result = getStringFromInputStream(is);
 
-        }
+                System.out.println(result);
+                System.out.println("Done");
 
-        // convert InputStream to String
-        public static String getStringFromInputStream(InputStream is) {
+            }
 
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
+            // convert InputStream to String
+            public String getStringFromInputStream(InputStream is) {
 
-            String line;
-            try {
+                BufferedReader br = null;
+                StringBuilder sb = new StringBuilder();
 
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
+                String line;
+                try {
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    br = new BufferedReader(new InputStreamReader(is));
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                return sb.toString();
             }
-            return sb.toString();
+
         }
-
     }
-
-
 }

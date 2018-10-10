@@ -106,7 +106,7 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
 
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "recently"));
-        nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
+//        nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
         new ServerFetchAsync(nameValuePairs, this).execute();
         listView = view.findViewById(R.id.recent_chats_list);
         final RecentChatsFragment recentChatsFragment = this;

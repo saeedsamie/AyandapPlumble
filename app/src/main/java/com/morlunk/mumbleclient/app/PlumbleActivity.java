@@ -41,6 +41,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -124,7 +125,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             supportInvalidateOptionsMenu();
 
             updateConnectionState(getService());
-                setTitle(currentFragment.getTag());
+            setTitle(currentFragment.getTag());
 
         }
 
@@ -481,7 +482,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     public void onBackPressed() {
 
-        if (!currentFragment.getClass().getName().equals(RecentChatsFragment.class.getName())) {
+        if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT) || mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerLayout.closeDrawers();
+        } else if (!currentFragment.getClass().getName().equals(RecentChatsFragment.class.getName())) {
             RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
             recentChatsFragment.setPlumbleActivity(this);
             getSupportFragmentManager().beginTransaction()
@@ -603,9 +606,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 startActivity(prefIntent);
                 return;
             case DrawerAdapter.EXIT:
-                sharedPreferences.edit().clear().commit();
+                sharedPreferences.edit().clear().apply();
                 Intent exitIntent = new Intent(this, LoginActivity.class);
                 startActivity(exitIntent);
+                mService.disconnect();
                 finish();
                 return;
             default:

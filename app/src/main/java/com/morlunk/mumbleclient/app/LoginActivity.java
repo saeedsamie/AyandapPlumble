@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
-            SignupActivity.userId = sharedPreferences.getString("userId", null);
+//            SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
             startActivity(intent);
             finish();
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
                 editor.putString(getString(R.string.PREF_TAG_username), username);
                 editor.putString(getString(R.string.PREF_TAG_image), image);
                 editor.putString(getString(R.string.PREF_TAG_userid), userId);
-                SignupActivity.userId = userId;
+//                SignupActivity.userId = userId;
             } catch (Exception e) {
                 e.printStackTrace();
             }
