@@ -81,11 +81,13 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
 
     @Override
     public void onTaskCompleted(JSONObject jsonObject) {
+
+
         try {
             isUser = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("isUser").equals("1");
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
 
+//            editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
 
             String fullname = null;
             String username = null;
@@ -128,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

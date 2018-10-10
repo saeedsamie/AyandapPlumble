@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -41,6 +42,8 @@ import java.util.List;
 import java.util.UUID;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.morlunk.mumbleclient.app.LoginActivity.sharedPreferences;
 
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -150,11 +153,15 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
                         intent = new Intent(VerificationActivity.this, SignupActivity.class);
                         intent.putExtra("phone_number", user_phone_number);
                         intent.putExtra("Launcher", "verification");
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
                         startActivity(intent);
                         verificationActivity.setResult(RESULT_OK);
                         finish();
                     } else if (enteredCode.equals(c) && isUser) {
                         intent = new Intent(VerificationActivity.this, PlumbleActivity.class);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
                         startActivity(intent);
                         verificationActivity.setResult(RESULT_OK);
                         finish();
@@ -236,7 +243,7 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
 //            c = code;
             //todo change String code to JSONObject
             TextView textView = (TextView) findViewById(R.id.verification_code_holder);
-//            textView.setText(code);
+            textView.setText(c);
             sendFakeSms();
         } catch (Exception e) {
             e.printStackTrace();
