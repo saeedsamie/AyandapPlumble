@@ -16,7 +16,8 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:plumble="http://schemas.android.com/apk/res-auto">
+      xmlns:plumble="http://schemas.android.com/apk/res-auto"
+      xmlns:app="http://schemas.android.com/tools">
     <!--<item-->
         <!--android:id="@+id/menu_mute_button"-->
         <!--android:title="@string/mute"-->
@@ -27,12 +28,13 @@
         <!--android:title="@string/deafen"-->
         <!--plumble:showAsAction="ifRoom"-->
         <!--android:icon="@drawable/ic_action_audio" />-->
-    <item
-        android:id="@+id/menu_search"
-        android:title="@string/search"
-        plumble:actionViewClass="android.support.v7.widget.SearchView"
-        plumble:showAsAction="ifRoom|collapseActionView"
-        android:icon="@drawable/ic_action_search" />
+    <!--<item-->
+      <!--android:id="@+id/menu_requests"-->
+      <!--android:checkable="true"-->
+      <!--android:icon="@drawable/new_request"-->
+      <!--android:title="requests"-->
+      <!--plumble:actionViewClass="android.support.v7.widget.SearchView"-->
+      <!--plumble:showAsAction="ifRoom|collapseActionView"/>-->
     <!--<item-->
         <!--android:id="@+id/menu_bluetooth"-->
         <!--android:title="@string/bluetooth"-->

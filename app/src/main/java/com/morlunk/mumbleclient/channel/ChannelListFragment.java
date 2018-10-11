@@ -18,24 +18,19 @@
 package com.morlunk.mumbleclient.channel;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.CursorWrapper;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -233,42 +228,42 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_channel_list, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-            @Override
-            public boolean onSuggestionSelect(int i) {
-                return false;
-            }
-
-            @Override
-            public boolean onSuggestionClick(int i) {
-                if (getService() == null || !getService().isConnected())
-                    return false;
-                CursorWrapper cursor = (CursorWrapper) searchView.getSuggestionsAdapter().getItem(i);
-                int typeColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA);
-                int dataIdColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
-                String itemType = cursor.getString(typeColumn);
-                int itemId = cursor.getInt(dataIdColumn);
-
-                IJumbleSession session = getService().getSession();
-                if (ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
-                    if (session.getSessionChannel().getId() != itemId) {
-                        session.joinChannel(itemId);
-                    } else {
-                        scrollToChannel(itemId);
-                    }
-                    return true;
-                } else if (ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
-                    scrollToUser(itemId);
-                    return true;
-                }
-                return false;
-            }
-        });
+//        MenuItem searchItem = menu.findItem(R.id.menu_requests);
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+//            @Override
+//            public boolean onSuggestionSelect(int i) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onSuggestionClick(int i) {
+//                if (getService() == null || !getService().isConnected())
+//                    return false;
+//                CursorWrapper cursor = (CursorWrapper) searchView.getSuggestionsAdapter().getItem(i);
+//                int typeColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA);
+//                int dataIdColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
+//                String itemType = cursor.getString(typeColumn);
+//                int itemId = cursor.getInt(dataIdColumn);
+//
+//                IJumbleSession session = getService().getSession();
+//                if (ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
+//                    if (session.getSessionChannel().getId() != itemId) {
+//                        session.joinChannel(itemId);
+//                    } else {
+//                        scrollToChannel(itemId);
+//                    }
+//                    return true;
+//                } else if (ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
+//                    scrollToUser(itemId);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -298,8 +293,9 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
 //                getActivity().supportInvalidateOptionsMenu();
 //                return true;
 //            }
-            case R.id.menu_search:
-                return false;
+//            case R.id.menu_requests:
+//                Log.i("ddjkncdscdsdkjcd","BAZZZINGA");
+//                return false;
 //            case R.id.menu_bluetooth:
 //                item.setChecked(!item.isChecked());
 //                if (item.isChecked()) {

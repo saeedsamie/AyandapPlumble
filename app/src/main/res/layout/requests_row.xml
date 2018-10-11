@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="#ffffff"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <ImageView
+      android:id="@+id/accept_request"
+      android:layout_width="50dp"
+      android:layout_height="60dp"
+      android:background="#00ff00"
+      android:src="@drawable/accept_request"/>
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/request_fullname"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/appIconIV"
+        android:layout_toRightOf="@+id/appIconIV"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="3dp"
+        android:text="req_fullname"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+      <TextView
+        android:id="@+id/request_username"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignLeft="@+id/roomname"
+        android:layout_alignStart="@+id/roomname"
+        android:layout_below="@+id/roomname"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="3dp"
+        android:text="req_username"
+        android:textColor="#000"
+        android:textSize="12sp"/>
+
+
+    </LinearLayout>
+
+    <ImageView
+      android:id="@+id/decline_request"
+      android:layout_width="50dp"
+      android:layout_height="60dp"
+      android:background="#ff0000"
+      android:src="@drawable/decline_request"/>
+
+  </LinearLayout>
+
+</RelativeLayout>
