@@ -55,6 +55,7 @@ public class RequestActivity extends AppCompatActivity {
             hashMap.put("username", c.getString("username"));
             hashMap.put("chatId", c.getString("chatId"));
             listValues.add(hashMap);
+            Log.i("test","test");
           }
 
         } catch (Exception e) {
