@@ -420,8 +420,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem disconnectButton = menu.findItem(R.id.action_disconnect);
-        disconnectButton.setVisible(mService != null && mService.isConnected());
+//        MenuItem disconnectButton = menu.findItem(R.id.action_disconnect);
+//        disconnectButton.setVisible(mService != null && mService.isConnected());
 
         // Color the action bar icons to the primary text color of the theme.
         int foregroundColor = getSupportActionBar().getThemedContext()
@@ -450,11 +450,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
 
-        switch (item.getItemId()) {
-            case R.id.action_disconnect:
-                getService().disconnect();
-                return true;
-        }
+//        switch (item.getItemId()) {
+////            case R.id.action_disconnect:
+////                getService().disconnect();
+////                return true;
+//        }
 
         return false;
     }

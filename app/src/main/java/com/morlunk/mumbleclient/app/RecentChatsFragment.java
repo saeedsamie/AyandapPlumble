@@ -1,16 +1,11 @@
 package com.morlunk.mumbleclient.app;
 
-import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.CursorWrapper;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +24,6 @@ import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
 import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.channel.ChannelListAdapter;
-import com.morlunk.mumbleclient.channel.ChannelSearchProvider;
 import com.morlunk.mumbleclient.db.PlumbleDatabase;
 import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.morlunk.mumbleclient.service.PlumbleService;
@@ -46,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener,Serializable {
+public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
@@ -163,44 +157,43 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_channel_list, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        if (searchManager != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//        MenuItem searchItem = menu.findItem(R.id.menu_requests);
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        if (searchManager != null) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//
+//        }
+//        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+//            @Override
+//            public boolean onSuggestionSelect(int i) {
+//                return false;
+//            }
+//            @Override
+//            public boolean onSuggestionClick(int i) {
+//                if (getService() == null || !getService().isConnected())
+//                    return false;
+//                CursorWrapper cursor = (CursorWrapper) searchView.getSuggestionsAdapter().getItem(i);
+//                int typeColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA);
+//                int dataIdColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
+//                String itemType = cursor.getString(typeColumn);
+//                int itemId = cursor.getInt(dataIdColumn);
 
-        }
-        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-            @Override
-            public boolean onSuggestionSelect(int i) {
-                return false;
-            }
-
-            @Override
-            public boolean onSuggestionClick(int i) {
-                if (getService() == null || !getService().isConnected())
-                    return false;
-                CursorWrapper cursor = (CursorWrapper) searchView.getSuggestionsAdapter().getItem(i);
-                int typeColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA);
-                int dataIdColumn = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_INTENT_DATA);
-                String itemType = cursor.getString(typeColumn);
-                int itemId = cursor.getInt(dataIdColumn);
-
-                IJumbleSession session = getService().getSession();
-                if (ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
-                    if (session.getSessionChannel().getId() != itemId) {
-                        session.joinChannel(itemId);
-                    } else {
-                        scrollToChannel(itemId);
-                    }
-                    return true;
-                } else if (ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
-                    scrollToUser(itemId);
-                    return true;
-                }
-                return false;
-            }
-        });
+//                IJumbleSession session = getService().getSession();
+//                if (ChannelSearchProvider.INTENT_DATA_CHANNEL.equals(itemType)) {
+//                    if (session.getSessionChannel().getId() != itemId) {
+//                        session.joinChannel(itemId);
+//                    } else {
+//                        scrollToChannel(itemId);
+//                    }
+//                    return true;
+//                } else if (ChannelSearchProvider.INTENT_DATA_USER.equals(itemType)) {
+//                    scrollToUser(itemId);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
     }
 
@@ -231,8 +224,9 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
 //                getActivity().supportInvalidateOptionsMenu();
 //                return true;
 //            }
-            case R.id.menu_search:
-                return false;
+//            case R.id.menu_requests:
+//                Log.i("ddjkncdscdsdkjcd","BAZZZINGA");
+//                return false;
 //            case R.id.menu_bluetooth:
 //                item.setChecked(!item.isChecked());
 //                if (item.isChecked()) {
@@ -313,8 +307,8 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                        Intent intent = new Intent(getContext(), ChatActivity.class);
 
-                        Intent intent = new Intent(getContext(),  ChatActivity.class);
                         HashMap<String, String> map = listValues.get(position);
                         Log.e("map", "map" + map.toString());
 

@@ -70,7 +70,7 @@
     <color name="colorPrimaryDark">#c25e00</color>
     <color name="colorPrimaryLight">#ffbd45</color>
     <color name="colorSecondary">#616161</color>
-    <color name="colorSecondaryLight">#8e8e8e</color>
+    <color name="colorSecondaryLight">#616161</color>
     <color name="colorSecondaryDark">#373737</color>
     <color name="textOnPrimary">#000000</color>
     <color name="textOnSecondary">#ffffff</color>
