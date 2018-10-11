@@ -111,6 +111,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private Fragment currentFragment;
+
+    /**
+     * List of fragments to be notified about service state changes.
+     */
+
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
     private JumbleObserver mObserver = new JumbleObserver() {
         @Override
@@ -252,20 +257,22 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-                "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
-                        "user" + new Random().nextInt(1000)), "");
+          "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
+            "user" + new Random().nextInt(1000)), "");
 
 
         mSettings = Settings.getInstance(this);
         setTheme(mSettings.getTheme());
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setStayAwake(mSettings.shouldStayAwake());
@@ -447,14 +454,21 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item))
-            return true;
+//        if (mDrawerToggle.onOptionsItemSelected(item))
+//            return true;
 
 //        switch (item.getItemId()) {
 ////            case R.id.action_disconnect:
 ////                getService().disconnect();
 ////                return true;
 //        }
+
+        int id = item.getItemId();
+
+        if (id == R.id.menu_requests) {
+            Intent intent = new Intent(PlumbleActivity.this,RequestActivity.class);
+            startActivity(intent);
+        }
 
         return false;
     }

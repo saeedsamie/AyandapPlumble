@@ -40,4 +40,10 @@
         <!--android:title="@string/bluetooth"-->
         <!--android:checkable="true"-->
         <!--plumble:showAsAction="never" />-->
+    <item
+      android:id="@+id/menu_requests"
+      android:orderInCategory="100"
+      android:icon="@drawable/new_request"
+      android:title="Refresh"
+      plumble:showAsAction="always"/>
 </menu>

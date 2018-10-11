@@ -176,6 +176,8 @@
       <activity
         android:name=".app.CreateChatActivity"
         android:theme="@style/Theme.CreateChat"/>
+        <activity
+          android:name=".app.RequestActivity"/>
     </application>
 
 </manifest>

@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-</LinearLayout>
+  <ListView
+    android:id="@+id/requests_list"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+
+  </ListView>
+  <!--app:searchBackground="@color/colorPrimary"-->
+  <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+  <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+  <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
+  <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
+
+</RelativeLayout>
