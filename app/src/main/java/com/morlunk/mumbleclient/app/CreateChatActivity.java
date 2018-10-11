@@ -24,11 +24,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.spongycastle.tsp.TimeStampRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class CreateChatActivity extends AppCompatActivity {
@@ -119,10 +121,10 @@ public class CreateChatActivity extends AppCompatActivity {
                   nameValuePairs.add(new BasicNameValuePair("fromId", userId));
                   nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                   IPlumbleService iPlumbleService = PlumbleActivity.mService;
-                  String chatId = "pv" + new Random().nextInt(1000);
+                  String chatId = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
                   iPlumbleService.getSession()
-                    .createChannel(0, chatId, "Private Chat  " + chatId, 0, true);
-                  nameValuePairs.add(new BasicNameValuePair("chatId", chatId));
+                    .createChannel(0, chatId , "Private Chat  " + chatId, 0, true);
+                  nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(iPlumbleService.getSession().getSessionChannel().getId())));
                   final int p = position;
                   new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
 

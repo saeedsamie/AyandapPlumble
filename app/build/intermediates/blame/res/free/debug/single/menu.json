@@ -20,6 +20,10 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\menu\\fragment_public_server_list.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\menu\\menu_item.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\menu\\menu_item.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\menu\\channel_menu.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\menu\\channel_menu.xml"
     },

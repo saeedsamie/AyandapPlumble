@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IUser;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -34,16 +35,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 
 public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
+    Boolean chatCreated = false;
     private PlumbleDatabase mDatabase;
     private PlumbleActivity plumbleActivity;
     private Settings mSettings;
@@ -264,7 +266,6 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
     }
 
 
-
     @Override
     public void onTaskCompleted(JSONObject jsonObject) {
         if (permission) {
@@ -291,44 +292,32 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
                 e.printStackTrace();
             }
 
-            HashMap hashMap = new HashMap();
-            hashMap.put("role", "role");
-            hashMap.put("title", "title");
-            hashMap.put("type", "type");
-            hashMap.put("id", "id");
-            hashMap.put("image", "image");
-            hashMap.put("bio", "bio");
-            listValues.add(hashMap);
+            RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getContext(), ChatActivity.class);
+                    HashMap<String, String> map = listValues.get(position);
+                    Log.e("map", "map" + map.toString());
+                    intent.putExtra("id", (listValues.get(position).get("id")));
+                    intent.putExtra("bio", (listValues.get(position).get("bio")));
+                    intent.putExtra("fullname", (listValues.get(position).get("title")));
+                    intent.putExtra("image", (listValues.get(position).get("image")));
+                    intent.putExtra("type", "private");
 
-
-            if (listValues.size() > 0) {
-                RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
-                onItemClickListener = new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        Intent intent = new Intent(getContext(), ChatActivity.class);
-
-                        HashMap<String, String> map = listValues.get(position);
-                        Log.e("map", "map" + map.toString());
-
-                        intent.putExtra("id", (listValues.get(position).get("id")));
-                        intent.putExtra("bio", (listValues.get(position).get("bio")));
-                        intent.putExtra("title", (listValues.get(position).get("title")));
-                        intent.putExtra("image", (listValues.get(position).get("image")));
-                        intent.putExtra("type", (listValues.get(position).get("type")));
-
-
-                        try {
-                            context.startActivity(intent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //to do Create channel !
                     }
-                };
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(onItemClickListener);
-            }
+
+                    context.startActivity(intent);
+
+
+                }
+            });
         }
     }
 }

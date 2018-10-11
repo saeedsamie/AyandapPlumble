@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="foreground_material_light">#ffffff</color>
+    <color name="primary_dark_material">#c25e00</color>
+    <color name="primary_dark_material_light">#c25e00</color>
+    <color name="primary_material">#fb8c00</color>
+    <color name="primary_material_dark">#c25e00</color>
+    <color name="primary_material_light">#ffbd45</color>
+    <color name="secondary_material">#616161</color>
+    <color name="secondary_material_dark">#373737</color>
+    <color name="text_color_primary">#000000</color>
+    <color name="text_color_secondary">#ffffff</color>
     <string name="Login">ورود</string>
     <string name="Signup">تکمیل اطلاعات</string>
     <string name="Verification">تایید هویت</string>
@@ -14,7 +24,7 @@
     <string name="chat_notify_kick_self">You were kicked from the server by %1$s: %2$s.</string>
     <string name="chat_notify_moved">%1$s moved in from %2$s by %3$s.</string>
     <string name="chat_notify_muted">Muted.</string>
-    <string name="chat_notify_muted_deafened">Muted and deafened.</string>
+    <string name="chat_notify_muted_deafened">teeeeeeeetst.</string>
     <string name="chat_notify_muted_deafened_self_by_actor">You were muted and deafened by %s.</string>
     <string name="chat_notify_muted_self_by_actor">You were muted by %s.</string>
     <string name="chat_notify_now_muted">%s is now muted.</string>

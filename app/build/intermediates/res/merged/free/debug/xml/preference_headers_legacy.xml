@@ -33,14 +33,14 @@
         android:summary="@string/audioSum">
         <intent android:action="com.morlunk.mumbleclient.app.PREFS_AUDIO"/>
     </Preference>
-    <Preference
-        android:title="@string/appearance"
-        android:summary="@string/appearanceSum">
-        <intent android:action="com.morlunk.mumbleclient.app.PREFS_APPEARANCE"/>
-    </Preference>
-    <Preference
-        android:title="@string/about"
-        android:summary="@string/aboutSum">
-        <intent  android:action="com.morlunk.mumbleclient.app.PREFS_ABOUT"/>
-    </Preference>
+    <!--<Preference-->
+        <!--android:title="@string/appearance"-->
+        <!--android:summary="@string/appearanceSum">-->
+        <!--<intent android:action="com.morlunk.mumbleclient.app.PREFS_APPEARANCE"/>-->
+    <!--</Preference>-->
+    <!--<Preference-->
+        <!--android:title="@string/about"-->
+        <!--android:summary="@string/aboutSum">-->
+        <!--<intent  android:action="com.morlunk.mumbleclient.app.PREFS_ABOUT"/>-->
+    <!--</Preference>-->
 </PreferenceScreen>

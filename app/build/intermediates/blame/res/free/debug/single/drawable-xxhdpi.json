@@ -1,19 +1,75 @@
 [
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_voice_search.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_voice_search.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_voice_search_inverted.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_voice_search_inverted.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_suppressed.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_suppressed.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_navigation_close.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_navigation_close.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_audio_muted.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_audio_muted.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_navigation_arrow_back.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_navigation_arrow_back.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_talking_on.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_talking_on.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_collapsed.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_collapsed.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_muted.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_muted.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_quick_connect.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_quick_connect.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_launcher.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\free\\res\\drawable-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_expanded.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_expanded.png"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_chat.png",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_chat.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_action_search.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_action_search.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_microphone_dark.png",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_microphone_dark.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_move.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_move.png"
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_navigation_arrow_back_inverted.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_navigation_arrow_back_inverted.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_suppressed.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_suppressed.png"
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_navigation_close_inverted.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_action_navigation_close_inverted.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_move.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_move.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_audio.png",
@@ -28,16 +84,8 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_server_muted.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_audio_muted.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_audio_muted.png"
-    },
-    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_drag_handle.png",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_drag_handle.png"
-    },
-    {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_talking_on.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_talking_on.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_deafened.png",
@@ -52,12 +100,12 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_headphones.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_microphone.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_microphone.png"
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_suggestion.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable-xxhdpi\\ic_suggestion.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_collapsed.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_collapsed.png"
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_microphone.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_microphone.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_muted_local.png",
@@ -68,27 +116,11 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_more_vert_black_24dp.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_muted.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_muted.png"
-    },
-    {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_quick_connect.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_quick_connect.png"
-    },
-    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_home.png",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_home.png"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_launcher.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\free\\res\\drawable-xxhdpi\\ic_launcher.png"
-    },
-    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_server_deafened.png",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_server_deafened.png"
-    },
-    {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable-xxhdpi\\ic_action_expanded.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable-xxhdpi\\ic_action_expanded.png"
     }
 ]

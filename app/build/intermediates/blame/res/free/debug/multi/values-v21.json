@@ -1719,8 +1719,29 @@
                     "startLine": 225,
                     "startColumn": 4,
                     "startOffset": 16916,
+                    "endLine": 231,
+                    "endColumn": 12,
+                    "endOffset": 17331
+                },
+                "from": {
+                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\values-v21\\values-v21.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 199,
+                        "endLine": 10,
+                        "endColumn": 12,
+                        "endOffset": 614
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 232,
+                    "startColumn": 4,
+                    "startOffset": 17336,
                     "endColumn": 70,
-                    "endOffset": 16982
+                    "endOffset": 17402
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1735,11 +1756,11 @@
             },
             {
                 "to": {
-                    "startLine": 226,
+                    "startLine": 233,
                     "startColumn": 4,
-                    "startOffset": 16987,
+                    "startOffset": 17407,
                     "endColumn": 82,
-                    "endOffset": 17065
+                    "endOffset": 17485
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1754,12 +1775,12 @@
             },
             {
                 "to": {
-                    "startLine": 227,
+                    "startLine": 234,
                     "startColumn": 4,
-                    "startOffset": 17070,
-                    "endLine": 236,
+                    "startOffset": 17490,
+                    "endLine": 243,
                     "endColumn": 12,
-                    "endOffset": 17745
+                    "endOffset": 18165
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1775,11 +1796,11 @@
             },
             {
                 "to": {
-                    "startLine": 237,
+                    "startLine": 244,
                     "startColumn": 4,
-                    "startOffset": 17750,
+                    "startOffset": 18170,
                     "endColumn": 56,
-                    "endOffset": 17802
+                    "endOffset": 18222
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1794,11 +1815,11 @@
             },
             {
                 "to": {
-                    "startLine": 238,
+                    "startLine": 245,
                     "startColumn": 4,
-                    "startOffset": 17807,
+                    "startOffset": 18227,
                     "endColumn": 57,
-                    "endOffset": 17860
+                    "endOffset": 18280
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1813,12 +1834,12 @@
             },
             {
                 "to": {
-                    "startLine": 239,
+                    "startLine": 246,
                     "startColumn": 4,
-                    "startOffset": 17865,
-                    "endLine": 250,
+                    "startOffset": 18285,
+                    "endLine": 257,
                     "endColumn": 12,
-                    "endOffset": 18554
+                    "endOffset": 18974
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1834,12 +1855,12 @@
             },
             {
                 "to": {
-                    "startLine": 251,
+                    "startLine": 258,
                     "startColumn": 4,
-                    "startOffset": 18559,
-                    "endLine": 262,
+                    "startOffset": 18979,
+                    "endLine": 269,
                     "endColumn": 12,
-                    "endOffset": 19260
+                    "endOffset": 19680
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1855,11 +1876,32 @@
             },
             {
                 "to": {
-                    "startLine": 263,
+                    "startLine": 270,
                     "startColumn": 4,
-                    "startOffset": 19265,
+                    "startOffset": 19685,
+                    "endLine": 281,
+                    "endColumn": 12,
+                    "endOffset": 20592
+                },
+                "from": {
+                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\AyandapPlumble.libraries\\Jumble\\unspecified\\res\\values-v21\\values-v21.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endLine": 13,
+                        "endColumn": 12,
+                        "endOffset": 962
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 282,
+                    "startColumn": 4,
+                    "startOffset": 20597,
                     "endColumn": 118,
-                    "endOffset": 19379
+                    "endOffset": 20711
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1874,11 +1916,11 @@
             },
             {
                 "to": {
-                    "startLine": 264,
+                    "startLine": 283,
                     "startColumn": 4,
-                    "startOffset": 19384,
+                    "startOffset": 20716,
                     "endColumn": 128,
-                    "endOffset": 19508
+                    "endOffset": 20840
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1893,12 +1935,12 @@
             },
             {
                 "to": {
-                    "startLine": 265,
+                    "startLine": 284,
                     "startColumn": 4,
-                    "startOffset": 19513,
-                    "endLine": 267,
+                    "startOffset": 20845,
+                    "endLine": 286,
                     "endColumn": 12,
-                    "endOffset": 19679
+                    "endOffset": 21011
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1914,12 +1956,12 @@
             },
             {
                 "to": {
-                    "startLine": 268,
+                    "startLine": 287,
                     "startColumn": 4,
-                    "startOffset": 19684,
-                    "endLine": 270,
+                    "startOffset": 21016,
+                    "endLine": 289,
                     "endColumn": 12,
-                    "endOffset": 19845
+                    "endOffset": 21177
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1935,11 +1977,11 @@
             },
             {
                 "to": {
-                    "startLine": 271,
+                    "startLine": 290,
                     "startColumn": 4,
-                    "startOffset": 19850,
+                    "startOffset": 21182,
                     "endColumn": 128,
-                    "endOffset": 19974
+                    "endOffset": 21306
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1954,12 +1996,12 @@
             },
             {
                 "to": {
-                    "startLine": 272,
+                    "startLine": 291,
                     "startColumn": 4,
-                    "startOffset": 19979,
-                    "endLine": 274,
+                    "startOffset": 21311,
+                    "endLine": 293,
                     "endColumn": 12,
-                    "endOffset": 20145
+                    "endOffset": 21477
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1975,11 +2017,11 @@
             },
             {
                 "to": {
-                    "startLine": 275,
+                    "startLine": 294,
                     "startColumn": 4,
-                    "startOffset": 20150,
+                    "startOffset": 21482,
                     "endColumn": 130,
-                    "endOffset": 20276
+                    "endOffset": 21608
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -1994,12 +2036,12 @@
             },
             {
                 "to": {
-                    "startLine": 276,
+                    "startLine": 295,
                     "startColumn": 4,
-                    "startOffset": 20281,
-                    "endLine": 278,
+                    "startOffset": 21613,
+                    "endLine": 297,
                     "endColumn": 12,
-                    "endOffset": 20446
+                    "endOffset": 21778
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -2015,12 +2057,12 @@
             },
             {
                 "to": {
-                    "startLine": 279,
+                    "startLine": 298,
                     "startColumn": 4,
-                    "startOffset": 20451,
-                    "endLine": 281,
+                    "startOffset": 21783,
+                    "endLine": 300,
                     "endColumn": 12,
-                    "endOffset": 20621
+                    "endOffset": 21953
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -2036,12 +2078,12 @@
             },
             {
                 "to": {
-                    "startLine": 282,
+                    "startLine": 301,
                     "startColumn": 4,
-                    "startOffset": 20626,
-                    "endLine": 286,
+                    "startOffset": 21958,
+                    "endLine": 305,
                     "endColumn": 12,
-                    "endOffset": 20962
+                    "endOffset": 22294
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\values-v21\\values-v21.xml",
@@ -2057,12 +2099,12 @@
             },
             {
                 "to": {
-                    "startLine": 287,
+                    "startLine": 306,
                     "startColumn": 4,
-                    "startOffset": 20967,
-                    "endLine": 289,
+                    "startOffset": 22299,
+                    "endLine": 308,
                     "endColumn": 12,
-                    "endOffset": 21160
+                    "endOffset": 22492
                 },
                 "from": {
                     "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\values-v21\\values-v21.xml",

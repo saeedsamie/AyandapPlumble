@@ -13,7 +13,7 @@
 -printconfiguration 'C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\app\build\intermediates\multi-dex\free\debug\components.flags'
 
 
-# view AndroidManifest.xml #generated:48
+# view AndroidManifest.xml #generated:50
 -keep class android.support.multidex.MultiDexApplication {
     <init>(...);
 }

@@ -22,7 +22,7 @@
     android:versionName="3.3.0-rc1" >
 
     <uses-sdk
-        android:minSdkVersion="12"
+        android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
     <uses-feature
@@ -39,6 +39,8 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <meta-data
@@ -56,8 +58,7 @@
             android:name="com.morlunk.mumbleclient.channel.ChannelSearchProvider"
             android:authorities="com.morlunk.mumbleclient.free.channel.ChannelSearchProvider"
             android:exported="false" />
-
-        <activity android:name="com.morlunk.mumbleclient.wizard.WizardActivity" />
+        <!-- <activity android:name=".wizard.WizardActivity" /> -->
         <activity
             android:name="com.morlunk.mumbleclient.preference.Preferences"
             android:parentActivityName="com.morlunk.mumbleclient.app.PlumbleActivity" >
@@ -95,14 +96,22 @@
         <activity
             android:name="com.morlunk.mumbleclient.app.PlumbleActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+            <!-- <meta-data -->
+            <!-- android:name="android.app.searchable" -->
+            <!-- android:resource="@xml/searchable" /> -->
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -158,23 +167,29 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.morlunk.mumbleclient.app.Login"
-            android:label="@string/Login" >
+        <activity android:name="com.morlunk.mumbleclient.app.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.morlunk.mumbleclient.app.Verification"
-            android:label="@string/Verification" >
-        </activity>
+            android:name="com.morlunk.mumbleclient.app.VerificationActivity"
+            android:label="@string/Verification"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.morlunk.mumbleclient.app.Signup"
-            android:label="@string/Signup" >
-        </activity>
+            android:name="com.morlunk.mumbleclient.app.SignupActivity"
+            android:label="@string/Signup"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.morlunk.mumbleclient.app.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.morlunk.mumbleclient.app.CreateChatActivity"
+            android:theme="@style/Theme.CreateChat" />
+        <activity android:name="com.morlunk.mumbleclient.app.RequestActivity" />
 
         <service
             android:name="com.morlunk.jumble.JumbleService"

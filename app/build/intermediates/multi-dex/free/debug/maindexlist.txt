@@ -15,14 +15,11 @@ android/support/v4/media/session/MediaControllerCompat.class
 android/support/v4/net/ConnectivityManagerCompatApi24.class
 android/support/annotation/IdRes.class
 android/support/v4/view/ViewPager$4.class
-org/jetbrains/annotations/PropertyKey.class
 android/support/annotation/ColorInt.class
 android/support/design/widget/FloatingActionButtonImpl.class
-org/intellij/lang/annotations/JdkConstants$TabLayoutPolicy.class
 android/support/annotation/RawRes.class
 android/support/v7/recyclerview/R$styleable.class
 android/support/design/widget/BaseTransientBottomBar$ContentViewCallback.class
-org/intellij/lang/annotations/MagicConstant.class
 android/support/v4/widget/MaterialProgressDrawable$3.class
 android/support/v4/net/ConnectivityManagerCompat$HoneycombMR2ConnectivityManagerCompatImpl.class
 com/google/protobuf/DescriptorProtos$DescriptorProto$ExtensionRange.class
@@ -105,7 +102,6 @@ android/support/v4/app/NotificationCompatApi20$Builder.class
 android/support/v7/graphics/drawable/DrawerArrowDrawable.class
 android/support/v4/media/session/MediaSessionCompat$ResultReceiverWrapper.class
 android/support/v4/app/TaskStackBuilder.class
-org/intellij/lang/annotations/JdkConstants$BoxLayoutAxis.class
 android/support/v7/app/ActionBar$OnNavigationListener.class
 android/support/v4/view/accessibility/AccessibilityNodeProviderCompat.class
 android/support/v7/appcompat/R.class
@@ -121,6 +117,7 @@ android/support/v4/view/ViewCompatICS.class
 android/support/v4/media/session/PlaybackStateCompat$Builder.class
 android/support/v4/media/RatingCompat$StarStyle.class
 android/support/design/widget/FloatingActionButton.class
+com/morlunk/mumbleclient/R.class
 android/support/v7/widget/RecyclerView$1.class
 android/support/annotation/Nullable.class
 android/support/v7/widget/ViewBoundsCheck$Callback.class
@@ -150,7 +147,6 @@ com/googlecode/javacpp/annotation/Opaque.class
 android/support/v4/media/MediaMetadataCompat$TextKey.class
 com/googlecode/javacpp/annotation/Namespace.class
 android/support/v4/media/VolumeProviderCompatApi21$Delegate.class
-org/jetbrains/annotations/TestOnly.class
 android/support/v4/text/util/LinkifyCompat$1.class
 android/support/annotation/Keep.class
 android/support/v4/media/session/PlaybackStateCompat$State.class
@@ -160,7 +156,6 @@ android/support/v4/view/ViewCompat$MarshmallowViewCompatImpl.class
 android/support/annotation/BinderThread.class
 android/support/v7/recyclerview/R.class
 com/morlunk/jumble/protobuf/Mumble$UserStats$Stats.class
-org/intellij/lang/annotations/JdkConstants.class
 com/morlunk/jumble/audio/javacpp/CELT11.class
 android/support/v4/media/MediaMetadataCompat$RatingKey.class
 android/support/design/R$dimen.class
@@ -168,15 +163,12 @@ android/support/v7/view/menu/CascadingMenuPopup$HorizPosition.class
 android/support/design/widget/CoordinatorLayout.class
 android/support/v4/view/ViewPager$SavedState.class
 com/google/protobuf/DescriptorProtos$FileOptions$OptimizeMode.class
-org/intellij/lang/annotations/JdkConstants$CalendarMonth.class
 android/support/v4/media/session/MediaSessionCompat$MediaSessionImplApi21.class
 android/support/v4/app/NotificationCompatApi24.class
 android/support/v7/widget/RecyclerView$RecycledViewPool.class
-org/intellij/lang/annotations/JdkConstants$ListSelectionMode.class
 android/support/v4/view/ViewPager$ItemInfo.class
 android/support/annotation/DimenRes.class
 android/support/annotation/TransitionRes.class
-org/intellij/lang/annotations/JdkConstants$TitledBorderJustification.class
 android/support/v7/view/menu/ShowableListMenu.class
 android/support/v4/app/NotificationCompatJellybean$Builder.class
 android/support/v4/app/NotificationCompatIceCreamSandwich.class
@@ -205,6 +197,7 @@ com/google/protobuf/DescriptorProtos$MethodDescriptorProto.class
 android/support/annotation/AnyRes.class
 android/support/v4/view/ViewCompat$BaseViewCompatImpl.class
 android/support/v4/media/session/MediaSessionCompat$MediaSessionImplBase.class
+uk/co/chrisjenx/calligraphy/CalligraphyConfig$Builder.class
 android/support/v4/app/NotificationCompatHoneycomb.class
 android/support/design/R$styleable.class
 android/support/design/widget/SwipeDismissBehavior$OnDismissListener.class
@@ -244,6 +237,7 @@ android/support/v7/graphics/drawable/DrawerArrowDrawable$ArrowDirection.class
 android/support/v7/widget/RecyclerView$AdapterDataObserver.class
 com/morlunk/jumble/protobuf/Mumble$PermissionDenied.class
 android/support/design/widget/HeaderBehavior$FlingRunnable.class
+com/morlunk/mumbleclient/R$attr.class
 com/morlunk/jumble/protobuf/Mumble$UserState.class
 android/support/v7/widget/RecyclerView$ItemAnimator$AdapterChanges.class
 android/support/v7/graphics/Palette.class
@@ -262,13 +256,11 @@ android/support/design/widget/ValueAnimatorCompat$AnimatorUpdateListener.class
 android/support/v4/media/MediaBrowserCompat$ItemCallback.class
 android/support/v4/widget/SearchViewCompat$OnCloseListenerCompat.class
 android/support/annotation/ColorRes.class
-org/intellij/lang/annotations/JdkConstants$FlowLayoutAlignment.class
 android/support/v4/app/NotificationCompat$NotificationCompatImplBase.class
 android/support/v7/view/menu/CascadingMenuPopup$CascadingMenuInfo.class
 android/support/v7/widget/OpReorderer$Callback.class
 android/support/v7/widget/AdapterHelper.class
 android/support/v4/media/MediaBrowserCompat$MediaItem$Flags.class
-org/jetbrains/annotations/NonNls.class
 android/support/v4/media/MediaBrowserCompatApi21.class
 android/support/v7/widget/ViewBoundsCheck.class
 android/support/v7/app/ActionBarActivity.class
@@ -279,6 +271,7 @@ com/googlecode/javacpp/CLongPointer.class
 android/support/v4/media/session/MediaSessionCompat$Token.class
 com/morlunk/jumble/audio/javacpp/Opus.class
 android/support/design/widget/CoordinatorLayout$LayoutParams.class
+uk/co/chrisjenx/calligraphy/CalligraphyConfig.class
 android/support/v4/util/ContainerHelpers.class
 android/support/annotation/NonNull.class
 android/support/design/widget/CoordinatorLayout$Behavior.class
@@ -287,7 +280,6 @@ android/support/v7/widget/RecyclerView$LayoutManager.class
 android/support/v7/widget/RecyclerView$5.class
 android/support/design/widget/ViewOffsetHelper.class
 android/support/v4/widget/DrawerLayout$DrawerListener.class
-org/jetbrains/annotations/NotNull.class
 android/support/design/widget/CoordinatorLayout$SavedState.class
 android/support/v7/widget/ActionMenuView$LayoutParams.class
 android/support/v7/widget/RecyclerView$SimpleOnItemTouchListener.class
@@ -340,7 +332,6 @@ android/support/v4/view/ViewCompat$ScrollIndicators.class
 android/support/v4/media/session/PlaybackStateCompat$1.class
 android/support/design/widget/FloatingActionButton$OnVisibilityChangedListener.class
 android/support/v7/appcompat/R$layout.class
-org/intellij/lang/annotations/Pattern.class
 android/support/v4/view/ViewCompatLollipop.class
 android/support/v4/media/MediaBrowserCompat$MediaItem$1.class
 android/support/v4/widget/CursorAdapter.class
@@ -356,7 +347,6 @@ com/morlunk/jumble/protobuf/Mumble$QueryUsers.class
 android/support/v7/app/AppCompatDelegateImplBase.class
 android/support/v7/view/menu/CascadingMenuPopup.class
 android/support/design/widget/BaseTransientBottomBar$8.class
-org/intellij/lang/annotations/JdkConstants$InputEventMask.class
 android/support/v4/app/NotificationCompatBase.class
 android/support/v7/view/menu/MenuBuilder.class
 android/support/annotation/CheckResult.class
@@ -393,19 +383,16 @@ android/support/annotation/AnimatorRes.class
 android/support/v7/widget/MenuPopupWindow.class
 android/support/v7/app/ActionBar$Tab.class
 android/support/v7/view/menu/CascadingMenuPopup$2.class
-org/intellij/lang/annotations/JdkConstants$HorizontalAlignment.class
 android/support/v7/widget/SimpleItemAnimator.class
 android/support/v4/view/ViewCompatKitKat.class
 android/support/design/widget/BaseTransientBottomBar$1.class
 com/googlecode/javacpp/annotation/ArrayAllocator.class
 com/google/protobuf/DescriptorProtos$FieldDescriptorProto.class
 android/support/v4/util/Pools$Pool.class
-org/intellij/lang/annotations/JdkConstants$TitledBorderTitlePosition.class
 android/support/annotation/BoolRes.class
 android/support/v4/media/MediaMetadataCompat.class
 android/support/design/widget/CoordinatorLayout$HierarchyChangeListener.class
 android/support/v4/view/PagerTitleStrip.class
-org/intellij/lang/annotations/JdkConstants$TabPlacement.class
 android/support/design/widget/ViewUtilsLollipop.class
 android/support/design/widget/ValueAnimatorCompat.class
 android/support/v4/media/RatingCompat$1.class
@@ -414,6 +401,7 @@ android/support/v7/view/menu/MenuAdapter.class
 android/support/v7/widget/RecyclerViewAccessibilityDelegate.class
 com/morlunk/jumble/protobuf/Mumble$Version.class
 android/support/v4/media/MediaMetadataCompatApi21.class
+uk/co/chrisjenx/calligraphy/CalligraphyContextWrapper.class
 com/googlecode/javacpp/annotation/Adapter.class
 android/support/annotation/IntegerRes.class
 android/support/design/widget/TabLayout$Tab.class
@@ -435,7 +423,6 @@ android/support/design/R.class
 com/googlecode/javacpp/annotation/Allocator.class
 android/support/v4/media/TransportController.class
 android/support/v7/app/AppCompatDelegateImplV14.class
-org/intellij/lang/annotations/JdkConstants$FontStyle.class
 com/morlunk/jumble/protobuf/Mumble$TextMessage.class
 android/support/v4/media/session/PlaybackStateCompat$Actions.class
 android/support/v4/view/ViewCompat.class
@@ -461,7 +448,6 @@ android/support/design/widget/ThemeUtils.class
 android/support/v7/appcompat/R$attr.class
 android/support/v4/view/accessibility/AccessibilityEventCompat.class
 android/support/design/R$style.class
-org/jetbrains/annotations/Nls.class
 android/support/v4/view/ViewCompatJB.class
 android/support/v7/widget/RecyclerView$ItemAnimatorRestoreListener.class
 android/support/design/widget/TabLayout$ViewPagerOnTabSelectedListener.class
@@ -490,7 +476,6 @@ android/support/v4/widget/EdgeEffectCompat.class
 android/support/v4/app/NotificationCompat$Action.class
 android/support/v4/widget/MaterialProgressDrawable$Ring.class
 com/googlecode/javacpp/BoolPointer.class
-org/intellij/lang/annotations/Identifier.class
 android/support/design/widget/TabLayout.class
 android/support/v4/view/InputDeviceCompat.class
 android/support/v4/app/RemoteInputCompatBase$RemoteInput$Factory.class
@@ -523,7 +508,6 @@ android/support/design/widget/BaseTransientBottomBar.class
 com/googlecode/javacpp/annotation/ValueGetter.class
 android/support/v4/view/ViewCompatHC.class
 android/support/annotation/LayoutRes.class
-org/intellij/lang/annotations/Language.class
 android/support/design/widget/AppBarLayout$LayoutParams.class
 com/googlecode/javacpp/annotation/ValueSetter.class
 android/support/v4/app/ServiceCompat$Api24ServiceCompatImpl.class
@@ -544,11 +528,9 @@ android/support/annotation/RestrictTo.class
 android/support/design/widget/TabLayout$PagerAdapterObserver.class
 android/support/v4/app/NotificationBuilderWithActions.class
 android/support/v4/view/ViewConfigurationCompat.class
-org/jetbrains/annotations/Nullable.class
 android/support/v4/view/ViewCompatICSMr1.class
 android/support/design/widget/CoordinatorLayout$ViewElevationComparator.class
 com/google/protobuf/DescriptorProtos$FieldDescriptorProto$Type.class
-org/intellij/lang/annotations/PrintFormat.class
 android/support/v4/view/ViewCompat$FocusDirection.class
 android/support/v7/appcompat/R$dimen.class
 android/support/v4/app/FragmentManager.class
@@ -557,7 +539,6 @@ android/support/annotation/Px.class
 android/support/v4/widget/SearchViewCompat$OnQueryTextListenerCompat.class
 com/morlunk/jumble/protobuf/Mumble$Authenticate.class
 android/support/annotation/AttrRes.class
-org/intellij/lang/annotations/JdkConstants$AdjustableOrientation.class
 android/support/v7/widget/GapWorker.class
 android/support/v4/widget/ResourceCursorAdapter.class
 android/support/annotation/Size.class
@@ -597,7 +578,6 @@ android/support/v7/widget/RecyclerView$RecyclerViewDataObserver.class
 android/support/v7/widget/RecyclerView$ChildDrawingOrderCallback.class
 android/support/v4/app/NotificationCompat$InboxStyle.class
 android/support/v4/media/session/PlaybackStateCompat$CustomAction.class
-org/intellij/lang/annotations/JdkConstants$TreeSelectionMode.class
 android/support/v4/view/ViewPager$ViewPositionComparator.class
 android/support/v4/widget/ViewDragHelper$Callback.class
 android/support/design/widget/BaseTransientBottomBar$6.class
@@ -609,7 +589,6 @@ android/support/v4/net/ConnectivityManagerCompat$ConnectivityManagerCompatImpl.c
 com/google/protobuf/DescriptorProtos$ServiceDescriptorProto.class
 android/support/annotation/FractionRes.class
 android/support/annotation/PluralsRes.class
-org/intellij/lang/annotations/Subst.class
 android/support/v4/media/TransportPerformer.class
 android/support/v4/app/NotificationCompat$NotificationCompatImplApi20.class
 android/support/v7/widget/ViewBoundsCheck$ViewBounds.class
@@ -619,7 +598,6 @@ android/support/v4/media/session/PlaybackStateCompatApi22.class
 android/support/v4/content/ContextCompat.class
 android/support/multidex/MultiDex$V14.class
 android/support/v7/widget/RecyclerView$Adapter.class
-org/intellij/lang/annotations/JdkConstants$PatternFlags.class
 android/support/v4/media/session/MediaSessionCompat$MediaSessionImpl.class
 android/support/design/widget/AppBarLayout$Behavior$SavedState.class
 com/morlunk/jumble/protobuf/Mumble$Reject.class
@@ -648,7 +626,7 @@ android/support/v7/widget/RecyclerView$ItemAnimator$ItemAnimatorFinishedListener
 android/support/v4/media/MediaBrowserCompat$MediaBrowserImplApi23.class
 android/support/v4/view/ViewCompat$KitKatViewCompatImpl.class
 android/support/v4/media/session/MediaSessionCompat$OnActiveChangeListener.class
-org/intellij/lang/annotations/RegExp.class
+com/morlunk/mumbleclient/FontChanger.class
 android/support/v4/util/Pools.class
 com/google/protobuf/DescriptorProtos$SourceCodeInfo$Location.class
 android/support/design/widget/ViewGroupUtils.class
@@ -671,7 +649,6 @@ android/support/v4/media/MediaBrowserCompat$SearchResultReceiver.class
 android/support/v4/net/ConnectivityManagerCompat$Api24ConnectivityManagerCompatImpl.class
 android/support/v4/app/NotificationCompatIceCreamSandwich$Builder.class
 com/morlunk/jumble/protobuf/Mumble$ACL.class
-org/intellij/lang/annotations/JdkConstants$CursorType.class
 android/support/v7/widget/RecyclerView$ViewHolder.class
 android/support/v4/media/VolumeProviderCompat$Callback.class
 com/google/protobuf/DescriptorProtos$OneofDescriptorProto.class

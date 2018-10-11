@@ -7,6 +7,18 @@
 package com.morlunk.jumble;
 
 public final class R {
+	public static final class color {
+		public static final int foreground_material_light = 0x7f0d0031;
+		public static final int primary_dark_material = 0x7f0d0050;
+		public static final int primary_dark_material_light = 0x7f0d0052;
+		public static final int primary_material = 0x7f0d0053;
+		public static final int primary_material_dark = 0x7f0d0054;
+		public static final int primary_material_light = 0x7f0d0055;
+		public static final int secondary_material = 0x7f0d0064;
+		public static final int secondary_material_dark = 0x7f0d0065;
+		public static final int text_color_primary = 0x7f0d0078;
+		public static final int text_color_secondary = 0x7f0d0079;
+	}
 	public static final class string {
 		public static final int Login = 0x7f08016c;
 		public static final int Signup = 0x7f080173;
@@ -56,5 +68,8 @@ public final class R {
 		public static final int perm_denied = 0x7f0800f2;
 		public static final int server = 0x7f08011a;
 		public static final int the_server = 0x7f08013d;
+	}
+	public static final class style {
+		public static final int PlumbleV1 = 0x7f0a008c;
 	}
 }

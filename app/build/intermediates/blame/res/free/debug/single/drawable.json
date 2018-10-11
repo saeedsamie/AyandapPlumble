@@ -4,12 +4,40 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_btn_radio_material.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\accept_request.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\accept_request.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\color_cursor_white.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.miguelcatalan\\materialsearchview\\1.4.0\\res\\drawable\\color_cursor_white.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\outline_circle_server_deafened.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_server_deafened.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\new_request.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\new_request.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\rounded_layout.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\rounded_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\chat_header_background.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\chat_header_background.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\decline_request.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\decline_request.png"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\mic_pic.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\mic_pic.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\ic_stat_notify.png",
@@ -56,12 +84,16 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\smsicon.png"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\outline_circle_muted.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_muted.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\design_snackbar_background.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable\\design_snackbar_background.xml"
     },
     {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\outline_circle_muted.xml",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_muted.xml"
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\round_button.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\round_button.xml"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\notification_bg.xml",
@@ -84,6 +116,10 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_item_background_holo_light.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\search_result_background.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\search_result_background.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\notification_bg_low.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\notification_bg_low.xml"
     },
@@ -94,10 +130,6 @@
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\outline_circle_suppressed.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_suppressed.xml"
-    },
-    {
-        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\imagen.png",
-        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\imagen.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
@@ -136,6 +168,10 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_edit_text_material.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\push_to_talk_unpressed.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\push_to_talk_unpressed.xml"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\outline_circle_deafened.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_deafened.xml"
     },
@@ -160,8 +196,16 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_cab_background_top_material.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\default_profile.jpg",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\default_profile.jpg"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\design_password_eye.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable\\design_password_eye.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\exit.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\exit.png"
     },
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\navigation_empty_icon.xml",
@@ -208,6 +252,10 @@
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\outline_circle_server_muted.xml"
     },
     {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\alert.png",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\alert.png"
+    },
+    {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\abc_ic_ab_back_material.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_ic_ab_back_material.xml"
     },
@@ -234,5 +282,9 @@
     {
         "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\design_fab_background.xml",
         "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable\\design_fab_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\build\\intermediates\\res\\merged\\free\\debug\\drawable\\push_to_talk_pressed.xml",
+        "source": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\app\\src\\main\\res\\drawable\\push_to_talk_pressed.xml"
     }
 ]

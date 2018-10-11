@@ -223,6 +223,13 @@
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="android:Widget.Material.TextView.SpinnerItem"/>
     <style name="Base.Widget.AppCompat.Toolbar.Button.Navigation" parent="android:Widget.Material.Toolbar.Button.Navigation">
     </style>
+    <style name="MSV_ImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:paddingLeft">@dimen/search_icon_padding</item>
+        <item name="android:paddingRight">@dimen/search_icon_padding</item>
+    </style>
     <style name="Platform.AppCompat" parent="Platform.V21.AppCompat"/>
     <style name="Platform.AppCompat.Light" parent="Platform.V21.AppCompat.Light"/>
     <style name="Platform.ThemeOverlay.AppCompat" parent="">
@@ -260,6 +267,18 @@
 
         <item name="android:buttonBarStyle">?attr/buttonBarStyle</item>
         <item name="android:buttonBarButtonStyle">?attr/buttonBarButtonStyle</item>
+    </style>
+    <style name="PlumbleV1" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/primary_material</item>
+        <item name="android:colorPrimaryDark">@color/primary_material_dark</item>
+        <item name="android:colorAccent">@color/primary_material_light</item>
+        <item name="android:colorBackground">@color/secondary_material_dark</item>
+        <item name="android:colorForeground">@color/foreground_material_light</item>
+        <item name="android:navigationBarColor">@color/secondary_material</item>
+        <item name="android:textColorPrimary">@color/text_color_primary</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/text_color_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/text_color_secondary</item>
     </style>
     <style name="TextAppearance.AppCompat.Notification" parent="@android:style/TextAppearance.Material.Notification"/>
     <style name="TextAppearance.AppCompat.Notification.Info" parent="@android:style/TextAppearance.Material.Notification.Info"/>
