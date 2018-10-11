@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.CursorWrapper;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
@@ -30,6 +31,7 @@ import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.channel.ChannelListAdapter;
 import com.morlunk.mumbleclient.channel.ChannelSearchProvider;
 import com.morlunk.mumbleclient.db.PlumbleDatabase;
+import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.morlunk.mumbleclient.service.PlumbleService;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
@@ -38,12 +40,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener {
+public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener,Serializable {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
@@ -310,8 +313,8 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        Intent intent = new Intent(getContext(), ChatActivity.class);
 
+                        Intent intent = new Intent(getContext(),  ChatActivity.class);
                         HashMap<String, String> map = listValues.get(position);
                         Log.e("map", "map" + map.toString());
 

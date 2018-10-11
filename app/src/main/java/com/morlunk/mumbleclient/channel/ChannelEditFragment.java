@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +29,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.morlunk.jumble.IJumbleSession;
-import com.morlunk.jumble.model.Channel;
 import com.morlunk.jumble.model.IChannel;
-import com.morlunk.jumble.net.Permissions;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.util.JumbleServiceProvider;
 
@@ -71,6 +68,7 @@ public class ChannelEditFragment extends DialogFragment {
         if (mServiceProvider.getService().isConnected()) {
             // TODO: we probably should just stop this dialog in its tracks if we're disconnected.
             IJumbleSession session = mServiceProvider.getService().getSession();
+            int i = getParent();
             IChannel parentChannel = session.getChannel(getParent());
             int combinedPermissions = session.getPermissions() | parentChannel.getPermissions();
 //            boolean canMakeChannel = (combinedPermissions & Permissions.MakeChannel) > 0;
@@ -84,13 +82,14 @@ public class ChannelEditFragment extends DialogFragment {
             mTemporaryBox.setEnabled(!onlyTemp);
         }
 
+
         return new AlertDialog.Builder(getActivity())
                 .setTitle(isAdding() ? R.string.channel_add : R.string.channel_edit)
                 .setView(view)
                 .setPositiveButton(isAdding() ? R.string.add : R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(isAdding() && mServiceProvider.getService().isConnected()) {
+                        if (isAdding() && mServiceProvider.getService().isConnected()) {
                             mServiceProvider.getService().getSession().createChannel(getParent(),
                                     mNameField.getText().toString(),
                                     mDescriptionField.getText().toString(),
@@ -118,6 +117,7 @@ public class ChannelEditFragment extends DialogFragment {
     public int getParent() {
         return getArguments().getInt("parent");
     }
+
     /**
      * @return the channel being updated.
      */

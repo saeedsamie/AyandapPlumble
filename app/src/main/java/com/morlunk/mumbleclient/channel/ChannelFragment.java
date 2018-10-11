@@ -191,7 +191,7 @@ public class ChannelFragment extends JumbleServiceFragment implements SharedPref
             Bundle listArgs = new Bundle();
             listArgs.putBoolean("pinned", isShowingPinnedChannels());
             listFragment.setArguments(listArgs);
-            ChannelChatFragment chatFragment = new ChannelChatFragment();
+//            ChannelChatFragment chatFragment = new ChannelChatFragment();
 
 //            getChildFragmentManager().beginTransaction()
 //                    .replace(R.id.list_fragment, listFragment)

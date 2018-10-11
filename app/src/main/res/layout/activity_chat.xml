@@ -18,13 +18,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/chat_title"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:textColor="@color/textOnSecondary"/>
+                android:textColor="@color/textOnSecondary" />
         </LinearLayout>
 
         <HorizontalScrollView
@@ -35,7 +36,7 @@
                 android:id="@+id/chat_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
         </HorizontalScrollView>
 
 
@@ -73,7 +74,7 @@
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="bottom"
-                android:background="@drawable/round_record_button"
+                android:background="@drawable/push_to_talk_unpressed"
                 android:src="@mipmap/mic" />
         </LinearLayout>
 

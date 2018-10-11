@@ -96,9 +96,13 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * If specified, the provided integer drawer fragment ID is shown when the activity is created.
      */
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
+    /**
+     * List of fragments to be notified about service state changes.
+     */
+
     SharedPreferences sharedPreferences;
     private Server server;
-    private IPlumbleService mService;
+    public static IPlumbleService mService;
     private PlumbleDatabase mDatabase;
     private Settings mSettings;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -107,10 +111,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private Fragment currentFragment;
-    /**
-     * List of fragments to be notified about service state changes.
-     */
-
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
     private JumbleObserver mObserver = new JumbleObserver() {
         @Override
@@ -236,6 +236,10 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             setTitle("Disconnected");
         }
     };
+
+    public IPlumbleService getPlumbleService() {
+        return mService;
+    }
 
     public Settings getmSettings() {
         return mSettings;
@@ -590,8 +594,7 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //                fragmentClass = FavouriteServerListFragment.class;
 //                break;
             case DrawerAdapter.ITEM_CHAT:
-                ChatActivity chatActivity = new ChatActivity();
-                intent = new Intent(this, chatActivity.getClass());
+                intent = new Intent(this, ChatActivity.class);
                 startActivity(intent);
                 return;
             case DrawerAdapter.ITEM_RECENTS:
@@ -624,9 +627,9 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if (fragmentchecker) {
             Fragment fragment = Fragment.instantiate(this, fragmentClass.getName(), args);
             getSupportFragmentManager().beginTransaction()
-              .replace(R.id.content_frame, fragment, fragmentClass.getName())
-              .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-              .commit();
+                    .replace(R.id.content_frame, fragment, fragmentClass.getName())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
             setCurrentFragment(fragment);
         }
 //        setTitle(mDrawerAdapter.getItemWithId(fragmentId).title);

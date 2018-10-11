@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-
-  <android.support.v7.widget.Toolbar
-    android:id="@+id/toolbar"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary"
-    />
+    android:layout_height="match_parent"
+    android:background="@color/colorSecondaryDark">
 
-  <com.miguelcatalan.materialsearchview.MaterialSearchView
-    android:id="@+id/search_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
 
-    android:textColor="#000"
-    />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary" />
 
-  <ListView
-    android:id="@+id/search_listview"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:layout_below="@+id/toolbar">
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000" />
 
-  </ListView>
-  <!--app:searchBackground="@color/colorPrimary"-->
-  <!--app:searchSuggestionBackground="@color/colorPrimary"-->
-  <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
-  <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
-  <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
+    <ListView
+        android:id="@+id/search_listview"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/toolbar"/>
+
+    <!--app:searchBackground="@color/colorPrimary"-->
+    <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+    <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+    <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
+    <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
 
 </RelativeLayout>
