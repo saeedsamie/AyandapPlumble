@@ -71,7 +71,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
     private EditText ed_fullname;
     private EditText ed_username;
     private ProgressDialog pDialog;
-    private String SERVER_URL = "http://192.168.2.26/SqliteTest/image.php";
+    private String SERVER_URL = "http://192.168.2.18/SqliteTest/image.php";
     private TextView textView;
     private BackgroundTask backgroundTask;
 
@@ -371,7 +371,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         protected String doInBackground(Void... voids) {
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://192.168.2.26/SqliteTest/sqlite.php");
+            HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));
