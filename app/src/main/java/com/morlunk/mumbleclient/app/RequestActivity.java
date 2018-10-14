@@ -185,7 +185,5 @@ public class RequestActivity extends AppCompatActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }).execute();
-
-
     }
 }
