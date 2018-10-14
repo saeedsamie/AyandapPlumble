@@ -32,7 +32,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:hint="Full Name"
-            android:inputType="textCapWords|textPersonName" />
+            android:inputType="textCapWords|textPersonName"
+            android:textColorHint="@color/textOnPrimary" />
 
         <EditText
             android:id="@+id/signup_username"
@@ -40,7 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:hint="Username" />
+            android:hint="Username"
+            android:textColorHint="@color/textOnPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"

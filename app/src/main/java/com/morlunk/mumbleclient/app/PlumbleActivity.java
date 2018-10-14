@@ -264,8 +264,7 @@ public class PlumbleActivity extends ActionBarActivity implements
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-                "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
-                        "user" + new Random().nextInt(1000)), "");
+                username, "");
 
 
         mSettings = Settings.getInstance(this);
@@ -281,7 +280,6 @@ public class PlumbleActivity extends ActionBarActivity implements
 
         mDatabase = new PlumbleSQLiteDatabase(this); // TODO add support for cloud storage
         mDatabase.open();
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -632,6 +630,8 @@ public class PlumbleActivity extends ActionBarActivity implements
                 return;
             case DrawerAdapter.EXIT:
                 sharedPreferences.edit().clear().apply();
+                mDatabase.removeServer(server);
+                PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
                 Intent exitIntent = new Intent(this, LoginActivity.class);
                 startActivity(exitIntent);
                 mService.disconnect();

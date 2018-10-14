@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -122,8 +123,12 @@ public class CreateChatActivity extends AppCompatActivity {
                   nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                   IPlumbleService iPlumbleService = PlumbleActivity.mService;
                   String chatId = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-                  iPlumbleService.getSession()
-                    .createChannel(0, chatId , "Private Chat  " + chatId, 0, true);
+                  try {
+                    iPlumbleService.getSession()
+                      .createChannel(0, chatId , "Private Chat  " + chatId, 0, true);
+                  } catch (JumbleDisconnectedException e) {
+                    e.printStackTrace();
+                  }
                   nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(iPlumbleService.getSession().getSessionChannel().getId())));
                   final int p = position;
                   new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
