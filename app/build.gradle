@@ -44,6 +44,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'com.wdullaer:swipeactionadapter:2.0.0'
 
 }
 

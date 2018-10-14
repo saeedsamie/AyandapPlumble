@@ -36,30 +36,6 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
         this.nameValuePairs = nameValuePairs;
         this.listener = onTaskCompletedListener;
     }
-//
-//    public ServerFetchAsync(List<NameValuePair> nameValuePairs) {
-//        this.nameValuePairs = nameValuePairs;
-//    }
-
-//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, RecentChatsFragment recentChatsFragment) {
-//        this.recentChatsFragment = recentChatsFragment;
-//        this.nameValuePairs = nameValuePairs;
-//    }
-
-//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, LoginActivity loginActivity) {
-//        this.loginActivity = loginActivity;
-//        this.nameValuePairs = nameValuePairs;
-//    }
-//
-//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, VerificationActivity verificationActivity) {
-//        this.nameValuePairs = nameValuePairs;
-//        this.verificationActivity = verificationActivity;
-//    }
-//
-//    public ServerFetchAsync(List<NameValuePair> nameValuePairs, SignupActivity signupActivity) {
-//        this.nameValuePairs = nameValuePairs;
-//        this.signupActivity = signupActivity;
-//    }
 
 
     private static String getStringFromInputStream(InputStream is) {

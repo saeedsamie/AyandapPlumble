@@ -18,6 +18,7 @@
 package com.morlunk.mumbleclient.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ import com.morlunk.mumbleclient.R;
 public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
     // Drawer rows, integer value is id
-//    public static final int HEADER_CONNECTED_SERVER = 0;
+    public static final int PROFILE_PROFILE = 0;
     public static final int ITEM_SERVER = 1;
     //    public static final int ITEM_PINNED_CHANNELS = 2;
     public static final int ITEM_INFO = 3;
@@ -48,7 +49,6 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public static final int ITEM_SETTINGS = 10;
     public static final int ITEM_CHAT = 11;
     public static final int ITEM_RECENTS = 12;
-    public static final int PROFILE_PROFILE = 13;
     public static final int EXIT = 14;
     public static final int ITEM_CREATE_CHAT = 15;
 
@@ -63,11 +63,14 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
         mProvider = provider;
-        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, "UserName", R.drawable.default_profile));
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString(context.getString(R.string.PREF_TAG_username), "Default Username");
+//        add(new DrawerAdapter.DrawerHeader(HEADER_USERNAME, username));
+
+        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, R.drawable.default_profile));
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "گفتگوها", R.drawable.ic_action_favourite_on));
-//        add(new DrawerAdapter.DrawerHeader(HEADER_CONNECTED_SERVER, context.getString(R.string.drawer_not_connected)));
         add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));
 //        add(new DrawerAdapter.DrawerItem(ITEM_PINNED_CHANNELS, context.getString(R.string.drawer_pinned), R.drawable.ic_action_comment));
 //        add(new DrawerAdapter.DrawerItem(ITEM_ACCESS_TOKENS, context.getString(R.string.drawer_tokens), R.drawable.ic_action_save));
@@ -103,7 +106,6 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         if (viewType == HEADER_TYPE) {
             DrawerHeader header = (DrawerHeader) getItem(position);
             TextView title = (TextView) v.findViewById(R.id.drawer_header_title);
-
 //            switch ((int) getItemId(position)) {
 //                case HEADER_CONNECTED_SERVER:
 //                    if (mProvider.isConnected()) {
@@ -111,7 +113,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 //                        break;
 //                    }
 //                default:
-//                    title.setText(header.title);
+            title.setText(header.title);
 //                    break;
 //            }
         } else if (viewType == ITEM_TYPE) {
@@ -166,21 +168,21 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
     @Override
     public boolean isEnabled(int position) {
-        int viewType = getItemViewType(position);
-        if (viewType == ITEM_TYPE) {
-            switch ((int) getItemId(position)) {
+//        int viewType = getItemViewType(position);
+//        if (viewType == ITEM_TYPE) {
+//            switch ((int) getItemId(position)) {
 //                case ITEM_SERVER:
-                case ITEM_INFO:
+//                case ITEM_INFO:
 //                case ITEM_ACCESS_TOKENS:
 //                case ITEM_PINNED_CHANNELS:
-                    return mProvider.isConnected();
+//                    return mProvider.isConnected();
 //                case ITEM_LAN:
 //                    return false;
-                default:
-                    return true;
-            }
-        }
-        return false; // Default false for headers
+//                default:
+//                    return true;
+//            }
+//        }
+        return true; // Default false for headers
     }
 
     @Override

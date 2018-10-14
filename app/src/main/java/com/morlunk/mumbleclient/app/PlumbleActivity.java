@@ -39,7 +39,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -48,13 +47,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.Server;
-import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
@@ -88,7 +85,7 @@ import info.guardianproject.netcipher.proxy.OrbotHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class PlumbleActivity extends ActionBarActivity implements ListView.OnItemClickListener,
+public class PlumbleActivity extends ActionBarActivity implements
         FavouriteServerListFragment.ServerConnectHandler, JumbleServiceProvider, DatabaseProvider,
         SharedPreferences.OnSharedPreferenceChangeListener, DrawerAdapter.DrawerDataProvider,
         ServerEditFragment.ServerEditListener {
@@ -96,13 +93,14 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
      * If specified, the provided integer drawer fragment ID is shown when the activity is created.
      */
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
+    public static IPlumbleService mService;
+    public static String username;
     /**
      * List of fragments to be notified about service state changes.
      */
 
     SharedPreferences sharedPreferences;
     private Server server;
-    public static IPlumbleService mService;
     private PlumbleDatabase mDatabase;
     private Settings mSettings;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -111,7 +109,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private Fragment currentFragment;
-
     /**
      * List of fragments to be notified about service state changes.
      */
@@ -264,10 +261,11 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
+        username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-          "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
-            "user" + new Random().nextInt(1000)), "");
+                "User" + sharedPreferences.getString(String.valueOf(R.string.PREF_TAG_username),
+                        "user" + new Random().nextInt(1000)), "");
 
 
         mSettings = Settings.getInstance(this);
@@ -298,7 +296,25 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 //            }
 //        });
 
-        mDrawerList.setOnItemClickListener(this);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent;
+                switch ((int) id) {
+                    case DrawerAdapter.PROFILE_PROFILE:
+                        intent = new Intent(PlumbleActivity.this, SignupActivity.class);
+                        intent.putExtra("Launcher","main");
+                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname),
+                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname), "default full name"));
+                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_username),
+                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_username), "default username"));
+                        startActivity(intent);
+                        break;
+                }
+                mDrawerLayout.closeDrawers();
+                loadDrawerFragment((int) id);
+            }
+        });
 
         mDrawerAdapter = new DrawerAdapter(this, this);
 //        mDrawerAdapter.getView()
@@ -454,22 +470,18 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (mDrawerToggle.onOptionsItemSelected(item))
-//            return true;
-
-//        switch (item.getItemId()) {
-////            case R.id.action_disconnect:
-////                getService().disconnect();
-////                return true;
-//        }
-
-        int id = item.getItemId();
-
-        if (id == R.id.menu_requests) {
-            Intent intent = new Intent(PlumbleActivity.this,RequestActivity.class);
-            startActivity(intent);
+        if (mDrawerToggle.onOptionsItemSelected(item))
+            return true;
+        Intent intent;
+        switch (item.getItemId()) {
+//            case R.id.action_disconnect:
+//                getService().disconnect();
+//                return true;
+            case R.id.menu_requests:
+                intent = new Intent(PlumbleActivity.this, RequestActivity.class);
+                startActivity(intent);
+                break;
         }
-
         return false;
     }
 
@@ -504,7 +516,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             mDrawerLayout.closeDrawers();
         } else if (!currentFragment.getClass().getName().equals(RecentChatsFragment.class.getName())) {
             RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
-            recentChatsFragment.setPlumbleActivity(this);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -525,12 +536,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             dadb.show();
 //        super.onBackPressed();
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mDrawerLayout.closeDrawers();
-        loadDrawerFragment((int) id);
     }
 
     /**
@@ -578,10 +583,8 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
         Bundle args = new Bundle();
         Intent intent;
         switch (fragmentId) {
-            case DrawerAdapter.PROFILE_PROFILE:
-                intent = new Intent(this, SignupActivity.class);
-                startActivity(intent);
-                return;
+
+
             case DrawerAdapter.ITEM_SERVER:
                 fragmentClass = ChannelFragment.class;
                 break;
@@ -613,7 +616,6 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
                 return;
             case DrawerAdapter.ITEM_RECENTS:
                 RecentChatsFragment recentChatsFragment = new RecentChatsFragment();
-                recentChatsFragment.setPlumbleActivity(this);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, recentChatsFragment, "صفحه ی اصلی")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -745,90 +747,91 @@ public class PlumbleActivity extends ActionBarActivity implements ListView.OnIte
             case CONNECTING:
                 setTitle("Connecting");
                 Server server = service.getTargetServer();
-                mConnectingDialog = new ProgressDialog(this);
-                mConnectingDialog.setIndeterminate(true);
-                mConnectingDialog.setCancelable(false);
-                mConnectingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        mService.disconnect();
-//                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
-//                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),
-                        server.getPort()));
-                mConnectingDialog.show();
+//                mConnectingDialog = new ProgressDialog(this);
+//                mConnectingDialog.setIndeterminate(true);
+//                mConnectingDialog.setCancelable(false);
+//                mConnectingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialog) {
+//                        mService.disconnect();
+////                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
+////                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),
+//                        server.getPort()));
+//                mConnectingDialog.show();
                 break;
             case CONNECTION_LOST:
                 // Only bother the user if the error hasn't already been shown.
                 setTitle("Disconnected");
                 if (!getService().isErrorShown()) {
                     JumbleException error = getService().getConnectionError();
-                    AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);
-                    ab.setTitle(R.string.connectionRefused);
-                    if (mService.isReconnecting()) {
-                        try {
-                            ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            ab.setMessage(getString(R.string.attempting_reconnect, "we dont know!"));
+//                    AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);
+//                    ab.setTitle(R.string.connectionRefused);
+//                    if (mService.isReconnecting()) {
+//                        try {
+//                            ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            ab.setMessage(getString(R.string.attempting_reconnect, "we dont know!"));
 
-                        }
-                        ab.setPositiveButton(R.string.cancel_reconnect, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (getService() != null) {
-                                    getService().cancelReconnect();
-                                    getService().markErrorShown();
-                                }
-                            }
-                        });
-                    } else if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
-                            (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
-                                    error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
-                        // FIXME(acomminos): Long conditional.
-                        final EditText passwordField = new EditText(this);
-                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        passwordField.setHint(R.string.password);
-                        ab.setTitle(R.string.invalid_password);
-                        ab.setMessage(error.getMessage());
-                        ab.setView(passwordField);
-                        ab.setPositiveButton(R.string.reconnect, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Server server = getService().getTargetServer();
-                                if (server == null)
-                                    return;
-                                String password = passwordField.getText().toString();
-                                server.setPassword(password);
-                                if (server.isSaved())
-                                    mDatabase.updateServer(server);
-                                connectToServer(server);
-                            }
-                        });
-                        ab.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (getService() != null)
-                                    getService().markErrorShown();
-                            }
-                        });
-                    } else {
-                        ab.setMessage(error.getMessage());
-                        ab.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (getService() != null)
-                                    getService().markErrorShown();
-                            }
-                        });
-                    }
-                    ab.setCancelable(false);
-                    mErrorDialog = ab.show();
+//                        }
+//                        ab.setPositiveButton(R.string.cancel_reconnect, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                if (getService() != null) {
+//                                    getService().cancelReconnect();
+//                                    getService().markErrorShown();
+//                                }
+//                            }
+//                        });
+//                    } else
+//                        if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
+//                            (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
+//                                    error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
+//                        // FIXME(acomminos): Long conditional.
+//                        final EditText passwordField = new EditText(this);
+//                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT |
+//                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//                        passwordField.setHint(R.string.password);
+//                        ab.setTitle(R.string.invalid_password);
+//                        ab.setMessage(error.getMessage());
+//                        ab.setView(passwordField);
+//                        ab.setPositiveButton(R.string.reconnect, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Server server = getService().getTargetServer();
+//                                if (server == null)
+//                                    return;
+//                                String password = passwordField.getText().toString();
+//                                server.setPassword(password);
+//                                if (server.isSaved())
+//                                    mDatabase.updateServer(server);
+//                                connectToServer(server);
+//                            }
+//                        });
+//                        ab.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                if (getService() != null)
+//                                    getService().markErrorShown();
+//                            }
+//                        });
+//                    } else {
+//                        ab.setMessage(error.getMessage());
+//                        ab.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                if (getService() != null)
+//                                    getService().markErrorShown();
                 }
-                break;
+//                        });
+//                    }
+//                    ab.setCancelable(false);
+//                    mErrorDialog = ab.show();
+//                }
+//                break;
 
 
         }

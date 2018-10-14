@@ -1,7 +1,5 @@
 package com.morlunk.mumbleclient.app;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,14 +17,9 @@ import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IUser;
-import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.morlunk.mumbleclient.Settings;
-import com.morlunk.mumbleclient.channel.ChannelListAdapter;
-import com.morlunk.mumbleclient.db.PlumbleDatabase;
-import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.morlunk.mumbleclient.service.PlumbleService;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
@@ -38,39 +31,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
-public class RecentChatsFragment extends JumbleServiceFragment implements OnTaskCompletedListener {
+public class RecentChatsFragment extends JumbleServiceFragment {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
-    Boolean chatCreated = false;
-    private PlumbleDatabase mDatabase;
-    private PlumbleActivity plumbleActivity;
-    private Settings mSettings;
     private ListView listView;
-    private ChannelListAdapter mChannelListAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (getActivity() != null)
-                getActivity().supportInvalidateOptionsMenu(); // Update bluetooth menu item
-        }
-    };
-    private AdapterView.OnItemClickListener onItemClickListener;
     private RecentChatsFragment context;
+    private String userId;
 
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    public void setPlumbleActivity(PlumbleActivity plumbleActivity) {
-        this.plumbleActivity = plumbleActivity;
-        mDatabase = plumbleActivity.getmDatabase();
-        mSettings = plumbleActivity.getmSettings();
     }
 
     @Override
@@ -87,10 +63,12 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
 
         View view = inflater.inflate(R.layout.fragment_recent_chats, container, false);
         mSwipeRefreshLayout = view.findViewById(R.id.chat_frame);
+        userId = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE).getString(getString(R.string.PREF_TAG_userid), "-2");
+        listView = view.findViewById(R.id.recent_chats_list);
 
 //        mSwipeRefreshLayout.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
         if (!sharedPreferences.getBoolean("isRegistered", false)) {
             PlumbleService plumbleService = (PlumbleService) getService();
             if (getService() != null && getService().isConnected()) {
@@ -102,25 +80,78 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
                 }
             }
         }
-
-        nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("func", "recently"));
-//        nameValuePairs.add(new BasicNameValuePair("userid", SignupActivity.userId));
-        new ServerFetchAsync(nameValuePairs, this).execute();
-        listView = view.findViewById(R.id.recent_chats_list);
-        final RecentChatsFragment recentChatsFragment = this;
+        mSwipeRefreshLayout.setRefreshing(true);
+        updateListView();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new ServerFetchAsync(nameValuePairs, recentChatsFragment).execute();
-                listView.setOnItemClickListener(onItemClickListener);
+                updateListView();
             }
-
         });
         context = this;
-
         return view;
+    }
 
+    private void updateListView() {
+        nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("func", "recently"));
+        nameValuePairs.add(new BasicNameValuePair("userId", userId));
+        new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+            @Override
+            public void onTaskCompleted(JSONObject jsonObject) {
+                if (permission) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
+                    try {
+                        JSONArray jsonArray;
+                        jsonArray = jsonObject.getJSONArray("recently");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            HashMap hashMap = new HashMap();
+                            JSONObject c = jsonArray.getJSONObject(i);
+
+                            hashMap.put("role", c.getString("role"));
+                            hashMap.put("title", c.getString("title"));
+                            hashMap.put("type", c.getString("type"));
+                            hashMap.put("id", c.getString("id"));
+                            hashMap.put("image", c.getString("image"));
+                            hashMap.put("bio", c.getString("bio"));
+                            listValues.add(hashMap);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getContext(), ChatActivity.class);
+                            HashMap<String, String> map = listValues.get(position);
+                            Log.e("map", "map" + map.toString());
+                            intent.putExtra("id", (listValues.get(position).get("id")));
+                            intent.putExtra("bio", (listValues.get(position).get("bio")));
+                            intent.putExtra("fullname", (listValues.get(position).get("title")));
+                            intent.putExtra("image", (listValues.get(position).get("image")));
+                            intent.putExtra("type", "private");
+
+                            try {
+                                PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                //to do Create channel !
+                            }
+
+                            context.startActivity(intent);
+
+
+                        }
+                    });
+                }
+            }
+        }).execute();
     }
 
     @Override
@@ -227,7 +258,6 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
 //                return true;
 //            }
 //            case R.id.menu_requests:
-//                Log.i("ddjkncdscdsdkjcd","BAZZZINGA");
 //                return false;
 //            case R.id.menu_bluetooth:
 //                item.setChecked(!item.isChecked());
@@ -242,82 +272,8 @@ public class RecentChatsFragment extends JumbleServiceFragment implements OnTask
         return super.onOptionsItemSelected(item);
     }
 
-    public void scrollToUser(int userId) {
-        int userPosition = mChannelListAdapter.getUserPosition(userId);
-//        mSwipeRefreshLayout.smoothScrollToPosition(userPosition);
-        //todo
-    }
-
-    public void scrollToChannel(int channelId) {
-        int channelPosition = mChannelListAdapter.getChannelPosition(channelId);
-//        mSwipeRefreshLayout.smoothScrollToPosition(channelPosition);
-        //todo
-    }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(CalligraphyContextWrapper.wrap(context));
-//    }
-
-
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-
-    @Override
-    public void onTaskCompleted(JSONObject jsonObject) {
-        if (permission) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
-            try {
-                JSONArray jsonArray;
-                jsonArray = jsonObject.getJSONArray("recently");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    HashMap hashMap = new HashMap();
-                    JSONObject c = jsonArray.getJSONObject(i);
-
-                    hashMap.put("role", c.getString("role"));
-                    hashMap.put("title", c.getString("title"));
-                    hashMap.put("type", c.getString("type"));
-                    hashMap.put("id", c.getString("id"));
-                    hashMap.put("image", c.getString("image"));
-                    hashMap.put("bio", c.getString("bio"));
-                    listValues.add(hashMap);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(), listValues);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getContext(), ChatActivity.class);
-                    HashMap<String, String> map = listValues.get(position);
-                    Log.e("map", "map" + map.toString());
-                    intent.putExtra("id", (listValues.get(position).get("id")));
-                    intent.putExtra("bio", (listValues.get(position).get("bio")));
-                    intent.putExtra("fullname", (listValues.get(position).get("title")));
-                    intent.putExtra("image", (listValues.get(position).get("image")));
-                    intent.putExtra("type", "private");
-
-                    try {
-                        PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        //to do Create channel !
-                    }
-
-                    context.startActivity(intent);
-
-
-                }
-            });
-        }
     }
 }

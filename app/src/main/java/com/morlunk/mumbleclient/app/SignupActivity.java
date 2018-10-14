@@ -119,6 +119,11 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         });
         ed_fullname = (EditText) findViewById(R.id.signup_fullname);
         ed_username = (EditText) findViewById(R.id.signup_username);
+
+        if (getIntent().getStringExtra("Launcher").equals("main")) {
+            ed_fullname.setText(getIntent().getStringExtra(getString(R.string.PREF_TAG_fullname)));
+            ed_username.setText(getIntent().getStringExtra(getString(R.string.PREF_TAG_username)));
+        }
         sp = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         pDialog = new ProgressDialog(SignupActivity.this);
         pDialog.setMessage("لطفا صبر کنید...");
@@ -314,7 +319,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         editor.putString(getString(R.string.PREF_TAG_phonenumber), getIntent().getStringExtra("phone_number"));
         editor.putString(getString(R.string.PREF_TAG_fullname), ed_fullname.getText().toString());
         editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
-        editor.putString(getString(R.string.PREF_TAG_image), ed_username.getText().toString());
+        editor.putString(getString(R.string.PREF_TAG_image), "NoImage");
         editor.putString(getString(R.string.PREF_TAG_userid), user_id);
         Boolean isSavedInPref = editor.commit();
 
@@ -332,19 +337,16 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         pDialog.dismiss();
 
         if (isSavedInPref && !userId.isEmpty()) {
-            if (!getIntent().getStringExtra("Launcher").equals("main")) {
+            if (getIntent().getStringExtra("Launcher").equals("main")) {
+                finish();
+            } else {
                 Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
                 startActivity(intent);
                 finish();
             }
         } else {
             alertBuilder.setMessage("دوباره سعی کنید!");
-            alertBuilder.setCancelable(false);
-            alertBuilder.setNeutralButton("باشه", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
+            alertBuilder.setCancelable(true);
             alertBuilder.show();
         }
 

@@ -281,4 +281,5 @@
     <string name="PREF_TAG_username">username</string>
     <string name="PREF_TAG_image">image</string>
     <string name="PREF_TAG_userid">userId</string>
+    <string name="refresh">Refresh</string>
 </resources>
