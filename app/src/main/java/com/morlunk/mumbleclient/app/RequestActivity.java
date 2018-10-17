@@ -184,6 +184,7 @@ public class RequestActivity extends AppCompatActivity {
                                     }
                                 }
                             }).execute();
+                            updateListView();
                             swipeActionAdapter.notifyDataSetChanged();
                         }
                     }

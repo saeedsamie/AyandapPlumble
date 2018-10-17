@@ -218,13 +218,17 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
             //to get massage body
             body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
 
-            if (body.contains(check)) {
+            try {
+                if (body.contains(check)) {
 
-                numInsideSms = body.substring(33);
-                vcode.setText(numInsideSms);
-                flag = 1;
-                //do STH
+                    numInsideSms = body.substring(33);
+                    vcode.setText(numInsideSms);
+                    flag = 1;
+                    //do STH
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

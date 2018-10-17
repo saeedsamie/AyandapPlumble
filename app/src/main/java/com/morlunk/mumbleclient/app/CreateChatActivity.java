@@ -118,18 +118,23 @@ public class CreateChatActivity extends AppCompatActivity {
                                     nameValuePairs.add(new BasicNameValuePair("func", "createPV"));
                                     String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
                                             .getString(getString(R.string.PREF_TAG_userid), "-2");
+                                    String fullName = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                                            .getString(getString(R.string.PREF_TAG_fullname), "--3");
+                                    nameValuePairs.add(new BasicNameValuePair("fromName", fullName));
+                                    nameValuePairs.add(new BasicNameValuePair("toName", listValues.get(position).get("fullname")));
                                     nameValuePairs.add(new BasicNameValuePair("fromId", userId));
                                     nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                                     IPlumbleService iPlumbleService = PlumbleActivity.mService;
                                     String chat1Id = String.valueOf(TimeUnit.SECONDS.toSeconds(System.currentTimeMillis()));
-                                    String chatId = String.valueOf("felan"+new Random(100));
+                                    String chatId = String.valueOf("chat");
                                     try {
                                         iPlumbleService.getSession()
-                                                .createChannel(0, chatId, "Private Chat  " + chatId, 0, true);
-                                        Log.i("Create chat", "channel created");
-                                    } catch (JumbleDisconnectedException e) {
+                                                .createChannel(0, "chat" + new Random(100).nextInt(), "Private Chat", 0, true);
+
+                                        Log.e("Create chat", "channel created");
+                                    } catch (Exception e) {
                                         e.printStackTrace();
-                                        Log.i("Create chat", "channel Didn't create");
+                                        Log.e("Create chat", "channel Didn't create");
                                     }
                                     nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(iPlumbleService.getSession().getSessionChannel().getId())));
                                     final int p = position;
@@ -147,6 +152,10 @@ public class CreateChatActivity extends AppCompatActivity {
                                                     intent.putExtra("image", (listValues.get(p).get("image")));
                                                     intent.putExtra("type", ("private"));
                                                     startActivity(intent);
+                                                } else if (jsonObject.getString("PV").equals("EXIST")) {
+                                                    Log.e("Ex","Exist");
+                                                    Toast.makeText(CreateChatActivity.this, "PV Exist", Toast.LENGTH_LONG).show();
+
                                                 } else {
                                                     Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
                                                 }

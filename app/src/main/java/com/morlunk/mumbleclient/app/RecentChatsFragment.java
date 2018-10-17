@@ -13,14 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IUser;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.morlunk.mumbleclient.service.PlumbleService;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
 import org.apache.http.NameValuePair;
@@ -43,6 +41,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecentChatsFragment context;
     private String userId;
+    String fullName;
 
     @Override
     public void onResume() {
@@ -69,17 +68,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 //        mSwipeRefreshLayout.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
-        if (!sharedPreferences.getBoolean("isRegistered", false)) {
-            PlumbleService plumbleService = (PlumbleService) getService();
-            if (getService() != null && getService().isConnected()) {
-                plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
-                if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
-                    Toast.makeText(this.getContext(), "Registered :D !", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this.getContext(), "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
+        fullName = sharedPreferences.getString(getString(R.string.PREF_TAG_fullname), "username");
+
+//        if (!sharedPreferences.getBoolean("isRegistered", false)) {
+//            PlumbleService plumbleService = (PlumbleService) getService();
+//            if (getService() != null && getService().isConnected()) {
+//                plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
+//                if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
+//                    Toast.makeText(this.getContext(), "Registered :D !", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(this.getContext(), "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
         mSwipeRefreshLayout.setRefreshing(true);
         updateListView();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -113,9 +114,24 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("role", c.getString("role"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
-                            hashMap.put("id", c.getString("id"));
+                            hashMap.put("id", c.getString("id"));//chatId
                             hashMap.put("image", c.getString("image"));
                             hashMap.put("bio", c.getString("bio"));
+                            if (c.getString("type").equals("pv")) {
+                                String[] strings = c.getString("title").split(",");
+                                String[] ids = c.getString("bio").split(",");
+                                if (strings[0].equals(fullName)){
+                                    hashMap.put("title", strings[1]);
+                                }else {
+                                    hashMap.put("title", strings[0]);
+                                }
+                                if (ids[0].equals(userId)){
+                                    hashMap.put("id", ids[1]);
+                                }else {
+                                    hashMap.put("id", ids[0]);
+                                }
+
+                            }
                             listValues.add(hashMap);
                         }
 
@@ -135,7 +151,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("bio", (listValues.get(position).get("bio")));
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
-                            intent.putExtra("type", "private");
+                            intent.putExtra("type", (listValues.get(position).get("type")));
 
                             try {
                                 PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));

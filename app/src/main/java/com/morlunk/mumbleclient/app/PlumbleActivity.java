@@ -164,41 +164,41 @@ public class PlumbleActivity extends ActionBarActivity implements
                 return;
             try {
                 final X509Certificate x509 = chain[0];
-//                AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
-//                adb.setTitle(R.string.untrusted_certificate);
+                AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+                adb.setTitle(R.string.untrusted_certificate);
                 try {
                     MessageDigest digest = MessageDigest.getInstance("SHA-1");
                     byte[] certDigest = digest.digest(x509.getEncoded());
                     String hexDigest = new String(Hex.encode(certDigest));
-//                    adb.setMessage(getString(R.string.certificate_info,
-//                            x509.getSubjectDN().getName(),
-//                            x509.getNotBefore().toString(),
-//                            x509.getNotAfter().toString(),
-//                            hexDigest));
+                    adb.setMessage(getString(R.string.certificate_info,
+                            x509.getSubjectDN().getName(),
+                            x509.getNotBefore().toString(),
+                            x509.getNotAfter().toString(),
+                            hexDigest));
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    adb.setMessage(x509.toString());
+                    adb.setMessage(x509.toString());
                 }
-//                adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
+                adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+                    //
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 //                 Try to add to trust store
-                try {
-                    String alias = lastServer.getHost();
-                    KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
-                    trustStore.setCertificateEntry(alias, x509);
-                    PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
-                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
-                    connectToServer(lastServer);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
-                }
-//                    }
-//                });
-//                adb.setNegativeButton(R.string.wizard_cancel, null);
-//                adb.show();
+                        try {
+                            String alias = lastServer.getHost();
+                            KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
+                            trustStore.setCertificateEntry(alias, x509);
+                            PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
+                            Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+                            connectToServer(lastServer);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                adb.setNegativeButton(R.string.wizard_cancel, null);
+                adb.show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -206,10 +206,10 @@ public class PlumbleActivity extends ActionBarActivity implements
 
         @Override
         public void onPermissionDenied(String reason) {
-//            AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
-//            adb.setTitle(R.string.perm_denied);
-//            adb.setMessage(reason);
-//            adb.show();
+            AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+            adb.setTitle(R.string.perm_denied);
+            adb.setMessage(reason);
+            adb.show();
         }
     };
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -268,8 +268,9 @@ public class PlumbleActivity extends ActionBarActivity implements
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
-        server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-                username + userId, "");
+        server = new Server
+                (new Random(10).nextInt(), "MUMBLE-server", "31.184.132.206", 64738,
+                        username + userId, "");
 
 
         mSettings = Settings.getInstance(this);
@@ -296,7 +297,7 @@ public class PlumbleActivity extends ActionBarActivity implements
                 switch ((int) id) {
                     case DrawerAdapter.PROFILE_PROFILE:
                         intent = new Intent(PlumbleActivity.this, SignupActivity.class);
-                        intent.putExtra("Launcher","main");
+                        intent.putExtra("Launcher", "main");
                         intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname),
                                 sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname), "default full name"));
                         intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_username),
@@ -347,16 +348,16 @@ public class PlumbleActivity extends ActionBarActivity implements
         logo.setColorFilter(iconColor, PorterDuff.Mode.MULTIPLY);
         getSupportActionBar().setLogo(logo);
 
-//        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
-//        dadb.setMessage(R.string.disconnectSure);
-//        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                if(mService != null) mService.disconnect();
-////                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
-//            }
-//        });
-//        dadb.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog.Builder dadb = new AlertDialog.Builder(this);
+        dadb.setMessage(R.string.disconnectSure);
+        dadb.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mService != null) mService.disconnect();
+//                loadDrawerFragment(DrawerAdapter.ITEM_SERVER);
+            }
+        });
+        dadb.setNegativeButton(android.R.string.cancel, null);
 //        mDisconnectPromptBuilder = dadb;
 
         if (savedInstanceState == null) {
@@ -539,23 +540,23 @@ public class PlumbleActivity extends ActionBarActivity implements
         // Prompt the user to generate a certificate.
 
         if (mSettings.isUsingCertificate()) return;
-//        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-//        adb.setTitle(R.string.first_run_generate_certificate_title);
-//        adb.setMessage(R.string.first_run_generate_certificate);
-//        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//        @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
-//            @Override
-//            protected void onPostExecute(DatabaseCertificate result) {
-//                super.onPostExecute(result);
-//                if (result != null) mSettings.setDefaultCertificateId(result.getId());
-//            }
-//        };
-//        generateTask.execute();
-//            }
-//        });
-//        adb.show();
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle(R.string.first_run_generate_certificate_title);
+        adb.setMessage(R.string.first_run_generate_certificate);
+        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
+                    @Override
+                    protected void onPostExecute(DatabaseCertificate result) {
+                        super.onPostExecute(result);
+                        if (result != null) mSettings.setDefaultCertificateId(result.getId());
+                    }
+                };
+                generateTask.execute();
+            }
+        });
+        adb.show();
         mSettings.setFirstRun(false);
 
         // TODO: finish wizard
@@ -576,8 +577,6 @@ public class PlumbleActivity extends ActionBarActivity implements
         Bundle args = new Bundle();
         Intent intent;
         switch (fragmentId) {
-
-
             case DrawerAdapter.ITEM_SERVER:
                 fragmentClass = ChannelFragment.class;
                 break;
@@ -737,7 +736,7 @@ public class PlumbleActivity extends ActionBarActivity implements
         switch (mService.getConnectionState()) {
             case CONNECTING:
                 setTitle("Connecting");
-                Server server = service.getTargetServer();
+//                Server server = service.getTargetServer();
                 mConnectingDialog = new ProgressDialog(this);
                 mConnectingDialog.setIndeterminate(true);
                 mConnectingDialog.setCancelable(false);
@@ -777,8 +776,7 @@ public class PlumbleActivity extends ActionBarActivity implements
                                 }
                             }
                         });
-                    } else
-                        if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
+                    } else if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
                             (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
                                     error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
                         // FIXME(acomminos): Long conditional.
@@ -792,8 +790,8 @@ public class PlumbleActivity extends ActionBarActivity implements
                         ab.setPositiveButton(R.string.reconnect, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Server server = getService().getTargetServer();
-                                server = getService().getTargetServer();
+//                                Server server = getService().getTargetServer();
+//                                server = getService().getTargetServer();
                                 if (server == null)
                                     return;
                                 String password = passwordField.getText().toString();
@@ -817,15 +815,13 @@ public class PlumbleActivity extends ActionBarActivity implements
                             public void onClick(DialogInterface dialog, int which) {
                                 if (getService() != null)
                                     getService().markErrorShown();
-                }
+                            }
                         });
                     }
                     ab.setCancelable(false);
                     mErrorDialog = ab.show();
                 }
                 break;
-
-
         }
     }
 
@@ -874,7 +870,7 @@ public class PlumbleActivity extends ActionBarActivity implements
     @Override
     public String getConnectedServerName() {
         if (mService != null && mService.isConnected()) {
-            Server server = mService.getTargetServer();
+//            Server server = mService.getTargetServer();
             return server.getName().equals("") ? server.getHost() : server.getName();
         }
         if (BuildConfig.DEBUG)
