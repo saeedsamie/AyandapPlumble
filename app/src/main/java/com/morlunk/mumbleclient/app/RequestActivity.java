@@ -61,13 +61,15 @@ public class RequestActivity extends AppCompatActivity {
 
         requests_list = (ListView) findViewById(R.id.requests_list);
         requests_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // accept
-                List<NameValuePair> value = new ArrayList<>();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RequestActivity.this);
+                List<NameValuePair> value = new ArrayList<>();
                 value.add(new BasicNameValuePair("func", "acceptPV"));
                 value.add(new BasicNameValuePair("userId", userId));
+                value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+
                 builder.setMessage("گفتگو پذیرفته شد").create().show();
                 new ServerFetchAsync(value, new OnTaskCompletedListener() {
                     @Override
@@ -145,12 +147,14 @@ public class RequestActivity extends AppCompatActivity {
                                     dir = "Far left";
                                     value.add(new BasicNameValuePair("func", "declinePV"));
                                     value.add(new BasicNameValuePair("userId", userId));
+                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     builder.setMessage("گفتگو پذیرفته نشد").create().show();
                                     break;
                                 case DIRECTION_NORMAL_LEFT:
                                     dir = "Left";
                                     value.add(new BasicNameValuePair("func", "declinePV"));
                                     value.add(new BasicNameValuePair("userId", userId));
+                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     builder.setMessage("گفتگو پذیرفته نشد").create().show();
 
                                     break;
@@ -158,11 +162,13 @@ public class RequestActivity extends AppCompatActivity {
                                     dir = "Far right";
                                     value.add(new BasicNameValuePair("func", "acceptPV"));
                                     value.add(new BasicNameValuePair("userId", userId));
+                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     builder.setMessage("گفتگو پذیرفته شد").create().show();
                                     break;
                                 case DIRECTION_NORMAL_RIGHT:
                                     value.add(new BasicNameValuePair("func", "acceptPV"));
                                     value.add(new BasicNameValuePair("userId", userId));
+                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     builder.setMessage("گفتگو پذیرفته شد").create().show();
                                     dir = "Right";
                                     break;
@@ -172,7 +178,7 @@ public class RequestActivity extends AppCompatActivity {
                                 public void onTaskCompleted(JSONObject jsonObject) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(RequestActivity.this);
                                     try {
-                                        builder.setMessage(jsonObject.getString("request").toString()).create().show();
+                                        builder.setMessage(jsonObject.getString("request")).create().show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }

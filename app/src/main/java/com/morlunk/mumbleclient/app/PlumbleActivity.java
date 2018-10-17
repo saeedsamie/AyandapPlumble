@@ -39,6 +39,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -47,11 +48,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.Server;
+import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
@@ -73,6 +77,8 @@ import com.morlunk.mumbleclient.service.PlumbleService;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 import com.morlunk.mumbleclient.util.JumbleServiceProvider;
 import com.morlunk.mumbleclient.util.PlumbleTrustStore;
+
+import org.spongycastle.util.encoders.Hex;
 
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -163,7 +169,7 @@ public class PlumbleActivity extends ActionBarActivity implements
                 try {
                     MessageDigest digest = MessageDigest.getInstance("SHA-1");
                     byte[] certDigest = digest.digest(x509.getEncoded());
-//                    String hexDigest = new String(Hex.encode(certDigest));
+                    String hexDigest = new String(Hex.encode(certDigest));
 //                    adb.setMessage(getString(R.string.certificate_info,
 //                            x509.getSubjectDN().getName(),
 //                            x509.getNotBefore().toString(),
@@ -177,17 +183,17 @@ public class PlumbleActivity extends ActionBarActivity implements
 //
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
-                // Try to add to trust store
+//                 Try to add to trust store
                 try {
                     String alias = lastServer.getHost();
                     KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
                     trustStore.setCertificateEntry(alias, x509);
                     PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
-//                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+                    Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
                     connectToServer(lastServer);
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
+                    Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
                 }
 //                    }
 //                });
@@ -200,10 +206,10 @@ public class PlumbleActivity extends ActionBarActivity implements
 
         @Override
         public void onPermissionDenied(String reason) {
-            AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
-            adb.setTitle(R.string.perm_denied);
-            adb.setMessage(reason);
-            adb.show();
+//            AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+//            adb.setTitle(R.string.perm_denied);
+//            adb.setMessage(reason);
+//            adb.show();
         }
     };
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -214,9 +220,6 @@ public class PlumbleActivity extends ActionBarActivity implements
             mService.setSuppressNotifications(true);
             mService.registerObserver(mObserver);
             mService.clearChatNotifications(); // Clear chat notifications on resume.
-
-//            User i = new User(((PlumbleService.PlumbleBinder) service).getService().getSession().getSessionId(),"userTest" + new Random(10).nextInt());
-//            plumbleService.registerUser(((PlumbleService) mService).getSessionId());
 
             mDrawerAdapter.notifyDataSetChanged();
 
@@ -238,6 +241,7 @@ public class PlumbleActivity extends ActionBarActivity implements
             setTitle("Disconnected");
         }
     };
+    private String userId;
 
     public IPlumbleService getPlumbleService() {
         return mService;
@@ -262,9 +266,10 @@ public class PlumbleActivity extends ActionBarActivity implements
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
+        userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server(5, "MUMBLE-server", "31.184.132.206", 64738,
-                username, "");
+                username + userId, "");
 
 
         mSettings = Settings.getInstance(this);
@@ -283,16 +288,6 @@ public class PlumbleActivity extends ActionBarActivity implements
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-
-//        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.profile_layout);
-//        linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getBaseContext(), SignupActivity.class);
-//                intent.putExtra("Launcher", "main");
-//                startActivity(intent);
-//            }
-//        });
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -550,14 +545,14 @@ public class PlumbleActivity extends ActionBarActivity implements
 //        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {
-        @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
-            @Override
-            protected void onPostExecute(DatabaseCertificate result) {
-                super.onPostExecute(result);
-                if (result != null) mSettings.setDefaultCertificateId(result.getId());
-            }
-        };
-        generateTask.execute();
+//        @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
+//            @Override
+//            protected void onPostExecute(DatabaseCertificate result) {
+//                super.onPostExecute(result);
+//                if (result != null) mSettings.setDefaultCertificateId(result.getId());
+//            }
+//        };
+//        generateTask.execute();
 //            }
 //        });
 //        adb.show();
@@ -689,11 +684,7 @@ public class PlumbleActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void connectToPublicServer(PublicServer server) {
-
-    }
-
-//    public void connectToPublicServer(final PublicServer server) {
+    public void connectToPublicServer(final PublicServer server) {
 //        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 //
 //        final Settings settings = Settings.getInstance(this);
@@ -718,7 +709,7 @@ public class PlumbleActivity extends ActionBarActivity implements
 //        });
 
 //        alertBuilder.show();
-//    }
+    }
 
     private void setStayAwake(boolean stayAwake) {
         if (stayAwake) {
@@ -747,91 +738,92 @@ public class PlumbleActivity extends ActionBarActivity implements
             case CONNECTING:
                 setTitle("Connecting");
                 Server server = service.getTargetServer();
-//                mConnectingDialog = new ProgressDialog(this);
-//                mConnectingDialog.setIndeterminate(true);
-//                mConnectingDialog.setCancelable(false);
-//                mConnectingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(DialogInterface dialog) {
-//                        mService.disconnect();
-////                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
-////                                Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),
-//                        server.getPort()));
-//                mConnectingDialog.show();
+                mConnectingDialog = new ProgressDialog(this);
+                mConnectingDialog.setIndeterminate(true);
+                mConnectingDialog.setCancelable(false);
+                mConnectingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mService.disconnect();
+                        Toast.makeText(PlumbleActivity.this, R.string.cancelled,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),
+                        server.getPort()));
+                mConnectingDialog.show();
                 break;
             case CONNECTION_LOST:
                 // Only bother the user if the error hasn't already been shown.
-                setTitle("Disconnected");
+                setTitle("Connection Lost");
                 if (!getService().isErrorShown()) {
                     JumbleException error = getService().getConnectionError();
-//                    AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);
-//                    ab.setTitle(R.string.connectionRefused);
-//                    if (mService.isReconnecting()) {
-//                        try {
-//                            ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            ab.setMessage(getString(R.string.attempting_reconnect, "we dont know!"));
+                    AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);
+                    ab.setTitle(R.string.connectionRefused);
+                    if (mService.isReconnecting()) {
+                        try {
+                            ab.setMessage(getString(R.string.attempting_reconnect, error.getMessage()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ab.setMessage(getString(R.string.attempting_reconnect, "we dont know!"));
 
-//                        }
-//                        ab.setPositiveButton(R.string.cancel_reconnect, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (getService() != null) {
-//                                    getService().cancelReconnect();
-//                                    getService().markErrorShown();
-//                                }
-//                            }
-//                        });
-//                    } else
-//                        if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
-//                            (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
-//                                    error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
-//                        // FIXME(acomminos): Long conditional.
-//                        final EditText passwordField = new EditText(this);
-//                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT |
-//                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//                        passwordField.setHint(R.string.password);
-//                        ab.setTitle(R.string.invalid_password);
-//                        ab.setMessage(error.getMessage());
-//                        ab.setView(passwordField);
-//                        ab.setPositiveButton(R.string.reconnect, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Server server = getService().getTargetServer();
-//                                if (server == null)
-//                                    return;
-//                                String password = passwordField.getText().toString();
-//                                server.setPassword(password);
-//                                if (server.isSaved())
-//                                    mDatabase.updateServer(server);
-//                                connectToServer(server);
-//                            }
-//                        });
-//                        ab.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (getService() != null)
-//                                    getService().markErrorShown();
-//                            }
-//                        });
-//                    } else {
-//                        ab.setMessage(error.getMessage());
-//                        ab.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (getService() != null)
-//                                    getService().markErrorShown();
+                        }
+                        ab.setPositiveButton(R.string.cancel_reconnect, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (getService() != null) {
+                                    getService().cancelReconnect();
+                                    getService().markErrorShown();
+                                }
+                            }
+                        });
+                    } else
+                        if (error.getReason() == JumbleException.JumbleDisconnectReason.REJECT &&
+                            (error.getReject().getType() == Mumble.Reject.RejectType.WrongUserPW ||
+                                    error.getReject().getType() == Mumble.Reject.RejectType.WrongServerPW)) {
+                        // FIXME(acomminos): Long conditional.
+                        final EditText passwordField = new EditText(this);
+                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        passwordField.setHint(R.string.password);
+                        ab.setTitle(R.string.invalid_password);
+                        ab.setMessage(error.getMessage());
+                        ab.setView(passwordField);
+                        ab.setPositiveButton(R.string.reconnect, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Server server = getService().getTargetServer();
+                                server = getService().getTargetServer();
+                                if (server == null)
+                                    return;
+                                String password = passwordField.getText().toString();
+                                server.setPassword(password);
+                                if (server.isSaved())
+                                    mDatabase.updateServer(server);
+                                connectToServer(server);
+                            }
+                        });
+                        ab.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (getService() != null)
+                                    getService().markErrorShown();
+                            }
+                        });
+                    } else {
+                        ab.setMessage(error.getMessage());
+                        ab.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (getService() != null)
+                                    getService().markErrorShown();
                 }
-//                        });
-//                    }
-//                    ab.setCancelable(false);
-//                    mErrorDialog = ab.show();
-//                }
-//                break;
+                        });
+                    }
+                    ab.setCancelable(false);
+                    mErrorDialog = ab.show();
+                }
+                break;
 
 
         }

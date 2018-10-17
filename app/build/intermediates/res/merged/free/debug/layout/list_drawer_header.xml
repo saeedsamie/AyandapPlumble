@@ -26,7 +26,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="?android:textColorSecondaryInverse"
-            android:text="@string/app_name"
             android:id="@+id/drawer_header_title"
             android:padding="8dp"
             android:textAllCaps="true"

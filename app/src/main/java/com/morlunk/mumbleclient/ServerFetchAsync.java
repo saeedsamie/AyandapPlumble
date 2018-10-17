@@ -72,6 +72,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
             UrlEncodedFormEntity form;
             form = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
+            Log.e("requests elements", "request -----" + nameValuePairs.toString());
 
             // Use UrlEncodedFormEntity to send in proper format which we need
             httpPost.setEntity(form);
