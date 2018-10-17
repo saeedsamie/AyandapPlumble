@@ -119,7 +119,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("bio", c.getString("bio"));
                             if (c.getString("type").equals("pv")) {
                                 String[] strings = c.getString("title").split(",");
-                                String[] ids = c.getString("bio").split(",");
+                                String[] ids = c.getString("bio").toString().split(",");
                                 if (strings[0].equals(fullName)){
                                     hashMap.put("title", strings[1]);
                                 }else {
@@ -127,12 +127,15 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                 }
                                 if (ids[0].equals(userId)){
                                     hashMap.put("id", ids[1]);
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[1]+".png");
                                 }else {
                                     hashMap.put("id", ids[0]);
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[0]+".png");
                                 }
 
                             }
                             listValues.add(hashMap);
+                            Log.i("HBJFDHB",listValues.toString());
                         }
 
                     } catch (Exception e) {
@@ -152,7 +155,6 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
                             intent.putExtra("type", (listValues.get(position).get("type")));
-
                             try {
                                 PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));
                             } catch (Exception e) {
