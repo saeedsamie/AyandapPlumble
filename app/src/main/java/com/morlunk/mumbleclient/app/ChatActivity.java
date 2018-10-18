@@ -13,8 +13,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.morlunk.jumble.IJumbleService;
+import com.morlunk.jumble.IJumbleSession;
+import com.morlunk.jumble.JumbleService;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
+
+import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -24,14 +30,10 @@ import static com.morlunk.mumbleclient.R.id;
 public class ChatActivity extends ActionBarActivity {
 
     PlumbleActivity plumbleActivity;
-    private IPlumbleService mService;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private IPlumbleService service;
 
-    public void setPlumblService(IPlumbleService mService) {
-        this.mService = mService;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class ChatActivity extends ActionBarActivity {
         }
         setContentView(R.layout.activity_chat);
         TextView textView = (TextView) findViewById(id.chat_title);
-        String chatId = getIntent().getStringExtra("ChatId");
+        String chatId = getIntent().getStringExtra("chatId");
         String chatTitle = getIntent().getStringExtra("ChatTitle");
         if ((chatId != null && chatTitle != null)) {
 //            textView.setText(chatId + "\n" + chatTitle);
@@ -50,6 +52,15 @@ public class ChatActivity extends ActionBarActivity {
         this.setTitle(chatTitle);
         LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        try {
+            IJumbleSession session = PlumbleActivity.mService.getSession();
+            session.joinChannel(Integer.parseInt(chatId));
+        } catch (JumbleDisconnectedException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         if (getIntent().getStringExtra("type").equals("private")) {
             this.setTitle(getIntent().getStringExtra("fullname"));
@@ -113,4 +124,18 @@ public class ChatActivity extends ActionBarActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override
+    public void onBackPressed() {
+
+        IJumbleService iPlumbleService  = PlumbleActivity.mService;
+        int parentChannel;
+        try {
+            parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
+        } catch (Exception e) {
+            parentChannel = 0;
+            e.printStackTrace();
+        }
+        iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
+        super.onBackPressed();
+    }
 }

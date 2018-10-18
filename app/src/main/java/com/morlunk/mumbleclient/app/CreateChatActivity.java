@@ -39,6 +39,7 @@ public class CreateChatActivity extends AppCompatActivity {
     List<NameValuePair> nameValuePairs;
     Boolean chatCreated = false;
     private ListView listView;
+    private int chatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,6 @@ public class CreateChatActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-
                             Log.i("WEAKMEWAKM", "" + listValues);
 
                             SearchListAdapter adapter = new SearchListAdapter(CreateChatActivity.this, listValues);
@@ -125,18 +125,23 @@ public class CreateChatActivity extends AppCompatActivity {
                                     nameValuePairs.add(new BasicNameValuePair("fromId", userId));
                                     nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                                     IPlumbleService iPlumbleService = PlumbleActivity.mService;
-                                    String chat1Id = String.valueOf(TimeUnit.SECONDS.toSeconds(System.currentTimeMillis()));
-                                    String chatId = String.valueOf("chat");
+                                    int parentChannel;
+                                    try {
+                                        parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
+                                    } catch (Exception e) {
+                                        parentChannel = 0;
+                                        e.printStackTrace();
+                                    }
                                     try {
                                         iPlumbleService.getSession()
-                                                .createChannel(0, "chat" + new Random(100).nextInt(), "Private Chat", 0, true);
-
+                                                .createChannel(parentChannel, "chat" + new Random(100).nextInt(), "Private Chat", 0, true);
+                                        chatId = iPlumbleService.getSession().getSessionChannel().getId();
                                         Log.e("Create chat", "channel created");
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Log.e("Create chat", "channel Didn't create");
                                     }
-                                    nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(iPlumbleService.getSession().getSessionChannel().getId())));
+                                    nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(chatId)));
                                     final int p = position;
                                     new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
 
@@ -146,7 +151,7 @@ public class CreateChatActivity extends AppCompatActivity {
                                                 chatCreated = jsonObject.getString("PV").equals("CREATED");
                                                 if (chatCreated) {
                                                     Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
-                                                    intent.putExtra("id", (listValues.get(p).get("id")));
+                                                    intent.putExtra("chatId", (listValues.get(p).get("chatId")));
                                                     intent.putExtra("bio", (listValues.get(p).get("bio")));
                                                     intent.putExtra("fullname", (listValues.get(p).get("fullname")));
                                                     intent.putExtra("image", (listValues.get(p).get("image")));

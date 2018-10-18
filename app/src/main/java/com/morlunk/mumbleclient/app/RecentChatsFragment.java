@@ -37,11 +37,11 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
+    String fullName;
     private ListView listView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecentChatsFragment context;
     private String userId;
-    String fullName;
 
     @Override
     public void onResume() {
@@ -114,20 +114,20 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("role", c.getString("role"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
-                            hashMap.put("id", c.getString("id"));//chatId
+                            hashMap.put("chatId", c.getString("id"));//chatId
                             hashMap.put("image", c.getString("image"));
                             hashMap.put("bio", c.getString("bio"));
                             if (c.getString("type").equals("pv")) {
                                 String[] strings = c.getString("title").split(",");
                                 String[] ids = c.getString("bio").split(",");
-                                if (strings[0].equals(fullName)){
+                                if (strings[0].equals(fullName)) {
                                     hashMap.put("title", strings[1]);
-                                }else {
+                                } else {
                                     hashMap.put("title", strings[0]);
                                 }
-                                if (ids[0].equals(userId)){
+                                if (ids[0].equals(userId)) {
                                     hashMap.put("id", ids[1]);
-                                }else {
+                                } else {
                                     hashMap.put("id", ids[0]);
                                 }
 
@@ -147,22 +147,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             Intent intent = new Intent(getContext(), ChatActivity.class);
                             HashMap<String, String> map = listValues.get(position);
                             Log.e("map", "map" + map.toString());
-                            intent.putExtra("id", (listValues.get(position).get("id")));
+                            intent.putExtra("chatId", (listValues.get(position).get("chatId")));
                             intent.putExtra("bio", (listValues.get(position).get("bio")));
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
                             intent.putExtra("type", (listValues.get(position).get("type")));
 
                             try {
-                                PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("id")));
+                                PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("chatId")));
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 //to do Create channel !
                             }
-
-                            context.startActivity(intent);
-
-
+                            getActivity().startActivity(intent);
                         }
                     });
                 }
