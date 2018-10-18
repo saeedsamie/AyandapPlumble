@@ -79,7 +79,7 @@ public class CreateChatFragment extends JumbleServiceFragment implements OnTaskC
       }
     }
 
-    final RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(),listValues);
+//    final RecentChatsListAdapter adapter = new RecentChatsListAdapter(getContext(),listValues);
 //    ListView listView = view.findViewById(R.id.recent_chats_list);
 //    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //      @Override

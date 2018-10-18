@@ -37,11 +37,11 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
-    String fullName;
     private ListView listView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecentChatsFragment context;
     private String userId;
+    String fullName;
 
     @Override
     public void onResume() {
@@ -127,12 +127,15 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                 }
                                 if (ids[0].equals(userId)) {
                                     hashMap.put("id", ids[1]);
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[1]+".png");
                                 } else {
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[0]+".png");
                                     hashMap.put("id", ids[0]);
                                 }
 
                             }
                             listValues.add(hashMap);
+                            Log.i("HBJFDHB",listValues.toString());
                         }
 
                     } catch (Exception e) {

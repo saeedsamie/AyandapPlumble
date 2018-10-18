@@ -231,7 +231,6 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
