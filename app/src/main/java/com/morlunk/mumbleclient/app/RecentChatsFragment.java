@@ -114,8 +114,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("role", c.getString("role"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
+                            hashMap.put("image","http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
                             hashMap.put("chatId", c.getString("id"));//chatId
-                            hashMap.put("image", c.getString("image"));
                             hashMap.put("bio", c.getString("bio"));
                             if (c.getString("type").equals("pv")) {
                                 String[] strings = c.getString("title").split(",");

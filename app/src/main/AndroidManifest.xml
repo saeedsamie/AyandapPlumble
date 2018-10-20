@@ -37,12 +37,13 @@
 
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name=".FontChanger"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Plumble">
+        android:theme="@style/Theme.Plumble"
+      >
 
         <!-- <activity android:name=".wizard.WizardActivity" /> -->
         <activity
@@ -154,7 +155,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".app.LoginActivity">
+        <activity android:name=".app.LoginActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -165,7 +168,8 @@
         <activity
             android:name=".app.VerificationActivity"
             android:label="@string/Verification"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".app.SignupActivity"
             android:label="@string/Signup"
@@ -177,7 +181,14 @@
         android:name=".app.CreateChatActivity"
         android:theme="@style/Theme.CreateChat"/>
         <activity
-          android:name=".app.RequestActivity"/>
+      android:name=".app.RequestActivity"
+      android:theme="@style/Theme.Plumble"
+      android:label="@string/Requests"/>
+
+        <activity
+          android:name=".app.ProfileActivity"
+          android:label="@string/Profile"/>
+
     </application>
 
 </manifest>

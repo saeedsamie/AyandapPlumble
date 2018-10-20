@@ -6,10 +6,11 @@
 
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary" />
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/m_primary"
+      android:gravity="right"/>
 
     <com.miguelcatalan.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
@@ -18,10 +19,12 @@
         android:textColor="#000" />
 
     <ListView
-        android:id="@+id/search_listview"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/toolbar"/>
+      android:id="@+id/search_listview"
+      android:layout_width="match_parent"
+      android:layout_height="fill_parent"
+      android:layout_below="@+id/toolbar"
+      android:divider="@color/cardOutline"
+      android:dividerHeight="1dp"/>
 
     <!--app:searchBackground="@color/colorPrimary"-->
     <!--app:searchSuggestionBackground="@color/colorPrimary"-->

@@ -14,7 +14,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -76,6 +75,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
             // Use UrlEncodedFormEntity to send in proper format which we need
             httpPost.setEntity(form);
+
             HttpResponse response = httpClient.execute(httpPost);
             InputStream inputStream = response.getEntity().getContent();
             jsonResponse = getStringFromInputStream(inputStream);

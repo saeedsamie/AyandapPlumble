@@ -5,18 +5,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,7 +90,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ActivityCompat.requestPermissions(SignupActivity.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
@@ -152,6 +159,30 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                 selectedFilePath = FilePath.getPath(this, selectedFileUri);
 
                 if (selectedFilePath != null && !selectedFilePath.equals("")) {
+
+                    String TAG = "AsyncTaskLoadImage";
+                    Bitmap bitmap = null;
+                    Bitmap circleBitmap = null;
+
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
+                        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+                        BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                        Paint paint = new Paint();
+                        paint.setShader(shader);
+                        paint.setAntiAlias(true);
+                        Canvas c = new Canvas(circleBitmap);
+                        c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
+
+
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    ivAttachment.setImageBitmap(circleBitmap);
+
+
+
                 } else {
                     Toast.makeText(this, "Cannot upload file to server", Toast.LENGTH_SHORT).show();
                 }
@@ -313,6 +344,16 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         } catch (JSONException e) {
             e.printStackTrace();
         }
+            if (userId.equals("username"))
+            {
+                pDialog.dismiss();
+                Snackbar
+                  .make(findViewById(android.R.id.content),"این نام کاربری گرفته شده است", Snackbar.LENGTH_SHORT)
+                  .show();
+            }
+
+        else
+        {
         SharedPreferences sharedPreferences = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
@@ -350,7 +391,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
             alertBuilder.show();
         }
 
-
+    }
     }
 
 

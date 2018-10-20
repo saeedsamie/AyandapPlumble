@@ -153,7 +153,7 @@ public class PlumbleActivity extends ActionBarActivity implements
 //            supportInvalidateOptionsMenu();
 
             updateConnectionState(getService());
-            setTitle("Disconnected");
+            setTitle("اتصال قطع است");
         }
 
         @Override
@@ -238,7 +238,7 @@ public class PlumbleActivity extends ActionBarActivity implements
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mService = null;
-            setTitle("Disconnected");
+            setTitle("اتصال قطع است");
         }
     };
     private String userId;
@@ -296,17 +296,20 @@ public class PlumbleActivity extends ActionBarActivity implements
                 Intent intent;
                 switch ((int) id) {
                     case DrawerAdapter.PROFILE_PROFILE:
-                        intent = new Intent(PlumbleActivity.this, SignupActivity.class);
-                        intent.putExtra("Launcher", "main");
-                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname),
-                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname), "default full name"));
-                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_username),
-                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_username), "default username"));
-                        startActivity(intent);
+                          intent = new Intent(PlumbleActivity.this,ProfileActivity.class);
+//                        intent = new Intent(PlumbleActivity.this, SignupActivity.class);
+//                        intent.putExtra("Launcher", "main");
+//                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname),
+//                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname), "default full name"));
+//                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_username),
+//                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_username), "default username"));
+//                        startActivity(intent);
+                      startActivity(intent);
                         break;
                 }
-                mDrawerLayout.closeDrawers();
+//                mDrawerLayout.closeDrawers();
                 loadDrawerFragment((int) id);
+                mDrawerLayout.closeDrawers();
             }
         });
 
@@ -726,7 +729,7 @@ public class PlumbleActivity extends ActionBarActivity implements
      *
      * @param service A bound IJumbleService.
      */
-    @SuppressLint("StringFormatMatches")
+    @SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
     private void updateConnectionState(IJumbleService service) {
         if (mConnectingDialog != null)
             mConnectingDialog.dismiss();
@@ -748,13 +751,13 @@ public class PlumbleActivity extends ActionBarActivity implements
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, server.getHost(),
-                        server.getPort()));
+                mConnectingDialog.setMessage(getString(R.string.connecting_to_server,"",
+                        ""));
                 mConnectingDialog.show();
                 break;
             case CONNECTION_LOST:
                 // Only bother the user if the error hasn't already been shown.
-                setTitle("Connection Lost");
+                setTitle("اتصال قطع است");
                 if (!getService().isErrorShown()) {
                     JumbleException error = getService().getConnectionError();
                     AlertDialog.Builder ab = new AlertDialog.Builder(PlumbleActivity.this);

@@ -15,11 +15,11 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/recent_chats_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#00000000"
-            android:dividerHeight="10dp"/>
+          android:id="@+id/recent_chats_list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:divider="@color/colorSecondaryDark"
+          android:dividerHeight="10dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

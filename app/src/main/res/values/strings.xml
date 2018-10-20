@@ -96,7 +96,7 @@
     <string name="server_host">آدرس</string>
     <string name="server_label">برچسب</string>
     <string name="connecting">در حال اتصال</string>
-    <string name="connecting_to_server">Connecting to %1$s:%2$s</string>
+    <string name="connecting_to_server">در حال اتصال به سرور</string>
     <string name="fragment_chat">گفتگو</string>
     <string name="fragment_channel">کانال</string>
     <string name="menu_settings">تنظیمات</string>

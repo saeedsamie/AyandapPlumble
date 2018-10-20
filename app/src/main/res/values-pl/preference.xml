@@ -23,7 +23,7 @@
   <string name="hotCorner">Push to Talk Hot Corner</string>
   <string name="hotCornerSum">A specified corner of the screen that, when pressed down, will push to talk throughout Android.</string>
   <string name="general">General</string>
-  <string name="generalSum">Adjust general settings</string>
+  <string name="generalSum">تنظیمات عمومی برنامه</string>
   <string name="appearance">Appearance</string>
   <string name="appearanceSum">Tweak the app\'s visuals</string>
   <string name="themeSum">The theme of the app\'s channel view.</string>
@@ -39,7 +39,7 @@
   <string name="chatNotifications">Chat Notifications</string>
   <string name="chatNotificationsSum">Show notifications when a user posts in chat.</string>
   <string name="certificateGenerate">Generate Certificate</string>
-  <string name="certificateGenerateSum">Generates a new self-signed Plumble certificate. Recommended for beginners.</string>
+  <string name="certificateGenerateSum">ساخت مجوز برای دسترسی به سرور</string>
   <string name="pttSettings">Push to Talk Settings</string>
   <string name="pttSettingsSum">Configure Push to Talk if it is enabled.</string>
   <string name="voiceActivitySettings">Voice Activity Settings</string>

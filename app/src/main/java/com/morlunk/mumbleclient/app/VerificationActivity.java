@@ -123,7 +123,7 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
         new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                timer.setTextColor(Color.parseColor("#000000"));
+                timer.setTextColor(Color.parseColor("#ffffff"));
                 timer.setText(String.format("%s (%d)  ", getString(R.string.verificationPageNote), millisUntilFinished / 1000));
                 if (flag == 0) {
                     searchSmsForCode();
@@ -134,7 +134,7 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
                 SpannableString content = new SpannableString("کدی دریافت نکردید ؟");
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 timer.setText(content);
-                timer.setTextColor(Color.parseColor("#132273"));
+                timer.setTextColor(Color.parseColor("#ffffff"));
                 isFinished = 1;
             }
         }.start();

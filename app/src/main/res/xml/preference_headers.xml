@@ -36,12 +36,12 @@
         android:fragment="com.morlunk.mumbleclient.preference.Preferences$PlumblePreferenceFragment">
         <extra android:name="settings" android:value="audio"></extra>
     </header>
-    <header
-        android:title="@string/appearance"
-        android:summary="@string/appearanceSum"
-        android:fragment="com.morlunk.mumbleclient.preference.Preferences$PlumblePreferenceFragment">
-        <extra android:name="settings" android:value="appearance"></extra>
-    </header>
+    <!--<header-->
+        <!--android:title="@string/appearance"-->
+        <!--android:summary="@string/appearanceSum"-->
+        <!--android:fragment="com.morlunk.mumbleclient.preference.Preferences$PlumblePreferenceFragment">-->
+        <!--<extra android:name="settings" android:value="appearance"></extra>-->
+    <!--</header>-->
     <header
         android:title="@string/about"
         android:summary="@string/aboutSum"

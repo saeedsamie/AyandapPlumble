@@ -3,6 +3,7 @@ package com.morlunk.mumbleclient.app;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +16,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class CreateChatActivity extends AppCompatActivity {
@@ -45,10 +46,12 @@ public class CreateChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_chat);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Material Search");
+        getSupportActionBar().setTitle("جستجوی نام کاربری");
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
 
         listView = (ListView) findViewById(R.id.search_listview);
@@ -95,7 +98,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
                                     hashMap.put("fullname", c.getString("fullname"));
                                     hashMap.put("username", c.getString("username"));
-                                    hashMap.put("image", c.getString("image"));
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+c.getString("image"));
                                     hashMap.put("id", c.getString("id"));
 
                                     listValues.add(hashMap);
@@ -189,4 +192,9 @@ public class CreateChatActivity extends AppCompatActivity {
         searchView.setMenuItem(item);
         return true;
     }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

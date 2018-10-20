@@ -1,6 +1,8 @@
 package com.morlunk.mumbleclient.app;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import static com.wdullaer.swipeactionadapter.SwipeDirection.DIRECTION_FAR_LEFT;
 import static com.wdullaer.swipeactionadapter.SwipeDirection.DIRECTION_FAR_RIGHT;
 import static com.wdullaer.swipeactionadapter.SwipeDirection.DIRECTION_NORMAL_LEFT;
@@ -41,6 +45,9 @@ public class RequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_requests);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.request_panel_swipeRefreshLayout);
         nameValuePairs = new ArrayList<NameValuePair>();
         userId = getSharedPreferences("MyPref", MODE_PRIVATE).getString(getString(R.string.PREF_TAG_userid), "-2");
@@ -192,5 +199,10 @@ public class RequestActivity extends AppCompatActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }).execute();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

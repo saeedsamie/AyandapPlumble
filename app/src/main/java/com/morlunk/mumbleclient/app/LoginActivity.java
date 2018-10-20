@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         if (sharedPreferences.getBoolean("isLoggedIn", false)) {
 //            SignupActivity.userId = sharedPreferences.getString("userId", null);
             Intent intent = new Intent(LoginActivity.this, PlumbleActivity.class);
@@ -62,11 +65,38 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
         loginContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("func", "isUser"));
-                user_phone_number = phone.getText().toString();
-                nameValuePairs.add(new BasicNameValuePair("phone", user_phone_number));
-                new ServerFetchAsync(nameValuePairs, loginActivity).execute();
+
+                if(phone.getText().toString().equals(""))
+                {
+                    Snackbar
+                      .make(findViewById(android.R.id.content),"لطفا تلفن همراه خود را وارد نمایید", Snackbar.LENGTH_SHORT)
+                      .show();
+                }
+                if(phone.getText().toString().length()<11&&phone.getText().toString().length()>0)
+                {
+                    Snackbar
+                      .make(findViewById(android.R.id.content),"لطفا تلفن همراه خود را به صورت کامل وارد نمایید", Snackbar.LENGTH_SHORT)
+                      .show();
+                }
+
+                if (phone.getText().toString().length()==11)
+                {
+                    String temp = phone.getText().toString().substring(0,2);
+                    if(!temp.equals("09"))
+                    {
+                        Snackbar
+                          .make(findViewById(android.R.id.content),"لطفا تلفن همراه خود را به صورت صحیح وارد نمایید", Snackbar.LENGTH_SHORT)
+                          .show();
+                    }
+                    else {
+
+                        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                        nameValuePairs.add(new BasicNameValuePair("func", "isUser"));
+                        user_phone_number = phone.getText().toString();
+                        nameValuePairs.add(new BasicNameValuePair("phone", user_phone_number));
+                        new ServerFetchAsync(nameValuePairs, loginActivity).execute();
+                    }
+                }
             }
         });
     }

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
   <ImageView
-    android:id="@+id/ivAttachment"
+    android:id="@+id/profile_image"
     android:layout_width="160dp"
     android:layout_height="160dp"
     android:layout_gravity="center"
@@ -25,7 +25,7 @@
     android:paddingTop="32dp">
 
     <android.support.design.widget.TextInputLayout
-      android:id="@+id/signup_fullnamem"
+      android:id="@+id/profile_fullnamem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
@@ -35,7 +35,7 @@
       android:textColorHint="#FFFFFF">
 
       <EditText
-        android:id="@+id/signup_fullname"
+        android:id="@+id/profile_fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -52,7 +52,7 @@
 
 
     <android.support.design.widget.TextInputLayout
-      android:id="@+id/signup_usernamem"
+      android:id="@+id/profile_usernamem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
@@ -62,10 +62,11 @@
       android:textColorHint="#FFFFFF">
 
       <EditText
-        android:id="@+id/signup_username"
+        android:id="@+id/profile_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:editable="true"
         android:gravity="center"
         android:hint="نام کاربری"
         android:inputType="text|textNoSuggestions"
@@ -87,14 +88,14 @@
 
 
       <Button
-        android:id="@+id/signup_signup"
+        android:id="@+id/profile_save"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/rounded_button"
         android:padding="12dp"
-        android:text="ثبت"
+        android:text="ذخیره"
         android:textColor="#FFFFFF"
         android:textSize="18sp"/>
 

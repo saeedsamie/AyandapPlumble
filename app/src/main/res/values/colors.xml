@@ -54,7 +54,7 @@
     <color name="solarized_base0">#839496</color>
     <color name="solarized_base1">#93a1a1</color>
     <color name="solarized_base2">#eee8d5</color>
-    <color name="solarized_base3">#fdf6e3</color>
+    <color name="solarized_base3">#ffffff</color>
 
     <!-- Ripple talk states -->
     <color name="ripple_talk_state_on">@color/holo_red_dark</color>
@@ -69,10 +69,19 @@
     <color name="colorPrimary">#fb8c00</color>
     <color name="colorPrimaryDark">#c25e00</color>
     <color name="colorPrimaryLight">#ffbd45</color>
-    <color name="colorSecondary">#616161</color>
+    <color name="colorSecondary">#303030</color>
     <color name="colorSecondaryLight">#616161</color>
     <color name="colorSecondaryDark">#373737</color>
     <color name="textOnPrimary">#000000</color>
     <color name="textOnSecondary">#ffffff</color>
     <color name="transparent">#00ffffff</color>
+
+
+    <color name="m_primary">#344955</color>
+    <color name="m_primary_dark">#232F34</color>
+    <color name="m_primary_light">#4A6572</color>
+    <color name="m_secondary">#F9AA33</color>
+
+
+
 </resources>

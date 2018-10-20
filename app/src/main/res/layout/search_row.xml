@@ -10,7 +10,6 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
-    android:background="@drawable/search_result_background"
     android:orientation="horizontal"
     android:padding="10dp">
 
@@ -24,7 +23,9 @@
     <LinearLayout
       android:layout_width="0dp"
       android:layout_height="match_parent"
+      android:layout_marginRight="10dp"
       android:layout_weight="1"
+      android:gravity="right|center"
       android:orientation="vertical">
 
       <TextView
@@ -35,7 +36,7 @@
         android:layout_toEndOf="@+id/appIconIV"
         android:layout_toRightOf="@+id/appIconIV"
         android:layout_weight="1"
-        android:gravity="bottom|right|center"
+        android:gravity="bottom|right"
         android:maxLines="1"
         android:padding="3dp"
         android:text="Fullname"
@@ -51,13 +52,12 @@
         android:layout_alignStart="@+id/roomname"
         android:layout_below="@+id/roomname"
         android:layout_weight="1"
-        android:gravity="top|right|center"
+        android:gravity="top|right"
         android:maxLines="1"
         android:padding="3dp"
         android:text="username"
         android:textColor="#FFF"
         android:textSize="12sp"/>
-
 
 
     </LinearLayout>
@@ -66,7 +66,7 @@
       android:id="@+id/no"
       android:layout_width="0dp"
       android:layout_height="60dp"
-      android:gravity="center" />
+      android:gravity="center"/>
 
   </LinearLayout>
 
