@@ -86,6 +86,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -101,11 +102,13 @@ public class PlumbleActivity extends ActionBarActivity implements
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
     public static IPlumbleService mService;
     public static String username;
+    public static String plumbleUserName;
     /**
      * List of fragments to be notified about service state changes.
      */
 
     SharedPreferences sharedPreferences;
+    private boolean isCertificateCreated = false;
     private Server server;
     private PlumbleDatabase mDatabase;
     private Settings mSettings;
@@ -129,6 +132,7 @@ public class PlumbleActivity extends ActionBarActivity implements
             loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
 //            }
 
+            registerUser();
             mDrawerAdapter.notifyDataSetChanged();
             supportInvalidateOptionsMenu();
 
@@ -190,9 +194,11 @@ public class PlumbleActivity extends ActionBarActivity implements
                             trustStore.setCertificateEntry(alias, x509);
                             PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
                             Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+                            isCertificateCreated = true;
                             connectToServer(lastServer);
                         } catch (Exception e) {
                             e.printStackTrace();
+                            isCertificateCreated = false;
                             Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -266,11 +272,12 @@ public class PlumbleActivity extends ActionBarActivity implements
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
+        plumbleUserName = username + "_" + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server
                 (new Random(10).nextInt(), "MUMBLE-server", "31.184.132.206", 64738,
-                        username + userId, "");
+                        plumbleUserName, "");
 
 
         mSettings = Settings.getInstance(this);
@@ -397,6 +404,19 @@ public class PlumbleActivity extends ActionBarActivity implements
         connectToServer(server);
 
 
+    }
+
+    private void registerUser() {
+        if (!sharedPreferences.getBoolean("isRegistered", false)) {
+            if (getService() != null && getService().isConnected() && mSettings.isUsingCertificate() && isCertificateCreated) {
+                ((PlumbleService) getService()).registerUser(getService().getSession().getSessionUser().getSession());
+                if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
+                    Toast.makeText(this, "Registered :D !", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -544,22 +564,23 @@ public class PlumbleActivity extends ActionBarActivity implements
 
         if (mSettings.isUsingCertificate()) return;
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.first_run_generate_certificate_title);
-        adb.setMessage(R.string.first_run_generate_certificate);
-        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+//        adb.setTitle(R.string.first_run_generate_certificate_title);
+//        adb.setMessage(R.string.first_run_generate_certificate);
+//        adb.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+        @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                @SuppressLint("StaticFieldLeak") PlumbleCertificateGenerateTask generateTask = new PlumbleCertificateGenerateTask(PlumbleActivity.this) {
-                    @Override
-                    protected void onPostExecute(DatabaseCertificate result) {
-                        super.onPostExecute(result);
-                        if (result != null) mSettings.setDefaultCertificateId(result.getId());
-                    }
-                };
-                generateTask.execute();
+            protected void onPostExecute(DatabaseCertificate result) {
+                super.onPostExecute(result);
+                if (result != null) mSettings.setDefaultCertificateId(result.getId());
+//
             }
-        });
-        adb.show();
+        };
+        generateTask.execute();
+//            }
+//        });
+//        adb.show();
         mSettings.setFirstRun(false);
 
         // TODO: finish wizard
@@ -586,6 +607,7 @@ public class PlumbleActivity extends ActionBarActivity implements
             case DrawerAdapter.ITEM_CREATE_CHAT:
                 fragmentchecker = false;
                 intent = new Intent(this, CreateChatActivity.class);
+                intent.putExtra("plumbleUserName",plumbleUserName);
                 startActivity(intent);
                 break;
             case DrawerAdapter.ITEM_INFO:
@@ -627,10 +649,20 @@ public class PlumbleActivity extends ActionBarActivity implements
                 return;
             case DrawerAdapter.EXIT:
                 sharedPreferences.edit().clear().apply();
+                Log.e("DATABASE1", getDatabase().getServers().toString());
+                mDatabase.open();
                 mDatabase.removeServer(server);
+                Log.e("DATABASE2", getDatabase().getServers().toString());
+                Log.e("DATABASE3", getDatabase().getCertificates().toString());
                 PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
                 Intent exitIntent = new Intent(this, LoginActivity.class);
-                startActivity(exitIntent);
+                for (int i = 0; i < mDatabase.getCertificates().size(); i++)
+                    mDatabase.removeCertificate(getDatabase().getCertificates().get(i).getId());
+//                mDatabase.removeCertificate();
+                Log.e("DATABASE4", getDatabase().getCertificates().toString());
+                mDatabase.close();
+                getBaseContext().deleteDatabase("mumble.db");
+                    startActivity(exitIntent);
                 mService.disconnect();
                 finish();
                 return;

@@ -70,17 +70,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
         fullName = sharedPreferences.getString(getString(R.string.PREF_TAG_fullname), "username");
 
-//        if (!sharedPreferences.getBoolean("isRegistered", false)) {
-//            PlumbleService plumbleService = (PlumbleService) getService();
-//            if (getService() != null && getService().isConnected()) {
-//                plumbleService.registerUser(getService().getSession().getSessionUser().getSession());
-//                if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
-//                    Toast.makeText(this.getContext(), "Registered :D !", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(this.getContext(), "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }
+
         mSwipeRefreshLayout.setRefreshing(true);
         updateListView();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

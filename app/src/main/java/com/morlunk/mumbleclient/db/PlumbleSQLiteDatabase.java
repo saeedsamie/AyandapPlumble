@@ -391,6 +391,11 @@ public class PlumbleSQLiteDatabase extends SQLiteOpenHelper implements PlumbleDa
     }
 
     @Override
+    public void deleteDatabaseCertificate() {
+        getWritableDatabase().replace(TABLE_CERTIFICATES, null, null);
+    }
+
+    @Override
     public List<DatabaseCertificate> getCertificates() {
         Cursor cursor = getReadableDatabase().query(TABLE_CERTIFICATES,
                 new String[] { COLUMN_CERTIFICATES_ID, COLUMN_CERTIFICATES_NAME },

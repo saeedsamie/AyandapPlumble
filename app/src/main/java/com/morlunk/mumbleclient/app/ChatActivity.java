@@ -15,12 +15,9 @@ import android.widget.TextView;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
-import com.morlunk.jumble.JumbleService;
 import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
-
-import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -53,14 +50,15 @@ public class ChatActivity extends ActionBarActivity {
         LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        try {
-            IJumbleSession session = PlumbleActivity.mService.getSession();
-            session.joinChannel(Integer.parseInt(chatId));
-        } catch (JumbleDisconnectedException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+        if (!chatId.isEmpty())
+            try {
+                IJumbleSession session = PlumbleActivity.mService.getSession();
+                session.joinChannel(Integer.parseInt(chatId));
+            } catch (JumbleDisconnectedException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
 
         if (getIntent().getStringExtra("type").equals("private")) {
             this.setTitle(getIntent().getStringExtra("fullname"));
@@ -127,7 +125,7 @@ public class ChatActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        IJumbleService iPlumbleService  = PlumbleActivity.mService;
+        IJumbleService iPlumbleService = PlumbleActivity.mService;
         int parentChannel;
         try {
             parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
@@ -135,7 +133,11 @@ public class ChatActivity extends ActionBarActivity {
             parentChannel = 0;
             e.printStackTrace();
         }
-        iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
+        try {
+            iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onBackPressed();
     }
 }

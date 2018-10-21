@@ -61,6 +61,7 @@ public interface PlumbleDatabase {
      * @return A handle for the newly craeted certificate.
      */
     DatabaseCertificate addCertificate(String name, byte[] certificate);
+    void deleteDatabaseCertificate(); //saeed Added
     List<DatabaseCertificate> getCertificates();
 
     /**

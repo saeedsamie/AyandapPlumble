@@ -282,4 +282,6 @@
     <string name="PREF_TAG_image">image</string>
     <string name="PREF_TAG_userid">userId</string>
     <string name="refresh">Refresh</string>
+    <string name="Requests">درخواست ها</string>
+    <string name="Profile">پروفایل</string>
 </resources>

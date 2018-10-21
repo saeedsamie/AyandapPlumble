@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -40,7 +39,6 @@ public class CreateChatActivity extends AppCompatActivity {
     List<NameValuePair> nameValuePairs;
     Boolean chatCreated = false;
     private ListView listView;
-    private int chatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +96,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
                                     hashMap.put("fullname", c.getString("fullname"));
                                     hashMap.put("username", c.getString("username"));
-                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+c.getString("image"));
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
                                     hashMap.put("id", c.getString("id"));
 
                                     listValues.add(hashMap);
@@ -128,44 +126,47 @@ public class CreateChatActivity extends AppCompatActivity {
                                     nameValuePairs.add(new BasicNameValuePair("fromId", userId));
                                     nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                                     IPlumbleService iPlumbleService = PlumbleActivity.mService;
-                                    int parentChannel;
-                                    try {
-                                        parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
-                                    } catch (Exception e) {
-                                        parentChannel = 0;
-                                        e.printStackTrace();
-                                    }
+                                    int parentChannel = 0;
+                                    String chatName = "chat";
+                                    Log.e("chatName", chatName);
                                     try {
                                         iPlumbleService.getSession()
-                                                .createChannel(parentChannel, "chat" + new Random(100).nextInt(), "Private Chat", 0, true);
-                                        chatId = iPlumbleService.getSession().getSessionChannel().getId();
-                                        Log.e("Create chat", "channel created");
+                                                .createChannel(parentChannel, chatName, "felan", 0, true);
+                                        Log.e("CreateChat", "channel created");
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        Log.e("Create chat", "channel Didn't create");
+                                        Log.e("CreateChat", "channel Didn't create in jumble request!");
                                     }
-                                    nameValuePairs.add(new BasicNameValuePair("chatId", String.valueOf(chatId)));
+                                    nameValuePairs.add(new BasicNameValuePair("chatName", chatName));
                                     final int p = position;
                                     new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
 
                                         @Override
                                         public void onTaskCompleted(JSONObject jsonObject) {
                                             try {
-                                                chatCreated = jsonObject.getString("PV").equals("CREATED");
-                                                if (chatCreated) {
-                                                    Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
-                                                    intent.putExtra("chatId", (listValues.get(p).get("chatId")));
-                                                    intent.putExtra("bio", (listValues.get(p).get("bio")));
-                                                    intent.putExtra("fullname", (listValues.get(p).get("fullname")));
-                                                    intent.putExtra("image", (listValues.get(p).get("image")));
-                                                    intent.putExtra("type", ("private"));
-                                                    startActivity(intent);
-                                                } else if (jsonObject.getString("PV").equals("EXIST")) {
-                                                    Log.e("Ex","Exist");
-                                                    Toast.makeText(CreateChatActivity.this, "PV Exist", Toast.LENGTH_LONG).show();
-
-                                                } else {
-                                                    Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
+                                                switch (jsonObject.getString("PV")) {
+                                                    case "DB ERROR":
+                                                        Toast.makeText(CreateChatActivity.this, "DataBase problem Chat didn't create!", Toast.LENGTH_LONG).show();
+                                                        break;
+                                                    case "CHAT NOT FOUND":
+                                                        Toast.makeText(CreateChatActivity.this, "Chat Not found!", Toast.LENGTH_LONG).show();
+                                                        break;
+                                                    case "CREATED":
+                                                        Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
+                                                        intent.putExtra("chatId", (jsonObject.getString("chatId")));
+                                                        intent.putExtra("bio", (listValues.get(p).get("bio")));
+                                                        intent.putExtra("fullname", (listValues.get(p).get("fullname")));
+                                                        intent.putExtra("image", (listValues.get(p).get("image")));
+                                                        intent.putExtra("type", ("private"));
+                                                        startActivity(intent);
+                                                        break;
+                                                    case "EXIST":
+                                                        Log.e("Ex", "Exist");
+                                                        Toast.makeText(CreateChatActivity.this, "Chat Exist", Toast.LENGTH_LONG).show();
+                                                        break;
+                                                    default:
+                                                        Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
+                                                        break;
                                                 }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -192,6 +193,7 @@ public class CreateChatActivity extends AppCompatActivity {
         searchView.setMenuItem(item);
         return true;
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

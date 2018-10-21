@@ -12,7 +12,7 @@
     android:layout_gravity="center"
     android:layout_marginTop="20dp"
     android:scaleType="centerCrop"
-    android:src="@drawable/profilepic"/>
+    android:src="@drawable/default_profile"/>
 
 
   <LinearLayout
