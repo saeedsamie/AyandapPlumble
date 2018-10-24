@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -127,7 +128,7 @@ public class CreateChatActivity extends AppCompatActivity {
                                     nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
                                     IPlumbleService iPlumbleService = PlumbleActivity.mService;
                                     int parentChannel = 0;
-                                    String chatName = "chat";
+                                    String chatName = "chat" + new Random().nextInt();
                                     Log.e("chatName", chatName);
                                     try {
                                         iPlumbleService.getSession()

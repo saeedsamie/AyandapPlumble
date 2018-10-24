@@ -120,7 +120,63 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                     nameValuePairs.add(new BasicNameValuePair("username", ed_username.getText().toString()));
                     Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
                     pDialog.show();
-                    new ServerFetchAsync(nameValuePairs, signupActivity).execute();
+                    pDialog.setCancelable(true);
+                    new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                        @Override
+                        public void onTaskCompleted(JSONObject jsonObject) {
+                            String user_id = "";
+                            try {
+                                user_id = jsonObject.getString("userId");
+                                userId = user_id;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (userId.equals("username")) {
+                                pDialog.dismiss();
+                                Snackbar
+                                        .make(findViewById(android.R.id.content), "این نام کاربری گرفته شده است", Snackbar.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                SharedPreferences sharedPreferences = SignupActivity.this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
+                                editor.putString(getString(R.string.PREF_TAG_phonenumber), getIntent().getStringExtra("phone_number"));
+                                editor.putString(getString(R.string.PREF_TAG_fullname), ed_fullname.getText().toString());
+                                editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
+                                editor.putString(getString(R.string.PREF_TAG_image), "NoImage");
+                                editor.putString(getString(R.string.PREF_TAG_userid), user_id);
+                                Boolean isSavedInPref = editor.commit();
+
+                                if (selectedFilePath != null) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //creating new thread to handle Http Operations
+                                            uploadFile(selectedFilePath);
+                                        }
+                                    }).start();
+                                } else {
+                                    Toast.makeText(SignupActivity.this, "برای اضافه کردن عکس به تنظیمات پروفایل بروید", Toast.LENGTH_SHORT).show();
+                                }
+                                pDialog.dismiss();
+
+                                if (isSavedInPref && !userId.isEmpty()) {
+                                    if (getIntent().getStringExtra("Launcher").equals("main")) {
+                                        finish();
+                                    } else {
+                                        Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                } else {
+                                    alertBuilder.setMessage("دوباره سعی کنید!");
+                                    alertBuilder.setCancelable(true);
+                                    alertBuilder.show();
+                                }
+
+                            }
+                        }
+                    }).execute();
                 }
             }
         });
@@ -168,19 +224,18 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
                         circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
-                        BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                         Paint paint = new Paint();
                         paint.setShader(shader);
                         paint.setAntiAlias(true);
                         Canvas c = new Canvas(circleBitmap);
-                        c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
+                        c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
 
 
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
                     ivAttachment.setImageBitmap(circleBitmap);
-
 
 
                 } else {
@@ -337,61 +392,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
     @Override
     public void onTaskCompleted(JSONObject jsonObject) {
 
-        String user_id = "";
-        try {
-            user_id = jsonObject.getString("userId");
-            userId = user_id;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-            if (userId.equals("username"))
-            {
-                pDialog.dismiss();
-                Snackbar
-                  .make(findViewById(android.R.id.content),"این نام کاربری گرفته شده است", Snackbar.LENGTH_SHORT)
-                  .show();
-            }
 
-        else
-        {
-        SharedPreferences sharedPreferences = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(getString(R.string.PREF_TAG_isLoggedIn), true);
-        editor.putString(getString(R.string.PREF_TAG_phonenumber), getIntent().getStringExtra("phone_number"));
-        editor.putString(getString(R.string.PREF_TAG_fullname), ed_fullname.getText().toString());
-        editor.putString(getString(R.string.PREF_TAG_username), ed_username.getText().toString());
-        editor.putString(getString(R.string.PREF_TAG_image), "NoImage");
-        editor.putString(getString(R.string.PREF_TAG_userid), user_id);
-        Boolean isSavedInPref = editor.commit();
-
-        if (selectedFilePath != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    //creating new thread to handle Http Operations
-                    uploadFile(selectedFilePath);
-                }
-            }).start();
-        } else {
-            Toast.makeText(SignupActivity.this, "برای اضافه کردن عکس به تنظیمات پروفایل بروید", Toast.LENGTH_SHORT).show();
-        }
-        pDialog.dismiss();
-
-        if (isSavedInPref && !userId.isEmpty()) {
-            if (getIntent().getStringExtra("Launcher").equals("main")) {
-                finish();
-            } else {
-                Intent intent = new Intent(SignupActivity.this, PlumbleActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } else {
-            alertBuilder.setMessage("دوباره سعی کنید!");
-            alertBuilder.setCancelable(true);
-            alertBuilder.show();
-        }
-
-    }
     }
 
 

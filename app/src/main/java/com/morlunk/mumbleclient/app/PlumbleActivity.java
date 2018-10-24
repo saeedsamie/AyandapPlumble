@@ -272,11 +272,11 @@ public class PlumbleActivity extends ActionBarActivity implements
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
-        plumbleUserName = username + "_" + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        plumbleUserName = username ;
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server
-                (new Random(10).nextInt(), "MUMBLE-server", "31.184.132.206", 64738,
+                (new Random().nextInt(), "MUMBLE-server", "31.184.132.206", 64738,
                         plumbleUserName, "");
 
 
