@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.morlunk.jumble.IJumbleSession;
+import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.IUser;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
@@ -37,11 +38,11 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
     List<NameValuePair> nameValuePairs;
     Boolean permission = false;
+    String fullName;
     private ListView listView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecentChatsFragment context;
     private String userId;
-    String fullName;
 
     @Override
     public void onResume() {
@@ -104,7 +105,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("role", c.getString("role"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
-                            hashMap.put("image","http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
+                            hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
                             hashMap.put("chatId", c.getString("id"));//chatId
                             hashMap.put("bio", c.getString("bio"));
                             if (c.getString("type").equals("pv")) {
@@ -117,15 +118,15 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                 }
                                 if (ids[0].equals(userId)) {
                                     hashMap.put("id", ids[1]);
-                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[1]+".png");
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/" + ids[1] + ".png");
                                 } else {
-                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/"+ids[0]+".png");
+                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/" + ids[0] + ".png");
                                     hashMap.put("id", ids[0]);
                                 }
 
                             }
                             listValues.add(hashMap);
-                            Log.i("HBJFDHB",listValues.toString());
+                            Log.i("HBJFDHB", listValues.toString());
                         }
 
                     } catch (Exception e) {
@@ -140,17 +141,33 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             Intent intent = new Intent(getContext(), ChatActivity.class);
                             HashMap<String, String> map = listValues.get(position);
                             Log.e("map", "map" + map.toString());
-                            intent.putExtra("chatId", (listValues.get(position).get("chatId")));
+                            int chatId = Integer.valueOf(listValues.get(position).get("chatId"));
+                            intent.putExtra("chatId", chatId);
+                            Log.e("chatId", "recentChats:" + chatId);
                             intent.putExtra("bio", (listValues.get(position).get("bio")));
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
                             intent.putExtra("type", (listValues.get(position).get("type")));
-
-                            try {
-                                PlumbleActivity.mService.getSession().joinChannel(Integer.valueOf(listValues.get(position).get("chatId")));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                //to do Create channel !
+                            ArrayList<IChannel> channels = PlumbleActivity.iChannels;
+                            int channelId = -2;
+                            for (int i = 0; i < channels.size(); i++) {
+                                if (channels.get(i).getName().equals(chatId)) {
+                                    channelId = channels.get(i).getId();
+                                    break;
+                                }
+                            }
+                            if (channelId == -2) {
+                                try {
+                                    PlumbleActivity.mService.getSession().createChannel(0, String.valueOf(chatId), "", 0, true);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    PlumbleActivity.mService.getSession().joinChannel(channelId);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             getActivity().startActivity(intent);
                         }

@@ -40,9 +40,9 @@ public class ChatActivity extends ActionBarActivity {
         }
         setContentView(R.layout.activity_chat);
         TextView textView = (TextView) findViewById(id.chat_title);
-        String chatId = getIntent().getStringExtra("chatId");
+        int chatId = getIntent().getIntExtra("chatId",-1);
         String chatTitle = getIntent().getStringExtra("ChatTitle");
-        if ((chatId != null && chatTitle != null)) {
+        if ((chatId != -1 && chatTitle != null)) {
 //            textView.setText(chatId + "\n" + chatTitle);
         }
         chatTitle = "ChatTitle";
@@ -50,10 +50,10 @@ public class ChatActivity extends ActionBarActivity {
         LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        if (!chatId.isEmpty())
+        if (chatId!=-1)
             try {
                 IJumbleSession session = PlumbleActivity.mService.getSession();
-                session.joinChannel(Integer.parseInt(chatId));
+                session.joinChannel(chatId);
             } catch (JumbleDisconnectedException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {

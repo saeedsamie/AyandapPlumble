@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -126,24 +125,14 @@ public class CreateChatActivity extends AppCompatActivity {
                                     nameValuePairs.add(new BasicNameValuePair("toName", listValues.get(position).get("fullname")));
                                     nameValuePairs.add(new BasicNameValuePair("fromId", userId));
                                     nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
-                                    IPlumbleService iPlumbleService = PlumbleActivity.mService;
-                                    int parentChannel = 0;
-                                    String chatName = "chat" + new Random().nextInt();
-                                    Log.e("chatName", chatName);
-                                    try {
-                                        iPlumbleService.getSession()
-                                                .createChannel(parentChannel, chatName, "felan", 0, true);
-                                        Log.e("CreateChat", "channel created");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Log.e("CreateChat", "channel Didn't create in jumble request!");
-                                    }
-                                    nameValuePairs.add(new BasicNameValuePair("chatName", chatName));
+                                    Log.e("channels", PlumbleActivity.iChannels.toString());
+
                                     final int p = position;
                                     new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
 
                                         @Override
                                         public void onTaskCompleted(JSONObject jsonObject) {
+                                            IPlumbleService iPlumbleService = PlumbleActivity.mService;
                                             try {
                                                 switch (jsonObject.getString("PV")) {
                                                     case "DB ERROR":
@@ -153,8 +142,17 @@ public class CreateChatActivity extends AppCompatActivity {
                                                         Toast.makeText(CreateChatActivity.this, "Chat Not found!", Toast.LENGTH_LONG).show();
                                                         break;
                                                     case "CREATED":
+                                                        int chatId = Integer.valueOf(jsonObject.getString("chatId"));
+                                                        try {
+                                                            iPlumbleService.getSession()
+                                                                    .createChannel(0, String.valueOf(chatId), "felan", 0, true);//todo delete description
+                                                            Log.e("CreateChat", "channel created");
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                            Log.e("CreateChat", "channel Didn't create in jumble request!");
+                                                        }
                                                         Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
-                                                        intent.putExtra("chatId", (jsonObject.getString("chatId")));
+                                                        intent.putExtra("chatId", chatId);
                                                         intent.putExtra("bio", (listValues.get(p).get("bio")));
                                                         intent.putExtra("fullname", (listValues.get(p).get("fullname")));
                                                         intent.putExtra("image", (listValues.get(p).get("image")));

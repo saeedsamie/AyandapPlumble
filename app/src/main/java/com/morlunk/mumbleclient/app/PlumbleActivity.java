@@ -54,6 +54,7 @@ import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
+import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.util.JumbleException;
@@ -80,13 +81,13 @@ import com.morlunk.mumbleclient.util.PlumbleTrustStore;
 
 import org.spongycastle.util.encoders.Hex;
 
+import java.io.File;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -103,11 +104,16 @@ public class PlumbleActivity extends ActionBarActivity implements
     public static IPlumbleService mService;
     public static String username;
     public static String plumbleUserName;
+    public static ArrayList<IChannel> iChannels = new ArrayList<>();
     /**
      * List of fragments to be notified about service state changes.
      */
 
     SharedPreferences sharedPreferences;
+    /**
+     * List of fragments to be notified about service state changes.
+     */
+    ArrayList<IChannel> chls = new ArrayList<IChannel>();
     private boolean isCertificateCreated = false;
     private Server server;
     private PlumbleDatabase mDatabase;
@@ -118,12 +124,27 @@ public class PlumbleActivity extends ActionBarActivity implements
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private Fragment currentFragment;
-    /**
-     * List of fragments to be notified about service state changes.
-     */
-
     private List<JumbleServiceFragment> mServiceFragments = new ArrayList<JumbleServiceFragment>();
     private JumbleObserver mObserver = new JumbleObserver() {
+        @Override
+        public void onChannelAdded(IChannel channel) {
+            if (mService.isConnected()) {
+                updateChannelLists();
+                Log.e("channel", "addded" + PlumbleActivity.iChannels.toString());
+                super.onChannelAdded(channel);
+            }
+        }
+
+        @Override
+        public void onChannelRemoved(IChannel channel) {
+            if (mService.isConnected()) {
+                updateChannelLists();
+                Log.e("channels", "removed" + PlumbleActivity.iChannels.toString());
+                super.onChannelRemoved(channel);
+            }
+        }
+
+
         @Override
         public void onConnected() {
 //            if (mSettings.shouldStartUpInPinnedMode()) {
@@ -131,7 +152,7 @@ public class PlumbleActivity extends ActionBarActivity implements
 //            } else {
             loadDrawerFragment(DrawerAdapter.ITEM_RECENTS);
 //            }
-
+            updateChannelLists();
             registerUser();
             mDrawerAdapter.notifyDataSetChanged();
             supportInvalidateOptionsMenu();
@@ -163,51 +184,7 @@ public class PlumbleActivity extends ActionBarActivity implements
         @Override
         public void onTLSHandshakeFailed(X509Certificate[] chain) {
 //            final Server lastServer = getService().getTargetServer();
-            final Server lastServer = server;
-            if (chain.length == 0)
-                return;
-            try {
-                final X509Certificate x509 = chain[0];
-                AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
-                adb.setTitle(R.string.untrusted_certificate);
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                    byte[] certDigest = digest.digest(x509.getEncoded());
-                    String hexDigest = new String(Hex.encode(certDigest));
-                    adb.setMessage(getString(R.string.certificate_info,
-                            x509.getSubjectDN().getName(),
-                            x509.getNotBefore().toString(),
-                            x509.getNotAfter().toString(),
-                            hexDigest));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    adb.setMessage(x509.toString());
-                }
-                adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
-                    //
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                 Try to add to trust store
-                        try {
-                            String alias = lastServer.getHost();
-                            KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
-                            trustStore.setCertificateEntry(alias, x509);
-                            PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
-                            Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
-                            isCertificateCreated = true;
-                            connectToServer(lastServer);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            isCertificateCreated = false;
-                            Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                adb.setNegativeButton(R.string.wizard_cancel, null);
-                adb.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            createCertificate(chain);
         }
 
         @Override
@@ -249,6 +226,112 @@ public class PlumbleActivity extends ActionBarActivity implements
     };
     private String userId;
 
+    public static void deleteCache(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            File[] dirs = context.getExternalCacheDirs();
+            try {
+                for (int i = 0; i < dirs.length; i++) {
+                    File dir = context.getCacheDir();
+                    deleteDir(dir);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+            File edir = context.getExternalCacheDir();
+            deleteDir(edir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if (dir != null && dir.isFile()) {
+            return dir.delete();
+        } else if (dir.isFile()) {
+            return dir.delete();
+        } else
+            return false;
+
+    }
+
+    private void createCertificate(X509Certificate[] chain) {
+        final Server lastServer = server;
+        if (chain.length == 0)
+            return;
+        try {
+            final X509Certificate x509 = chain[0];
+            AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+            adb.setTitle(R.string.untrusted_certificate);
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-1");
+                byte[] certDigest = digest.digest(x509.getEncoded());
+                String hexDigest = new String(Hex.encode(certDigest));
+                adb.setMessage(getString(R.string.certificate_info,
+                        x509.getSubjectDN().getName(),
+                        x509.getNotBefore().toString(),
+                        x509.getNotAfter().toString(),
+                        hexDigest));
+            } catch (Exception e) {
+                e.printStackTrace();
+                adb.setMessage(x509.toString());
+            }
+            adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+                //
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+//                 Try to add to trust store
+                    try {
+                        String alias = lastServer.getHost();
+                        KeyStore trustStore = PlumbleTrustStore.getTrustStore(PlumbleActivity.this);
+                        trustStore.setCertificateEntry(alias, x509);
+                        PlumbleTrustStore.saveTrustStore(PlumbleActivity.this, trustStore);
+                        Toast.makeText(PlumbleActivity.this, R.string.trust_added, Toast.LENGTH_LONG).show();
+                        isCertificateCreated = true;
+                        connectToServer(lastServer);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        isCertificateCreated = false;
+                        Toast.makeText(PlumbleActivity.this, R.string.trust_add_failed, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            adb.setNegativeButton(R.string.wizard_cancel, null);
+            adb.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    ArrayList<IChannel> updateChannelLists() {
+
+        chls = new ArrayList<IChannel>();
+        if (chls.size() == 0) {
+            chls.add(mService.getSession().getChannel(0));
+        }
+        for (int i = 0; i < chls.size(); i++) {
+            IChannel channel = mService.getSession().getChannel(chls.get(i).getId());
+            if (channel != null) {
+//                constructNodes(null, channel, 0, mNodes);
+                iChannels.add(channel);
+                chls.addAll(channel.getSubchannels());
+            }
+        }
+        return iChannels;
+    }
+
     public IPlumbleService getPlumbleService() {
         return mService;
     }
@@ -272,7 +355,7 @@ public class PlumbleActivity extends ActionBarActivity implements
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
-        plumbleUserName = username ;
+        plumbleUserName = username + new Random().nextInt();
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server
@@ -293,6 +376,7 @@ public class PlumbleActivity extends ActionBarActivity implements
 
         mDatabase = new PlumbleSQLiteDatabase(this); // TODO add support for cloud storage
         mDatabase.open();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -303,7 +387,7 @@ public class PlumbleActivity extends ActionBarActivity implements
                 Intent intent;
                 switch ((int) id) {
                     case DrawerAdapter.PROFILE_PROFILE:
-                          intent = new Intent(PlumbleActivity.this,ProfileActivity.class);
+                        intent = new Intent(PlumbleActivity.this, ProfileActivity.class);
 //                        intent = new Intent(PlumbleActivity.this, SignupActivity.class);
 //                        intent.putExtra("Launcher", "main");
 //                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_fullname),
@@ -311,7 +395,7 @@ public class PlumbleActivity extends ActionBarActivity implements
 //                        intent.putExtra(PlumbleActivity.this.getString(R.string.PREF_TAG_username),
 //                                sharedPreferences.getString(PlumbleActivity.this.getString(R.string.PREF_TAG_username), "default username"));
 //                        startActivity(intent);
-                      startActivity(intent);
+                        startActivity(intent);
                         break;
                 }
 //                mDrawerLayout.closeDrawers();
@@ -452,9 +536,10 @@ public class PlumbleActivity extends ActionBarActivity implements
 
     @Override
     protected void onDestroy() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
-        mDatabase.close();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        preferences.unregisterOnSharedPreferenceChangeListener(this);
+//        mDatabase.close();
+        deleteCache(PlumbleActivity.this);
         super.onDestroy();
     }
 
@@ -607,7 +692,7 @@ public class PlumbleActivity extends ActionBarActivity implements
             case DrawerAdapter.ITEM_CREATE_CHAT:
                 fragmentchecker = false;
                 intent = new Intent(this, CreateChatActivity.class);
-                intent.putExtra("plumbleUserName",plumbleUserName);
+                intent.putExtra("plumbleUserName", plumbleUserName);
                 startActivity(intent);
                 break;
             case DrawerAdapter.ITEM_INFO:
@@ -661,10 +746,11 @@ public class PlumbleActivity extends ActionBarActivity implements
 //                mDatabase.removeCertificate();
                 Log.e("DATABASE4", getDatabase().getCertificates().toString());
                 mDatabase.close();
-                getBaseContext().deleteDatabase("mumble.db");
-                    startActivity(exitIntent);
+                PlumbleActivity.this.deleteDatabase("mumble.db");
+                deleteCache(PlumbleActivity.this);
                 mService.disconnect();
-                finish();
+                this.finish();
+                startActivity(exitIntent);
                 return;
             default:
                 return;
@@ -745,6 +831,10 @@ public class PlumbleActivity extends ActionBarActivity implements
 //        alertBuilder.show();
     }
 
+    /*
+     * HERE BE IMPLEMENTATIONS
+     */
+
     private void setStayAwake(boolean stayAwake) {
         if (stayAwake) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -783,7 +873,7 @@ public class PlumbleActivity extends ActionBarActivity implements
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-                mConnectingDialog.setMessage(getString(R.string.connecting_to_server,"",
+                mConnectingDialog.setMessage(getString(R.string.connecting_to_server, "",
                         ""));
                 mConnectingDialog.show();
                 break;
@@ -860,10 +950,6 @@ public class PlumbleActivity extends ActionBarActivity implements
         }
     }
 
-    /*
-     * HERE BE IMPLEMENTATIONS
-     */
-
     @Override
     public IPlumbleService getService() {
         return mService;
@@ -930,10 +1016,8 @@ public class PlumbleActivity extends ActionBarActivity implements
 //        }
     }
 
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 }
