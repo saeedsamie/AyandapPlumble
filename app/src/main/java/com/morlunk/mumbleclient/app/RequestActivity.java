@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.morlunk.jumble.model.IChannel;
+import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -41,12 +43,36 @@ public class RequestActivity extends AppCompatActivity {
     private ArrayList<HashMap<String, String>> listValues;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private JumbleObserver mObserver = new JumbleObserver() {
+
+        @Override
+        public void onChannelAdded(IChannel channel) {
+            if (PlumbleActivity.mService.isConnected()) {
+                updateListView();
+                Log.e("channel", "addded" + PlumbleActivity.iChannels.toString());
+                super.onChannelAdded(channel);
+            }
+        }
+
+        @Override
+        public void onChannelRemoved(IChannel channel) {
+            if (PlumbleActivity.mService.isConnected()) {
+                updateListView();
+                Log.e("channels", "removed" + PlumbleActivity.iChannels.toString());
+                super.onChannelRemoved(channel);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_requests);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        if (PlumbleActivity.mService.isConnected()) {
+            PlumbleActivity.mService.registerObserver(mObserver);
         }
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.request_panel_swipeRefreshLayout);
         nameValuePairs = new ArrayList<NameValuePair>();
@@ -85,6 +111,7 @@ public class RequestActivity extends AppCompatActivity {
                         builder.setMessage(jsonObject.toString()).create().show();
                     }
                 }).execute();
+                updateListView();
             }
         });
     }
@@ -147,37 +174,27 @@ public class RequestActivity extends AppCompatActivity {
                             int position = pos[i];
                             String dir = "";
                             List<NameValuePair> value = new ArrayList<>();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(RequestActivity.this);
 
                             switch (direction) {
                                 case DIRECTION_FAR_LEFT:
-                                    dir = "Far left";
                                     value.add(new BasicNameValuePair("func", "declinePV"));
                                     value.add(new BasicNameValuePair("userId", userId));
                                     value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    builder.setMessage("گفتگو پذیرفته نشد").create().show();
                                     break;
                                 case DIRECTION_NORMAL_LEFT:
-                                    dir = "Left";
                                     value.add(new BasicNameValuePair("func", "declinePV"));
                                     value.add(new BasicNameValuePair("userId", userId));
                                     value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    builder.setMessage("گفتگو پذیرفته نشد").create().show();
-
                                     break;
                                 case DIRECTION_FAR_RIGHT:
-                                    dir = "Far right";
                                     value.add(new BasicNameValuePair("func", "acceptPV"));
                                     value.add(new BasicNameValuePair("userId", userId));
                                     value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    builder.setMessage("گفتگو پذیرفته شد").create().show();
                                     break;
                                 case DIRECTION_NORMAL_RIGHT:
                                     value.add(new BasicNameValuePair("func", "acceptPV"));
                                     value.add(new BasicNameValuePair("userId", userId));
                                     value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    builder.setMessage("گفتگو پذیرفته شد").create().show();
-                                    dir = "Right";
                                     break;
                             }
                             new ServerFetchAsync(value, new OnTaskCompletedListener() {

@@ -60,7 +60,7 @@ public class ChatActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
 
-        if (getIntent().getStringExtra("type").equals("private")) {
+        if (getIntent().getStringExtra("type").equals("pv")) {
             this.setTitle(getIntent().getStringExtra("fullname"));
             ImageButton imageButton = new ImageButton(this);
 

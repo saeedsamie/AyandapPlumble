@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -88,40 +87,46 @@ public class RecentChatsListAdapter extends BaseAdapter {
         TextView chatBio;
         ImageView icon;
     }
-  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
-    private final static String TAG = "AsyncTaskLoadImage";
-    private ImageView imageView;
-    public AsyncTaskLoadImage(ImageView imageView) {
-      this.imageView = imageView;
+
+    public class AsyncTaskLoadImage extends AsyncTask<String, String, Bitmap> {
+        private final static String TAG = "AsyncTaskLoadImage";
+        private ImageView imageView;
+
+        public AsyncTaskLoadImage(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
+            Bitmap circleBitmap = null;
+
+            try {
+                URL url = new URL(params[0]);
+                bitmap.recycle();
+                bitmap = BitmapFactory.decodeStream((InputStream) url.getContent());
+
+
+                circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+                BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                Paint paint = new Paint();
+                paint.setShader(shader);
+                paint.setAntiAlias(true);
+                Canvas c = new Canvas(circleBitmap);
+                c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+
+
+            } catch (Exception e) {
+//                if (e != null)
+//                    Log.e("9589", e.getMessage());
+            }
+            return circleBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap circleBitmap) {
+            imageView.setImageBitmap(circleBitmap);
+        }
     }
-    @Override
-    protected Bitmap doInBackground(String... params) {
-      Bitmap bitmap = null;
-      Bitmap circleBitmap = null;
-
-      try {
-        URL url = new URL(params[0]);
-        bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
-
-
-        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-        BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        Paint paint = new Paint();
-        paint.setShader(shader);
-        paint.setAntiAlias(true);
-        Canvas c = new Canvas(circleBitmap);
-        c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
-
-
-      } catch (IOException e) {
-        Log.e(TAG, e.getMessage());
-      }
-      return circleBitmap;
-    }
-    @Override
-    protected void onPostExecute(Bitmap circleBitmap) {
-      imageView.setImageBitmap(circleBitmap);
-    }
-  }
 }

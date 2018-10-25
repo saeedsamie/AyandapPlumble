@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.IUser;
+import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -44,6 +45,26 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecentChatsFragment context;
     private String userId;
+    private JumbleObserver mObserver = new JumbleObserver() {
+
+        @Override
+        public void onChannelAdded(IChannel channel) {
+            if (PlumbleActivity.mService.isConnected()) {
+                updateListView();
+                Log.e("channel", "addded" + PlumbleActivity.iChannels.toString());
+                super.onChannelAdded(channel);
+            }
+        }
+
+        @Override
+        public void onChannelRemoved(IChannel channel) {
+            if (PlumbleActivity.mService.isConnected()) {
+                updateListView();
+                Log.e("channels", "removed" + PlumbleActivity.iChannels.toString());
+                super.onChannelRemoved(channel);
+            }
+        }
+    };
 
     @Override
     public void onResume() {
@@ -56,6 +77,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         permission = true;
+
+
     }
 
     @Override
@@ -83,6 +106,13 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             }
         });
         context = this;
+        try {
+            if (PlumbleActivity.mService.isConnected()) {
+                PlumbleActivity.mService.registerObserver(mObserver);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return view;
     }
 
