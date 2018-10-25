@@ -159,6 +159,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
         mChannelView = (RecyclerView) view.findViewById(R.id.channelUsers);
         mChannelView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
         return view;
     }
 

@@ -77,8 +77,8 @@
     <color name="transparent">#00ffffff</color>
 
 
-    <color name="m_primary">#344955</color>
-    <color name="m_primary_dark">#232F34</color>
+    <color name="m_primary">#293a43</color>
+    <color name="m_primary_dark">#1d272b</color>
     <color name="m_primary_light">#4A6572</color>
     <color name="m_secondary">#F9AA33</color>
 

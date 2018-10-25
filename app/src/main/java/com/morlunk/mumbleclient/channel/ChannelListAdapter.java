@@ -18,7 +18,6 @@
 package com.morlunk.mumbleclient.channel;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +27,7 @@ import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +44,6 @@ import com.morlunk.jumble.model.IUser;
 import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.model.TalkState;
 import com.morlunk.mumbleclient.R;
-import com.morlunk.mumbleclient.app.PlumbleActivity;
-import com.morlunk.mumbleclient.app.SignupActivity;
 import com.morlunk.mumbleclient.db.PlumbleDatabase;
 import com.morlunk.mumbleclient.drawable.CircleDrawable;
 import com.morlunk.mumbleclient.drawable.FlipDrawable;
@@ -56,8 +54,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.morlunk.mumbleclient.R.string.PREF_TAG_username;
 
 /**
  * Created by andrew on 31/07/13.
@@ -77,6 +73,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
     private PlumbleDatabase mDatabase;
     private List<Integer> mRootChannels;
     private List<Node> mNodes;
+    public static HashMap<String,String> server_channels = new HashMap<String,String>();
     /**
      * A mapping of user-set channel expansions.
      * If a key is not mapped, default to hiding empty channels.
@@ -155,7 +152,13 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
             cvh.mChannelExpandToggle.setEnabled(expandUsable);
             cvh.mChannelExpandToggle.setVisibility(expandUsable ? View.VISIBLE : View.INVISIBLE);
 
+            server_channels.put(channel.getName(),channel.getId()+"");
+
+
+
             cvh.mChannelName.setText(channel.getName());
+
+            Log.i("server_channels",server_channels.toString());
 
             int nameTypeface = Typeface.NORMAL;
             if (mService != null && mService.isConnected()) {
@@ -195,6 +198,8 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
                 public void onClick(View v) {
                     if (mService.isConnected())
                         mService.getSession().joinChannel(channel.getId());
+                    Log.i("fssesefs0",channel.getName());
+                    Log.i("fssesefs0",channel.getId()+"");
                 }
             });
 
@@ -307,7 +312,16 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
             return;
 
         IJumbleSession session = mService.getSession();
+
+//            final Node node = mNodes.get(0);
+//            final IChannel channel = node.getChannel();
+//            Log.i("NodeTesting","NAME : "+ channel.getName());
+//            Log.i("NodeTesting","ID : "+ channel.getId());
+//
+//
+
         mNodes.clear();
+
         for (int cid : mRootChannels) {
             IChannel channel = session.getChannel(cid);
             if (channel != null) {
@@ -342,6 +356,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
      * @param user The user to update.
      * @param view The view containing this adapter.
      */
+    int a;
     public void animateUserTalkStateUpdate(IUser user, RecyclerView view) {
         long itemId = user.getSession() | USER_ID_MASK;
         final UserViewHolder uvh = (UserViewHolder) view.findViewHolderForItemId(itemId);

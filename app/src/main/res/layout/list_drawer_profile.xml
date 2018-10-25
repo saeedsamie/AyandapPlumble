@@ -18,30 +18,31 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="250dp"
-    android:orientation="vertical"
-    android:padding="25dp"
-    android:id="@+id/profile_layout">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/profile_layout"
+              android:layout_width="fill_parent"
+              android:layout_height="250dp"
+              android:orientation="vertical"
+              android:padding="10dp">
 
-    <FrameLayout
+    <ImageView
       android:id="@+id/drawer_profile_pic"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="4"
       android:gravity="bottom"
       android:padding="4sp"
-      android:src="@drawable/ic_action_user_dark">
+      android:src="@drawable/ic_action_user_dark"/>
 
-        <TextView
-          android:id="@+id/drawer_profile_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom"
-          android:gravity="center"
-          android:textColor="#000000"
-          android:textIsSelectable="false"
-          android:textSize="18sp"/>
-    </FrameLayout>
+    <TextView
+      android:id="@+id/drawer_profile_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:layout_marginTop="5dp"
+      android:gravity="center"
+      android:textColor="#FFFFFF"
+      android:textIsSelectable="false"
+      android:textSize="18sp"/>
+
 </LinearLayout>

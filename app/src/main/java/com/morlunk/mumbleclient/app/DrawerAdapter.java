@@ -24,11 +24,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.util.AsyncLoadCircularImage;
 
 /**
  * Created by andrew on 01/08/13.
@@ -60,14 +60,17 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
     // TODO clean this up.
 
+    String userid;
+
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
         mProvider = provider;
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(context.getString(R.string.PREF_TAG_username), "Default Username");
+        userid = sharedPreferences.getString(context.getString(R.string.PREF_TAG_userid), "0");
 //        add(new DrawerAdapter.DrawerHeader(HEADER_USERNAME, username));
 
-        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, R.drawable.default_profile));
+        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, userid));
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "گفتگوها", R.drawable.ic_action_favourite_on));
@@ -135,9 +138,9 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         } else if (viewType == PROFILE_TYPE) {
             DrawerProfile profile = (DrawerProfile) getItem(position);
             TextView name = (TextView) v.findViewById(R.id.drawer_profile_name);
-            FrameLayout profile_pic = (FrameLayout) v.findViewById(R.id.drawer_profile_pic);
+            ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
             name.setText(profile.title);
-            profile_pic.setBackgroundResource(profile.profile_pic_res);
+            new AsyncLoadCircularImage(profile_pic).execute("http://192.168.2.18/SqliteTest/profile_image/" + userid + ".png");
 
             boolean enabled = isEnabled(position);
 
@@ -245,11 +248,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     }
 
     public static class DrawerProfile extends DrawerRow {
-        int profile_pic_res;
+        String profile_pic_url;
 
-        public DrawerProfile(int id, String title, int pic_res) {
+        public DrawerProfile(int id, String title, String userid) {
             super(id, title);
-            this.profile_pic_res = pic_res;
+            this.profile_pic_url = userid;
         }
     }
 }

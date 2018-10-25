@@ -12,7 +12,7 @@
     android:layout_gravity="center"
     android:layout_marginTop="20dp"
     android:scaleType="centerCrop"
-    android:src="@drawable/default_profile"/>
+    android:src="@drawable/profilepic"/>
 
 
   <LinearLayout
@@ -30,7 +30,6 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
       android:layout_marginTop="8dp"
-      android:background="@drawable/rounded_edittext"
       android:padding="5dp"
       android:textColorHint="#FFFFFF">
 
@@ -38,7 +37,6 @@
         android:id="@+id/profile_fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:gravity="center"
         android:hint="نام"
         android:inputType="textNoSuggestions|textPersonName"
@@ -57,7 +55,6 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
       android:layout_marginTop="8dp"
-      android:background="@drawable/rounded_edittext"
       android:padding="5dp"
       android:textColorHint="#FFFFFF">
 
@@ -65,7 +62,6 @@
         android:id="@+id/profile_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:editable="true"
         android:gravity="center"
         android:hint="نام کاربری"

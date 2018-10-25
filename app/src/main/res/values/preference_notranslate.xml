@@ -101,7 +101,7 @@
     </string-array>
 
     <string name="copyright">Copyright &#169; Ayandap 2018</string>
-    <string name="acknowledgements_link">https://google.com</string>
+    <string name="acknowledgements_link">https://ayandap.com</string>
     <string name="license_gplv3">GNU General Public License v3.0</string>
     <string name="license_gplv3_link">https://www.gnu.org/copyleft/gpl.html</string>
     <string name="license_apache2">Apache License Version 2.0</string>
