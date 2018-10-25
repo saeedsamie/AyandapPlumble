@@ -289,7 +289,6 @@ public class PlumbleActivity extends ActionBarActivity implements
                 adb.setMessage(x509.toString());
             }
             adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
-                //
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 //                 Try to add to trust store
@@ -734,22 +733,13 @@ public class PlumbleActivity extends ActionBarActivity implements
                 return;
             case DrawerAdapter.EXIT:
                 sharedPreferences.edit().clear().apply();
-                Log.e("DATABASE1", getDatabase().getServers().toString());
-                mDatabase.open();
-                mDatabase.removeServer(server);
-                Log.e("DATABASE2", getDatabase().getServers().toString());
-                Log.e("DATABASE3", getDatabase().getCertificates().toString());
                 PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
-                Intent exitIntent = new Intent(this, LoginActivity.class);
-                for (int i = 0; i < mDatabase.getCertificates().size(); i++)
-                    mDatabase.removeCertificate(getDatabase().getCertificates().get(i).getId());
-//                mDatabase.removeCertificate();
-                Log.e("DATABASE4", getDatabase().getCertificates().toString());
-                mDatabase.close();
                 PlumbleActivity.this.deleteDatabase("mumble.db");
                 deleteCache(PlumbleActivity.this);
                 mService.disconnect();
                 this.finish();
+                PlumbleTrustStore.clearTrustStore(this);
+                Intent exitIntent = new Intent(this, LoginActivity.class);
                 startActivity(exitIntent);
                 return;
             default:
