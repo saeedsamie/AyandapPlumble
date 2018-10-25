@@ -66,7 +66,6 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-//        HttpPost httpPost = new HttpPost("http://31.184.132.206/sqlite.php");
         HttpPost httpPost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
         try {
 

@@ -415,7 +415,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         protected String doInBackground(Void... voids) {
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
+            HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));

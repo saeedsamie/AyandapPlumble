@@ -20,6 +20,7 @@ import com.morlunk.jumble.model.IUser;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
+import com.morlunk.mumbleclient.channel.ChannelListAdapter;
 import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 
 import org.apache.http.NameValuePair;
@@ -78,6 +79,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             @Override
             public void onRefresh() {
                 updateListView();
+                Log.i("server_channels", ChannelListAdapter.server_channels.toString());
             }
         });
         context = this;

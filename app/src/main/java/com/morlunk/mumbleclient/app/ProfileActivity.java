@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -19,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,6 +34,7 @@ import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
+import com.morlunk.mumbleclient.util.AsyncLoadCircularImage;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -43,6 +44,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -83,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
   private TextView textView;
   private BackgroundTask backgroundTask;
   List<NameValuePair> nameValuePairs;
+  static ProfileActivity profileActivity;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
         showFileChooser();
       }
     });
-    final ProfileActivity profileActivity = this;
+    profileActivity = this;
     bUpload = (Button) findViewById(R.id.profile_save);
     bUpload.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -346,7 +349,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected String doInBackground(Void... voids) {
 
       HttpClient httpclient = new DefaultHttpClient();
-      HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite.php");
+      HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
       try {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));
@@ -439,32 +442,7 @@ public class ProfileActivity extends AppCompatActivity {
 
               ed_fullname.setText(c.getString("fullname"));
               ed_username.setText(c.getString("username"));
-              String TAG = "AsyncTaskLoadImage";
-              Bitmap bitmap = null;
-              Bitmap circleBitmap = null;
-
-              try {
-                URL url = new URL("http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                bitmap = BitmapFactory.decodeStream(input);
-
-                circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-                BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                Paint paint = new Paint();
-                paint.setShader(shader);
-                paint.setAntiAlias(true);
-                Canvas ca = new Canvas(circleBitmap);
-                ca.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
-
-
-              } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-              }
-              ivAttachment.setImageBitmap(circleBitmap);
+              new AsyncLoadCircularImage(ivAttachment).execute("http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
             }
 
           } catch (Exception e) {
@@ -480,29 +458,23 @@ public class ProfileActivity extends AppCompatActivity {
     nameValuePairs.add(new BasicNameValuePair("userId", userId));
     nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
 
-
-
     new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
       @Override
       public void onTaskCompleted(JSONObject jsonObject) {
-        Log.i("BHHJBCDHJBHBJHJB","HEILO");
-        final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
         try {
-          JSONArray jsonArray;
-          jsonArray = jsonObject.getJSONArray("profileUpdate");
-          String result;
-          for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject c = jsonArray.getJSONObject(i);
-
             if (jsonObject.getString("profile").equals("UPDATED"))
             {
               finish();
             }
+            else
+            {
+              Snackbar
+                .make(findViewById(android.R.id.content),"خطایی پیش آمده ، مجددا تلاش کنید", Snackbar.LENGTH_SHORT)
+                .show();
+            }
 
-          }
-
-        } catch (Exception e) {
-          e.printStackTrace();
+          } catch (JSONException e1) {
+          e1.printStackTrace();
         }
       }
     }).execute();
