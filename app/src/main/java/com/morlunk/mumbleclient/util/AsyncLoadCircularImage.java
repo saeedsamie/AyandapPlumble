@@ -29,7 +29,7 @@ public class AsyncLoadCircularImage  extends AsyncTask<String, String, Bitmap> {
       URL url = new URL(params[0]);
       bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
 
-      circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+      circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
       BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
       Paint paint = new Paint();
       paint.setShader(shader);
@@ -38,7 +38,7 @@ public class AsyncLoadCircularImage  extends AsyncTask<String, String, Bitmap> {
       c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
 
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       Log.e(TAG, e.getMessage());
     }
     return circleBitmap;

@@ -96,7 +96,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
                                     hashMap.put("fullname", c.getString("fullname"));
                                     hashMap.put("username", c.getString("username"));
-                                    hashMap.put("image", "http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
+                                    hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
                                     hashMap.put("id", c.getString("id"));
 
                                     listValues.add(hashMap);

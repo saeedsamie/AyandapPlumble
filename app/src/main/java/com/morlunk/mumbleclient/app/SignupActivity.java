@@ -78,7 +78,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
     private EditText ed_fullname;
     private EditText ed_username;
     private ProgressDialog pDialog;
-    private String SERVER_URL = "http://192.168.2.18/SqliteTest/image.php";
+    private String SERVER_URL = LoginActivity.URL+"image.php";
     private TextView textView;
     private BackgroundTask backgroundTask;
 
@@ -222,7 +222,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
 
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
-                        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                        circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
 
                         BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                         Paint paint = new Paint();
@@ -415,7 +415,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
         protected String doInBackground(Void... voids) {
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
+            HttpPost httppost = new HttpPost(LoginActivity.URL+"sqlite.php");
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));

@@ -24,4 +24,10 @@
     <attr name="arcLength" format="dimension" />
     <attr name="cyclePeriod" format="integer" />
   </declare-styleable>
+
+  <declare-styleable name="TimerView">
+    <attr name="circleColor" format="color"/>
+  </declare-styleable>
+
+
 </resources>

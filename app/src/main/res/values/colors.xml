@@ -82,6 +82,12 @@
     <color name="m_primary_light">#4A6572</color>
     <color name="m_secondary">#F9AA33</color>
 
+    <color name="timer_circle">#2ebfca</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="gradStart">#19AA8B</color>
+    <color name="gradStop">#23A7D8</color>
+
 
 
 </resources>

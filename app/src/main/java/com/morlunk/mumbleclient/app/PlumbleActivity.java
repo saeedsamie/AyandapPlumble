@@ -494,9 +494,9 @@ public class PlumbleActivity extends ActionBarActivity implements
             if (getService() != null && getService().isConnected() && mSettings.isUsingCertificate() && isCertificateCreated) {
                 ((PlumbleService) getService()).registerUser(getService().getSession().getSessionUser().getSession());
                 if (sharedPreferences.edit().putBoolean("isRegistered", true).commit()) {
-                    Toast.makeText(this, "Registered :D !", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, "Registered :D !", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, "CAN NOT REGISTER!", Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
   private EditText ed_fullname;
   private EditText ed_username;
   private ProgressDialog pDialog;
-  private String SERVER_URL = "http://192.168.2.18/SqliteTest/image.php";
+  private String SERVER_URL = LoginActivity.URL+"image.php";
   private TextView textView;
   private BackgroundTask backgroundTask;
   List<NameValuePair> nameValuePairs;
@@ -163,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
 
           try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
-            circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
 
             BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             Paint paint = new Paint();
@@ -349,7 +349,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected String doInBackground(Void... voids) {
 
       HttpClient httpclient = new DefaultHttpClient();
-      HttpPost httppost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
+      HttpPost httppost = new HttpPost(LoginActivity.URL+"sqlite.php");
       try {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "imageInsert"));
@@ -442,7 +442,7 @@ public class ProfileActivity extends AppCompatActivity {
 
               ed_fullname.setText(c.getString("fullname"));
               ed_username.setText(c.getString("username"));
-              new AsyncLoadCircularImage(ivAttachment).execute("http://192.168.2.18/SqliteTest/profile_image/" + c.getString("image"));
+              new AsyncLoadCircularImage(ivAttachment).execute(LoginActivity.URL+"profile_image/" + c.getString("image"));
             }
 
           } catch (Exception e) {

@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
     public EditText phone;
     private boolean isUser;
 
+    public static String URL = "http://31.184.132.206/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -58,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
 
         loginContinue = (Button) findViewById(R.id.login_continue);
         phone = (EditText) findViewById(R.id.login_phone);
-
 
         final LoginActivity loginActivity = this;
 

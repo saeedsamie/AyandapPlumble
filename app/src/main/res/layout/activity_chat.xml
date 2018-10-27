@@ -54,12 +54,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="00:00"
-                android:textColor="@color/textOnSecondary"
-                android:textSize="15sp" />
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:text="00:00"
+              android:textColor="@color/textOnSecondary"
+              android:textSize="15sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,6 +76,10 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/push_to_talk_unpressed"
                 android:src="@mipmap/mic" />
+
+
+
+
         </LinearLayout>
 
         <!--<LinearLayout-->

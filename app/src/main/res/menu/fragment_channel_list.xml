@@ -42,8 +42,8 @@
         <!--plumble:showAsAction="never" />-->
     <item
       android:id="@+id/menu_requests"
-      android:orderInCategory="100"
       android:icon="@drawable/new_request"
+      android:orderInCategory="100"
       android:title="@string/refresh"
       plumble:showAsAction="always"/>
 </menu>

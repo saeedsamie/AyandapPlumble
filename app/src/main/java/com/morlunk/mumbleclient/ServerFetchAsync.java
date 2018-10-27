@@ -66,14 +66,13 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost("http://192.168.2.18/SqliteTest/sqlite-vps.php");
+        HttpPost httpPost = new HttpPost(LoginActivity.URL+"sqlite.php");
         try {
 
             UrlEncodedFormEntity form;
             form = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
             Log.e("requests elements", "request -----" + nameValuePairs.toString());
 
-            // Use UrlEncodedFormEntity to send in proper format which we need
             httpPost.setEntity(form);
 
             HttpResponse response = httpClient.execute(httpPost);

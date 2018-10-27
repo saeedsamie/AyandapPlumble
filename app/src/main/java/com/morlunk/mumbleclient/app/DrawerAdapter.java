@@ -140,7 +140,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             TextView name = (TextView) v.findViewById(R.id.drawer_profile_name);
             ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
             name.setText(profile.title);
-            new AsyncLoadCircularImage(profile_pic).execute("http://192.168.2.18/SqliteTest/profile_image/" + userid + ".png");
+            new AsyncLoadCircularImage(profile_pic).execute(LoginActivity.URL+"profile_image/" + userid + ".png");
 
             boolean enabled = isEnabled(position);
 
