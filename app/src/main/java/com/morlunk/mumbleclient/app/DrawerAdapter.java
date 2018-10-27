@@ -27,15 +27,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.mumbleclient.R;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by andrew on 01/08/13.
  */
 public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
-
+    public static Picasso picassoWithCache;
     // Drawer rows, integer value is id
     public static final int PROFILE_PROFILE = 0;
     public static final int ITEM_SERVER = 1;
@@ -139,13 +144,52 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         } else if (viewType == PROFILE_TYPE) {
             DrawerProfile profile = (DrawerProfile) getItem(position);
             TextView name = (TextView) v.findViewById(R.id.drawer_profile_name);
-            ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
+            final ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
             name.setText(profile.title);
-//            new AsyncLoadCircularImage(profile_pic).execute(LoginActivity.URL+"profile_image/" + userid + ".png");
-            Glide.with(getContext())
-              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
-              .apply(RequestOptions.circleCropTransform())
-              .into(profile_pic);
+//            Glide.with(getContext())
+//              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
+//              .apply(RequestOptions.circleCropTransform())
+//              .into(profile_pic);
+
+
+//            Picasso.with(getContext())
+//              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
+//              .networkPolicy(NetworkPolicy.OFFLINE)
+//              .into(profile_pic, new Callback() {
+//                  @Override
+//                  public void onSuccess() {
+//
+//                  }
+//
+//                  @Override
+//                  public void onError() {
+//                      //Try again online if cache failed
+//                      Picasso.with(getContext())
+//                        .load(LoginActivity.URL+"profile_image/0.png")
+//                        .error(R.drawable.ic_action_error)
+//                        .into(profile_pic, new Callback() {
+//                            @Override
+//                            public void onSuccess() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError() {
+//                                Log.v("Picasso","Could not fetch image");
+//                            }
+//                        });
+//                  }
+//              });
+
+            File httpCacheDirectory = new File(getContext().getCacheDir(), "picasso-cache");
+            Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+            picassoWithCache = new Picasso.Builder(getContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+            picassoWithCache.load(LoginActivity.URL+"profile_image/" + userid + ".png").into(profile_pic);
+
+
+
+
             boolean enabled = isEnabled(position);
 
             // Set text and profile_pic color+alpha based on enabled/disabled state

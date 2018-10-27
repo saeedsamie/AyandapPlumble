@@ -30,12 +30,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -65,13 +65,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class ProfileActivity extends AppCompatActivity {
-
+  public static Picasso picassoWithCache;
   private static final int PICK_FILE_REQUEST = 1;
   String userId ;
   SharedPreferences sp;
@@ -444,11 +446,49 @@ public class ProfileActivity extends AppCompatActivity {
 
               ed_fullname.setText(c.getString("fullname"));
               ed_username.setText(c.getString("username"));
-//              new AsyncLoadCircularImage(ivAttachment).execute(LoginActivity.URL+"profile_image/" + c.getString("image"));
-              Glide.with(getBaseContext())
-                .load(LoginActivity.URL+"profile_image/" + c.getString("image"))
-                .apply(RequestOptions.circleCropTransform())
-                .into(ivAttachment);
+//              Glide.with(getBaseContext())
+//                .load(LoginActivity.URL+"profile_image/" + c.getString("image"))
+//                .apply(RequestOptions.circleCropTransform())
+//                .into(ivAttachment);
+
+//              Picasso.with(getBaseContext())
+//                .load(LoginActivity.URL+"profile_image/" + c.getString("image"))
+//                .networkPolicy(NetworkPolicy.OFFLINE)
+//                .into(ivAttachment, new Callback() {
+//                  @Override
+//                  public void onSuccess() {
+//
+//                  }
+//
+//                  @Override
+//                  public void onError() {
+//                    //Try again online if cache failed
+//                    Picasso.with(getBaseContext())
+//                      .load(LoginActivity.URL+"profile_image/0.png")
+//                      .error(R.drawable.ic_action_error)
+//                      .into(ivAttachment, new Callback() {
+//                        @Override
+//                        public void onSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError() {
+//                          Log.v("Picasso","Could not fetch image");
+//                        }
+//                      });
+//                  }
+//                });
+
+
+              File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
+              Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+              OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+              picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+              picassoWithCache.load(LoginActivity.URL+"profile_image/" + c.getString("image")).into(ivAttachment);
+
+
+
             }
 
           } catch (Exception e) {
@@ -470,6 +510,15 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             if (jsonObject.getString("profile").equals("UPDATED"))
             {
+              if (selectedFilePath != null) {
+                new Thread(new Runnable() {
+                  @Override
+                  public void run() {
+                    //creating new thread to handle Http Operations
+                    uploadFile(selectedFilePath);
+                  }
+                }).start();
+              }
               finish();
             }
             else

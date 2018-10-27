@@ -15,18 +15,23 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.mumbleclient.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+
 
 public class RecentChatsListAdapter extends BaseAdapter {
 
+    public static Picasso picassoWithCache;
     private final ArrayList<HashMap<String, String>> values;
     Context context;
 
@@ -78,11 +83,49 @@ public class RecentChatsListAdapter extends BaseAdapter {
         viewHolder.chatTitle.setText(values.get(position).get("title"));
         viewHolder.chatBio.setText(values.get(position).get("bio"));
 //        new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
-        Glide.with(context)
-          .load(values.get(position).get("image"))
-          .apply(RequestOptions.circleCropTransform())
-          .into(viewHolder.icon);
+//        Glide.with(context)
+//          .load(values.get(position).get("image"))
+//          .apply(RequestOptions.circleCropTransform())
+//          .into(viewHolder.icon);
+
+
+//        Picasso.with(context)
+////          .load(values.get(position).get("image"))
+////          .networkPolicy(NetworkPolicy.OFFLINE)
+////          .into(viewHolder.icon, new Callback() {
+////              @Override
+////              public void onSuccess() {
+////
+////              }
+////
+////              @Override
+////              public void onError() {
+////                  //Try again online if cache failed
+////                  Picasso.with(context)
+////                    .load(LoginActivity.URL+"profile_image/0.png")
+////                    .error(R.drawable.ic_action_error)
+////                    .into(viewHolder.icon, new Callback() {
+////                        @Override
+////                        public void onSuccess() {
+////
+////                        }
+////
+////                        @Override
+////                        public void onError() {
+////                            Log.v("Picasso","Could not fetch image");
+////                        }
+////                    });
+////              }
+////          });
+
+      File httpCacheDirectory = new File(context.getCacheDir(), "picasso-cache");
+      Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+      OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+      picassoWithCache = new Picasso.Builder(context).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+      picassoWithCache.load(values.get(position).get("image")).into(viewHolder.icon);
+
         return convertView;
+
     }
 
     //
