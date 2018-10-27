@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,34 +98,35 @@ public class RecentChatsListAdapter extends BaseAdapter {
         @Override
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap = null;
-            Bitmap circleBitmap = null;
+
 
             try {
                 URL url = new URL(params[0]);
-                bitmap.recycle();
-                bitmap = BitmapFactory.decodeStream((InputStream) url.getContent());
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                bitmap = BitmapFactory.decodeStream((InputStream)url.getContent(), null, options);
 
-
-                circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-
-                BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                Paint paint = new Paint();
-                paint.setShader(shader);
-                paint.setAntiAlias(true);
-                Canvas c = new Canvas(circleBitmap);
-                c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
 
 
             } catch (Exception e) {
 //                if (e != null)
 //                    Log.e("9589", e.getMessage());
             }
-            return circleBitmap;
+            return bitmap;
         }
 
         @Override
-        protected void onPostExecute(Bitmap circleBitmap) {
-            imageView.setImageBitmap(circleBitmap);
+        protected void onPostExecute(Bitmap bitmap) {
+          Bitmap circleBitmap = null;
+          circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+          BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+          Paint paint = new Paint();
+          paint.setShader(shader);
+          paint.setAntiAlias(true);
+          Canvas c = new Canvas(circleBitmap);
+          c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+
+          imageView.setImageBitmap(circleBitmap);
         }
     }
 }

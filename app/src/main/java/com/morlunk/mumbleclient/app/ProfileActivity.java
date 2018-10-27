@@ -162,6 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
           Bitmap circleBitmap = null;
 
           try {
+
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
             circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
 

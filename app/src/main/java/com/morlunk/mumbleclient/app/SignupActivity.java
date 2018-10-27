@@ -223,7 +223,6 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
                         circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-
                         BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                         Paint paint = new Paint();
                         paint.setShader(shader);

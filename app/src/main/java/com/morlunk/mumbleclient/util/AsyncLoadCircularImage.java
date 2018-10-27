@@ -23,28 +23,26 @@ public class AsyncLoadCircularImage  extends AsyncTask<String, String, Bitmap> {
   @Override
   protected Bitmap doInBackground(String... params) {
     Bitmap bitmap = null;
-    Bitmap circleBitmap = null;
-
     try {
       URL url = new URL(params[0]);
-      bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
-
-      circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-      BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-      Paint paint = new Paint();
-      paint.setShader(shader);
-      paint.setAntiAlias(true);
-      Canvas c = new Canvas(circleBitmap);
-      c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
-
-
+      BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inSampleSize = 8;
+      bitmap = BitmapFactory.decodeStream((InputStream)url.getContent(), null, options);
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
     }
-    return circleBitmap;
+    return bitmap;
   }
   @Override
-  protected void onPostExecute(Bitmap circleBitmap) {
+  protected void onPostExecute(Bitmap bitmap) {
+    Bitmap circleBitmap = null;
+    circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+    BitmapShader shader = new BitmapShader (bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+    Paint paint = new Paint();
+    paint.setShader(shader);
+    paint.setAntiAlias(true);
+    Canvas c = new Canvas(circleBitmap);
+    c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
     imageView.setImageBitmap(circleBitmap);
   }
 }
