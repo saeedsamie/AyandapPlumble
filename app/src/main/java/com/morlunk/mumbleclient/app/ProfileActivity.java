@@ -30,11 +30,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.morlunk.mumbleclient.util.AsyncLoadCircularImage;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -443,7 +444,11 @@ public class ProfileActivity extends AppCompatActivity {
 
               ed_fullname.setText(c.getString("fullname"));
               ed_username.setText(c.getString("username"));
-              new AsyncLoadCircularImage(ivAttachment).execute(LoginActivity.URL+"profile_image/" + c.getString("image"));
+//              new AsyncLoadCircularImage(ivAttachment).execute(LoginActivity.URL+"profile_image/" + c.getString("image"));
+              Glide.with(getBaseContext())
+                .load(LoginActivity.URL+"profile_image/" + c.getString("image"))
+                .apply(RequestOptions.circleCropTransform())
+                .into(ivAttachment);
             }
 
           } catch (Exception e) {

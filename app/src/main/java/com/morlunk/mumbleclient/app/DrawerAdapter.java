@@ -27,8 +27,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.morlunk.mumbleclient.R;
-import com.morlunk.mumbleclient.util.AsyncLoadCircularImage;
 
 /**
  * Created by andrew on 01/08/13.
@@ -140,8 +141,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             TextView name = (TextView) v.findViewById(R.id.drawer_profile_name);
             ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
             name.setText(profile.title);
-            new AsyncLoadCircularImage(profile_pic).execute(LoginActivity.URL+"profile_image/" + userid + ".png");
-
+//            new AsyncLoadCircularImage(profile_pic).execute(LoginActivity.URL+"profile_image/" + userid + ".png");
+            Glide.with(getContext())
+              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
+              .apply(RequestOptions.circleCropTransform())
+              .into(profile_pic);
             boolean enabled = isEnabled(position);
 
             // Set text and profile_pic color+alpha based on enabled/disabled state

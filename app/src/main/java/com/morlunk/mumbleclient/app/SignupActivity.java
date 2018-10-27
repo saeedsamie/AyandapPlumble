@@ -231,7 +231,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                         c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
 
 
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
                     }
                     ivAttachment.setImageBitmap(circleBitmap);

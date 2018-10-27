@@ -27,7 +27,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -355,7 +355,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
                     mActionMode = null;
                 }
             };
-            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(cb);
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(cb);
         }
     }
 
@@ -374,7 +374,7 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
                     mActionMode = null;
                 }
             };
-            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(cb);
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(cb);
         }
     }
 

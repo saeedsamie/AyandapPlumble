@@ -15,6 +15,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.morlunk.mumbleclient.R;
 
 import java.io.InputStream;
@@ -75,7 +77,11 @@ public class RecentChatsListAdapter extends BaseAdapter {
         }
         viewHolder.chatTitle.setText(values.get(position).get("title"));
         viewHolder.chatBio.setText(values.get(position).get("bio"));
-        new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
+//        new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
+        Glide.with(context)
+          .load(values.get(position).get("image"))
+          .apply(RequestOptions.circleCropTransform())
+          .into(viewHolder.icon);
         return convertView;
     }
 

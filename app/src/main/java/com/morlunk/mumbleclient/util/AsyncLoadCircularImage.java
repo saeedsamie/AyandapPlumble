@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -28,7 +27,7 @@ public class AsyncLoadCircularImage  extends AsyncTask<String, String, Bitmap> {
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 8;
       bitmap = BitmapFactory.decodeStream((InputStream)url.getContent(), null, options);
-    } catch (IOException e) {
+    } catch (Exception e) {
       Log.e(TAG, e.getMessage());
     }
     return bitmap;

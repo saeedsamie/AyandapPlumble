@@ -16,9 +16,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.morlunk.mumbleclient.R;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -77,7 +78,11 @@ public class SearchListAdapter extends BaseAdapter {
     }
     viewHolder.userFullname.setText(values.get(position).get("fullname"));
     viewHolder.username.setText(values.get(position).get("username"));
-    new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
+//    new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
+     Glide.with(context)
+      .load(values.get(position).get("image"))
+       .apply(RequestOptions.circleCropTransform())
+      .into(viewHolder.icon);
     return convertView;
   }
 
@@ -129,7 +134,7 @@ public class SearchListAdapter extends BaseAdapter {
         options.inSampleSize = 8;
         bitmap = BitmapFactory.decodeStream((InputStream)url.getContent(), null, options);
 
-      } catch (IOException e) {
+      } catch (Exception e) {
         Log.e(TAG, e.getMessage());
       }
       return bitmap;
