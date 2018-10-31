@@ -15,12 +15,19 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.morlunk.mumbleclient.R.drawable;
@@ -35,6 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     private IPlumbleService service;
     private boolean resume = false;
     private long elapsedTime;
+  public static Picasso picassoWithCache;
 
 
     @Override
@@ -69,57 +77,60 @@ public class ChatActivity extends AppCompatActivity {
 
         if ((chatId != -1 && chatTitle != null)) {
 //            textView.setText(chatId + "\n" + chatTitle);
+    }
+    chatTitle = "ChatTitle";
+    this.setTitle(chatTitle);
+    LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
+    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+    if (chatId!=-1)
+      try {
+        IJumbleSession session = PlumbleActivity.mService.getSession();
+        session.joinChannel(chatId);
+      } catch (JumbleDisconnectedException e) {
+        e.printStackTrace();
+      } catch (NumberFormatException e) {
+        e.printStackTrace();
+      }
+
+    if (getIntent().getStringExtra("type").equals("pv")) {
+      this.setTitle(getIntent().getStringExtra("fullname"));
+      ImageButton imageButton = new ImageButton(this);
+
+      File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
+      Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+      OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+      picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+      picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(imageButton);
+
+      imageButton.setBackgroundResource(drawable.round_button);
+      imageButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
         }
-        chatTitle = "ChatTitle";
-        this.setTitle(chatTitle);
-        LinearLayout linearLayout = (LinearLayout) findViewById(id.chat_header);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        if (chatId != -1)
-            try {
-                IJumbleSession session = PlumbleActivity.mService.getSession();
-                session.joinChannel(chatId);
-            } catch (JumbleDisconnectedException e) {
-                e.printStackTrace();
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-
-        if (getIntent().getStringExtra("type").equals("pv")) {
-            this.setTitle(getIntent().getStringExtra("fullname"));
-            ImageButton imageButton = new ImageButton(this);
-
-            imageButton.setImageResource(drawable.ic_launcher);
-            //todo get image from server!
-
-            imageButton.setBackgroundResource(drawable.round_button);
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
-            layoutParams.setMargins(5, 5, 5, 5);
-            imageButton.setPadding(3, 3, 3, 3);
-            linearLayout.addView(imageButton, layoutParams);
-        } else {
-            for (int i = 0; i < 10; i++) {
-                ImageButton imageButton = new ImageButton(this);
-                imageButton.setImageResource(drawable.ic_launcher);
-                imageButton.setBackgroundResource(drawable.round_button);
-                final int finalI = i;
-                imageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("Image View ", String.valueOf(finalI));
-                    }
-                });
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
-                layoutParams.setMargins(5, 5, 5, 5);
-                imageButton.setPadding(3, 3, 3, 3);
-                linearLayout.addView(imageButton, layoutParams);
-            }
-        }
+      });
+      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
+      layoutParams.setMargins(5, 5, 5, 5);
+      imageButton.setPadding(3, 3, 3, 3);
+      linearLayout.addView(imageButton, layoutParams);
+    } else {
+      for (int i = 0; i < 10; i++) {
+        ImageButton imageButton = new ImageButton(this);
+        imageButton.setImageResource(drawable.ic_launcher);
+        imageButton.setBackgroundResource(drawable.round_button);
+        final int finalI = i;
+        imageButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            Log.d("Image View ", String.valueOf(finalI));
+          }
+        });
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
+        layoutParams.setMargins(5, 5, 5, 5);
+        imageButton.setPadding(3, 3, 3, 3);
+        linearLayout.addView(imageButton, layoutParams);
+      }
+    }
 //        this.setServiceBound(true);
         final ImageButton pushButton = (ImageButton) findViewById(id.push_button);
         final int width = 400;
@@ -157,27 +168,27 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
 
-    @Override
-    public void onBackPressed() {
+  @Override
+  public void onBackPressed() {
 
-        IJumbleService iPlumbleService = PlumbleActivity.mService;
-        int parentChannel;
-        try {
-            parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
-        } catch (Exception e) {
-            parentChannel = 0;
-            e.printStackTrace();
-        }
-        try {
-            iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onBackPressed();
+    IJumbleService iPlumbleService = PlumbleActivity.mService;
+    int parentChannel;
+    try {
+      parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
+    } catch (Exception e) {
+      parentChannel = 0;
+      e.printStackTrace();
     }
+    try {
+      iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    super.onBackPressed();
+  }
 }

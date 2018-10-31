@@ -70,8 +70,6 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 
 public class ProfileActivity extends AppCompatActivity {
   public static Picasso picassoWithCache;
@@ -190,7 +188,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
   }
 
-
   public int uploadFile(final String selectedFilePath) {
 
     int serverResponseCode = 0;
@@ -201,12 +198,10 @@ public class ProfileActivity extends AppCompatActivity {
     String twoHyphens = "--";
     String boundary = "*****";
 
-
     int bytesRead, bytesAvailable, bufferSize;
     byte[] buffer;
     int maxBufferSize = 1 * 1024 * 1024;
     File selectedFile = new File(selectedFilePath);
-
 
     String[] parts = selectedFilePath.split("/");
     final String fileName = parts[parts.length - 1];

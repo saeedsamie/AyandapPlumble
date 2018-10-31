@@ -16,16 +16,16 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:orientation="vertical">
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="#049084"
+          android:orientation="vertical">
 
             <TextView
-                android:id="@+id/chat_title"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:textColor="@color/textOnSecondary" />
+              android:id="@+id/chat_title"
+              android:layout_width="fill_parent"
+              android:layout_height="1dp"
+              android:textColor="@color/textOnSecondary"/>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -41,9 +41,9 @@
 
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimary" />
+          android:layout_width="match_parent"
+          android:layout_height="2dp"
+          android:background="#049084"/>
 
         <FrameLayout
             android:id="@+id/chat_timer"
