@@ -2,7 +2,6 @@ package com.morlunk.mumbleclient;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.morlunk.mumbleclient.app.LoginActivity;
 import com.morlunk.mumbleclient.app.RecentChatsFragment;
@@ -90,7 +89,13 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject s) {
-        if (jsonResponse.trim().split("Gateway Timeout").length > 1) {
+        Boolean aBoolean = true;
+        try {
+            aBoolean = jsonResponse.trim().split("Gateway Timeout").length > 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (aBoolean) {
             try {
                 JSONObject jsonObject = new JSONObject("{response:\"TimeOut\"}");
                 listener.onTaskCompleted(jsonObject);

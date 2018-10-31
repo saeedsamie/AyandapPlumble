@@ -137,7 +137,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             hashMap.put("role", c.getString("role"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
-                            hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
+                            hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
                             hashMap.put("chatId", c.getString("id"));//chatId
                             hashMap.put("bio", c.getString("bio"));
                             if (c.getString("type").equals("pv")) {
@@ -150,9 +150,9 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                 }
                                 if (ids[0].equals(userId)) {
                                     hashMap.put("id", ids[1]);
-                                    hashMap.put("image", LoginActivity.URL+"profile_image/" + ids[1] + ".png");
+                                    hashMap.put("image", LoginActivity.URL + "profile_image/" + ids[1] + ".png");
                                 } else {
-                                    hashMap.put("image", LoginActivity.URL+"profile_image/" + ids[0] + ".png");
+                                    hashMap.put("image", LoginActivity.URL + "profile_image/" + ids[0] + ".png");
                                     hashMap.put("id", ids[0]);
                                 }
 
@@ -182,15 +182,15 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("type", (listValues.get(position).get("type")));
                             ArrayList<IChannel> channels = PlumbleActivity.iChannels;
                             int channelId = -2;
-                            Log.i("sczniljxdvlili",channels.size()+"");
+                            Log.i("sczniljxdvlili", channels.size() + "");
                             for (int i = 0; i < channels.size(); i++) {
-                                if (channels.get(i).getName().equals(chatId)) {
-
+                                if (channels.get(i).getName().trim().equals(String.valueOf(chatId).trim())) {
                                     channelId = channels.get(i).getId();
                                     break;
                                 }
+                                Log.i("channels", channels.get(i).getName().toString());
                             }
-                            if (channelId == -2) {
+                            if (channelId == -2 && PlumbleActivity.mService.getSession() != null) {
                                 try {
                                     PlumbleActivity.mService.getSession().createChannel(0, String.valueOf(chatId), "", 0, true);
                                 } catch (Exception e) {
@@ -203,7 +203,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                     e.printStackTrace();
                                 }
                             }
-                            Log.i("kufsekusgfskeug",channelId+"");
+                            Log.i("kufsekusgfskeug", channelId + "");
                             getActivity().startActivity(intent);
                         }
                     });
