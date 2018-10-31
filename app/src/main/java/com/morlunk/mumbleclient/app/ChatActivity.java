@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -96,24 +97,24 @@ public class ChatActivity extends AppCompatActivity {
 
     if (getIntent().getStringExtra("type").equals("pv")) {
       this.setTitle(getIntent().getStringExtra("fullname"));
-      ImageButton imageButton = new ImageButton(this);
+      ImageView ImageView = new ImageView(this);
 
       File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
       Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
       OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
       picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-      picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(imageButton);
+      picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(ImageView);
 
-      imageButton.setBackgroundResource(drawable.round_button);
-      imageButton.setOnClickListener(new View.OnClickListener() {
+      ImageView.setBackgroundResource(drawable.round_button);
+      ImageView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
         }
       });
-      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
+      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
       layoutParams.setMargins(5, 5, 5, 5);
-      imageButton.setPadding(3, 3, 3, 3);
-      linearLayout.addView(imageButton, layoutParams);
+      ImageView.setPadding(3, 3, 3, 3);
+      linearLayout.addView(ImageView, layoutParams);
     } else {
       for (int i = 0; i < 10; i++) {
         ImageButton imageButton = new ImageButton(this);
@@ -126,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("Image View ", String.valueOf(finalI));
           }
         });
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, 150);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
         layoutParams.setMargins(5, 5, 5, 5);
         imageButton.setPadding(3, 3, 3, 3);
         linearLayout.addView(imageButton, layoutParams);
