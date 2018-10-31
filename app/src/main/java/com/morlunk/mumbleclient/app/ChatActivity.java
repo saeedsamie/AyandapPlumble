@@ -66,12 +66,13 @@ public class ChatActivity extends AppCompatActivity {
                     elapsedTime = SystemClock.elapsedRealtime();
 
                     Log.d("choronometer", "onChronometerTick: " + minutes + " : " + seconds);
-                } else {
-                    long minutes = ((elapsedTime - cmTimer.getBase()) / 1000) / 60;
-                    long seconds = ((elapsedTime - cmTimer.getBase()) / 1000) % 60;
-                    elapsedTime = elapsedTime + 1000;
-                    Log.d("choronometer", "onChronometerTick: " + minutes + " : " + seconds);
                 }
+//                else {
+//                    long minutes = ((elapsedTime - cmTimer.getBase()) / 1000) / 60;
+//                    long seconds = ((elapsedTime - cmTimer.getBase()) / 1000) % 60;
+//                    elapsedTime = elapsedTime + 1000;
+//                    Log.d("choronometer", "onChronometerTick: " + minutes + " : " + seconds);
+//                }
             }
         });
 
@@ -143,6 +144,7 @@ public class ChatActivity extends AppCompatActivity {
                         pushButton.setBackgroundResource(drawable.push_to_talk_pressed);
                         PlumbleActivity.mService.onTalkKeyDown();
                         cmTimer.start();
+                        cmTimer.setBase(SystemClock.elapsedRealtime());
                         resume = true;
                         break;
                     case MotionEvent.ACTION_UP:
