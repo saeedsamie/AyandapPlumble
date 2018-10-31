@@ -236,17 +236,20 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                                 nameValuePairs.add(new BasicNameValuePair("func", "removePV"));
                                                 nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
 
-                                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
-                                                    @Override
-                                                    public void onTaskCompleted(JSONObject jsonObject) {
-                                                        try {
-                                                            if (jsonObject.getString("PV").equals("removed")) {
-                                                                Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
-                                                                        .show();
-                                                            } else {
-                                                                Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
-                                                                        .show();
-                                                            }
+                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                              @Override
+                                              public void onTaskCompleted(JSONObject jsonObject) {
+                                                  try {
+                                                      if (jsonObject.getString("PV").equals("removed")){
+
+                                                          Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      updateListView();}
+                                                      else
+                                                      {
+                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      }
 
                                                         } catch (JSONException e1) {
                                                             e1.printStackTrace();

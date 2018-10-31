@@ -233,8 +233,8 @@
     <string name="invalid_password">رمز عبور نامعتبر است</string>
     <string name="send_message">ارسال پیام</string>
     <string name="channel_menu_view_description">مشاهده ی جزئیات</string>
-    <string name="untrusted_certificate">مجوز ناامن</string>
-    <string name="allow">اجازه دادن</string>
+    <string name="untrusted_certificate">ساخت مجوز</string>
+    <string name="allow">ادامه</string>
     <string name="trust_added">Added certificate to trust store</string>
     <string name="trust_add_failed">Failed to add certificate to trust store!</string>
     <string name="trust_cleared">Trust database cleared</string>

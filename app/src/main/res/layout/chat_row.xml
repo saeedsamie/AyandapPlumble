@@ -37,28 +37,13 @@
               android:layout_toEndOf="@+id/appIconIV"
               android:layout_toRightOf="@+id/appIconIV"
               android:layout_weight="0.54"
-              android:gravity="bottom|right"
+              android:gravity="right|center"
               android:maxLines="1"
               android:padding="3dp"
               android:text="Chat Title"
               android:textColor="#FFF"
               android:textSize="28sp"
               android:textStyle="bold"/>
-
-            <TextView
-              android:id="@+id/chatBio"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_alignLeft="@+id/roomname"
-              android:layout_alignStart="@+id/roomname"
-              android:layout_below="@+id/roomname"
-              android:layout_weight="0.46"
-              android:gravity="top|right"
-              android:maxLines="1"
-              android:padding="3dp"
-              android:text="Chat Bio"
-              android:textColor="#FFF"
-              android:textSize="16sp"/>
 
         </LinearLayout>
 

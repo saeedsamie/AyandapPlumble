@@ -71,7 +71,6 @@ public class RecentChatsListAdapter extends BaseAdapter {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.chat_row, parent, false);
             viewHolder.chatTitle = (TextView) convertView.findViewById(R.id.chatTitle);
-            viewHolder.chatBio = (TextView) convertView.findViewById(R.id.chatBio);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
 
             result = convertView;
@@ -81,7 +80,6 @@ public class RecentChatsListAdapter extends BaseAdapter {
             result = convertView;
         }
         viewHolder.chatTitle.setText(values.get(position).get("title"));
-        viewHolder.chatBio.setText(values.get(position).get("bio"));
 //        new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
 //        Glide.with(context)
 //          .load(values.get(position).get("image"))
@@ -132,7 +130,6 @@ public class RecentChatsListAdapter extends BaseAdapter {
     private static class ViewHolder {
 
         TextView chatTitle;
-        TextView chatBio;
         ImageView icon;
     }
 

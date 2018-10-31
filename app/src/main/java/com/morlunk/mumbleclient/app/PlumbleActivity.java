@@ -307,7 +307,8 @@ public class PlumbleActivity extends AppCompatActivity implements
                     }
                 }
             });
-            adb.setNegativeButton(R.string.wizard_cancel, null);
+//            adb.setNegativeButton(R.string.wizard_cancel, null);
+            adb.setCancelable(false);
             adb.show();
         } catch (Exception e) {
             e.printStackTrace();
