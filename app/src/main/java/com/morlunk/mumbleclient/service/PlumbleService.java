@@ -43,6 +43,7 @@ import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.Settings;
 import com.morlunk.mumbleclient.service.ipc.TalkBroadcastReceiver;
 import com.morlunk.mumbleclient.util.HtmlUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -59,22 +60,33 @@ public class PlumbleService extends JumbleService implements
         SharedPreferences.OnSharedPreferenceChangeListener,
         PlumbleConnectionNotification.OnActionListener,
         PlumbleReconnectNotification.OnActionListener, IPlumbleService {
-    /** Undocumented constant that permits a proximity-sensing wake lock. */
+    /**
+     * Undocumented constant that permits a proximity-sensing wake lock.
+     */
     public static final int PROXIMITY_SCREEN_OFF_WAKE_LOCK = 32;
     public static final int TTS_THRESHOLD = 250; // Maximum number of characters to read
     public static final int RECONNECT_DELAY = 10000;
+    public String timer;
 
     private Settings mSettings;
     private PlumbleConnectionNotification mNotification;
     private PlumbleMessageNotification mMessageNotification;
     private PlumbleReconnectNotification mReconnectNotification;
-    /** Channel view overlay. */
+    /**
+     * Channel view overlay.
+     */
     private PlumbleOverlay mChannelOverlay;
-    /** Proximity lock for handset mode. */
+    /**
+     * Proximity lock for handset mode.
+     */
     private PowerManager.WakeLock mProximityLock;
-    /** Play sound when push to talk key is pressed */
+    /**
+     * Play sound when push to talk key is pressed
+     */
     private boolean mPTTSoundEnabled;
-    /** Try to shorten spoken messages when using TTS */
+    /**
+     * Try to shorten spoken messages when using TTS
+     */
     private boolean mShortTtsMessagesEnabled;
     /**
      * True if an error causing disconnection has been dismissed by the user.
@@ -88,12 +100,14 @@ public class PlumbleService extends JumbleService implements
     private TextToSpeech.OnInitListener mTTSInitListener = new TextToSpeech.OnInitListener() {
         @Override
         public void onInit(int status) {
-            if(status == TextToSpeech.ERROR)
+            if (status == TextToSpeech.ERROR)
                 logWarning(getString(R.string.tts_failed));
         }
     };
 
-    /** The view representing the hot corner. */
+    /**
+     * The view representing the hot corner.
+     */
     private PlumbleHotCorner mHotCorner;
     private PlumbleHotCorner.PlumbleHotCornerListener mHotCornerListener = new PlumbleHotCorner.PlumbleHotCornerListener() {
         @Override
@@ -163,9 +177,9 @@ public class PlumbleService extends JumbleService implements
 
         @Override
         public void onUserStateUpdated(IUser user) {
-            if(user.getSession() == getSessionId()) {
+            if (user.getSession() == getSessionId()) {
                 mSettings.setMutedAndDeafened(user.isSelfMuted(), user.isSelfDeafened()); // Update settings mute/deafen state
-                if(mNotification != null) {
+                if (mNotification != null) {
                     String contentText;
                     if (user.isSelfMuted() && user.isSelfDeafened())
                         contentText = getString(R.string.status_notify_muted_and_deafened);
@@ -192,7 +206,7 @@ public class PlumbleService extends JumbleService implements
             String strippedMessage = parsedMessage.text();
 
             String ttsMessage;
-            if(mShortTtsMessagesEnabled) {
+            if (mShortTtsMessagesEnabled) {
                 for (Element anchor : parsedMessage.getElementsByTag("A")) {
                     // Get just the domain portion of links
                     String href = anchor.attr("href");
@@ -213,7 +227,7 @@ public class PlumbleService extends JumbleService implements
                     message.getActorName(), ttsMessage);
 
             // Read if TTS is enabled, the message is less than threshold, is a text message, and not deafened
-            if(mSettings.isTextToSpeechEnabled() &&
+            if (mSettings.isTextToSpeechEnabled() &&
                     mTTS != null &&
                     formattedTtsMessage.length() <= TTS_THRESHOLD &&
                     getSessionUser() != null &&
@@ -246,7 +260,7 @@ public class PlumbleService extends JumbleService implements
 
         @Override
         public void onPermissionDenied(String reason) {
-            if(mNotification != null && !mSuppressNotifications) {
+            if (mNotification != null && !mSuppressNotifications) {
                 mNotification.setCustomTicker(reason);
                 mNotification.show();
             }
@@ -286,7 +300,7 @@ public class PlumbleService extends JumbleService implements
         mHotCorner = new PlumbleHotCorner(this, mSettings.getHotCornerGravity(), mHotCornerListener);
 
         // Set up TTS
-        if(mSettings.isTextToSpeechEnabled())
+        if (mSettings.isTextToSpeechEnabled())
             mTTS = new TextToSpeech(this, mTTSInitListener);
 
         mTalkReceiver = new TalkBroadcastReceiver(this);
@@ -319,7 +333,7 @@ public class PlumbleService extends JumbleService implements
         }
 
         unregisterObserver(mObserver);
-        if(mTTS != null) mTTS.shutdown();
+        if (mTTS != null) mTTS.shutdown();
         mMessageLog = null;
         mMessageNotification.dismiss();
         super.onDestroy();
@@ -330,7 +344,7 @@ public class PlumbleService extends JumbleService implements
         super.onConnectionSynchronized();
 
         // Restore mute/deafen state
-        if(mSettings.isMuted() || mSettings.isDeafened()) {
+        if (mSettings.isMuted() || mSettings.isDeafened()) {
             setSelfMuteDeafState(mSettings.isMuted(), mSettings.isDeafened());
         }
 
@@ -382,7 +396,7 @@ public class PlumbleService extends JumbleService implements
             case Settings.PREF_HANDSET_MODE:
                 setProximitySensorOn(isConnectionEstablished() && mSettings.isHandsetMode());
                 changedExtras.putInt(JumbleService.EXTRAS_AUDIO_STREAM, mSettings.isHandsetMode() ?
-                                     AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
+                        AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
                 break;
             case Settings.PREF_THRESHOLD:
                 changedExtras.putFloat(JumbleService.EXTRAS_DETECTION_THRESHOLD,
@@ -455,12 +469,12 @@ public class PlumbleService extends JumbleService implements
     }
 
     private void setProximitySensorOn(boolean on) {
-        if(on) {
+        if (on) {
             PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
             mProximityLock = pm.newWakeLock(PROXIMITY_SCREEN_OFF_WAKE_LOCK, "plumble_proximity");
             mProximityLock.acquire();
         } else {
-            if(mProximityLock != null) mProximityLock.release();
+            if (mProximityLock != null) mProximityLock.release();
             mProximityLock = null;
         }
     }
@@ -512,17 +526,17 @@ public class PlumbleService extends JumbleService implements
     }
 
     @Override
+    public boolean isOverlayShown() {
+        return mChannelOverlay.isShown();
+    }
+
+    @Override
     public void setOverlayShown(boolean showOverlay) {
-        if(!mChannelOverlay.isShown()) {
+        if (!mChannelOverlay.isShown()) {
             mChannelOverlay.show();
         } else {
             mChannelOverlay.hide();
         }
-    }
-
-    @Override
-    public boolean isOverlayShown() {
-        return mChannelOverlay.isShown();
     }
 
     @Override
@@ -551,12 +565,13 @@ public class PlumbleService extends JumbleService implements
      */
     @Override
     public void onTalkKeyDown() {
-        if(isConnectionEstablished()
+        if (isConnectionEstablished()
                 && Settings.ARRAY_INPUT_METHOD_PTT.equals(mSettings.getInputMethod())) {
             if (!mSettings.isPushToTalkToggle() && !isTalking()) {
                 setTalkingState(true); // Start talking
             }
         }
+
     }
 
     /**
@@ -565,7 +580,7 @@ public class PlumbleService extends JumbleService implements
      */
     @Override
     public void onTalkKeyUp() {
-        if(isConnectionEstablished()
+        if (isConnectionEstablished()
                 && Settings.ARRAY_INPUT_METHOD_PTT.equals(mSettings.getInputMethod())) {
             if (mSettings.isPushToTalkToggle()) {
                 setTalkingState(!isTalking()); // Toggle talk state
@@ -587,10 +602,10 @@ public class PlumbleService extends JumbleService implements
 
     /**
      * Sets whether or not notifications should be suppressed.
-     *
+     * <p>
      * It's typically a good idea to do this when the main activity is foreground, so that the user
      * is not bombarded with redundant alerts.
-     *
+     * <p>
      * <b>Chat notifications are NOT suppressed.</b> They may be if a chat indicator is added in the
      * activity itself. For now, the user may disable chat notifications manually.
      *
@@ -612,4 +627,5 @@ public class PlumbleService extends JumbleService implements
             return mService;
         }
     }
+
 }

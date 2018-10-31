@@ -45,22 +45,21 @@
             android:layout_height="2dp"
             android:background="@color/colorPrimary" />
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/chat_timer"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="40dp">
 
-            <TextView
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:text="00:00"
-              android:textColor="@color/textOnSecondary"
-              android:textSize="15sp"/>
-        </LinearLayout>
+            <Chronometer
+                android:id="@+id/cmTimer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,8 +75,6 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/push_to_talk_unpressed"
                 android:src="@mipmap/mic" />
-
-
 
 
         </LinearLayout>
