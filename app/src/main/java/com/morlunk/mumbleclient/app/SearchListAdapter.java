@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
@@ -121,7 +122,7 @@ public class SearchListAdapter extends BaseAdapter {
     Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
     OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
     picassoWithCache = new Picasso.Builder(context).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-    picassoWithCache.load(values.get(position).get("image")).into(viewHolder.icon);
+    picassoWithCache.load(values.get(position).get("image")).transform(new CropCircleTransformation()).into(viewHolder.icon);
 
 
 

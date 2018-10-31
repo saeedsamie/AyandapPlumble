@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
@@ -185,7 +186,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
             OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
             picassoWithCache = new Picasso.Builder(getContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-            picassoWithCache.load(LoginActivity.URL+"profile_image/" + userid + ".png").into(profile_pic);
+            picassoWithCache.load(LoginActivity.URL+"profile_image/" + userid + ".png").transform(new CropCircleTransformation()).into(profile_pic);
 
 
 

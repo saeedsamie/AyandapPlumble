@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -246,6 +247,7 @@ public class ProfileActivity extends AppCompatActivity {
             result.append(tmp[i]);
           }
         }
+        Log.i("SCSCJKSCJNSJAKC",result.toString());
         String mynewstring = result.toString();
         dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
@@ -485,7 +487,7 @@ public class ProfileActivity extends AppCompatActivity {
               Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
               OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
               picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-              picassoWithCache.load(LoginActivity.URL+"profile_image/" + c.getString("image")).into(ivAttachment);
+              picassoWithCache.load(LoginActivity.URL+"profile_image/" + c.getString("image")).transform(new CropCircleTransformation()).into(ivAttachment);
 
 
 
