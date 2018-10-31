@@ -31,6 +31,7 @@ import com.morlunk.mumbleclient.ServerFetchAsync;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -162,11 +163,18 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
         progressBarPage.setVisibility(View.GONE);
         loginPanel.setAlpha(1);
 
+        String response = "felan";
         try {
-            if (jsonObject.getString("response").equals("TimeOut")) {
-                Toast.makeText(LoginActivity.this, "پیامی از سرور دریافت نشد!", Toast.LENGTH_LONG).show();
-                errorBox.setText("پیامی از سرور دریافت نشد!");
-            } else {
+            response = jsonObject.getString("response");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (response.equals("TimeOut")) {
+            Toast.makeText(LoginActivity.this, "پیامی از سرور دریافت نشد!", Toast.LENGTH_LONG).show();
+            errorBox.setText("پیامی از سرور دریافت نشد!");
+        } else {
+
+            try {
                 isUser = jsonObject.getJSONArray("resLogin").getJSONObject(0).getString("isUser").equals("1");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -186,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
                     editor.putString(getString(R.string.PREF_TAG_username), username);
                     editor.putString(getString(R.string.PREF_TAG_image), image);
                     editor.putString(getString(R.string.PREF_TAG_userid), userId);
-//                SignupActivity.userId = userId;
+                    //                SignupActivity.userId = userId;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -210,9 +218,9 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
                     });
                     alertBuilder.show();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
