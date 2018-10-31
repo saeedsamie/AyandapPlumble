@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.morlunk.mumbleclient.app.PlumbleActivity.iChannels;
 
 
 public class RecentChatsFragment extends JumbleServiceFragment {
@@ -53,7 +54,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         public void onChannelAdded(IChannel channel) {
             if (PlumbleActivity.mService.isConnected()) {
                 updateListView();
-                Log.e("channel", "addded" + PlumbleActivity.iChannels.toString());
+                Log.e("channel", "addded" + iChannels.toString());
                 super.onChannelAdded(channel);
             }
         }
@@ -62,11 +63,12 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         public void onChannelRemoved(IChannel channel) {
             if (PlumbleActivity.mService.isConnected()) {
                 updateListView();
-                Log.e("channels", "removed" + PlumbleActivity.iChannels.toString());
+                Log.e("channels", "removed" + iChannels.toString());
                 super.onChannelRemoved(channel);
             }
         }
     };
+    private ArrayList<IChannel> chls;
 
     @Override
     public void onResume() {
@@ -182,7 +184,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
                             intent.putExtra("type", (listValues.get(position).get("type")));
-                            ArrayList<IChannel> channels = PlumbleActivity.iChannels;
+                            ArrayList<IChannel> channels = iChannels;
                             int channelId = -2;
                             Log.i("sczniljxdvlili", channels.size() + "");
                             for (int i = 0; i < channels.size(); i++) {
@@ -199,12 +201,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                     e.printStackTrace();
                                 }
                             } else {
-                                try {
-                                    PlumbleActivity.mService.getSession().joinChannel(channelId);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                for (int i = 0; i < 10; i++) {
+                                    try {
+                                        PlumbleActivity.mService.getSession().joinChannel(channelId);
+                                        wait(1000);
+                                    } catch (Exception e) {
+                                    }
+                                    if (isUserJoined(channelId)) {
+                                        Log.e("sadsfasfsafasfasi", String.valueOf(i));
+                                        break;
+                                    }
                                 }
                             }
+
                             Log.i("kufsekusgfskeug", channelId + "");
                             getActivity().startActivity(intent);
                         }
@@ -215,46 +224,39 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                         public boolean onItemLongClick(AdapterView<?> arg0, final View arg1,
                                                        final int pos, long id) {
 
-                            if(listValues.get(pos).get("type").equals("pv")) {
+                            if (listValues.get(pos).get("type").equals("pv")) {
                                 Snackbar
-                                  .make(arg1, "آیا ار حذف این چت اطمینان دارید ؟",
-                                    Snackbar.LENGTH_LONG)
-                                  .setAction("بلی", new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
+                                        .make(arg1, "آیا ار حذف این چت اطمینان دارید ؟",
+                                                Snackbar.LENGTH_LONG)
+                                        .setAction("بلی", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
 
-                                          nameValuePairs = new ArrayList<NameValuePair>();
-                                          nameValuePairs.add(new BasicNameValuePair("func", "removePV"));
-                                          nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
+                                                nameValuePairs = new ArrayList<NameValuePair>();
+                                                nameValuePairs.add(new BasicNameValuePair("func", "removePV"));
+                                                nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
 
-                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
-                                              @Override
-                                              public void onTaskCompleted(JSONObject jsonObject) {
-                                                  try {
-                                                      if (jsonObject.getString("PV").equals("removed"))
-                                                      {
-                                                          Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
-                                                            .show();
-                                                      }
-                                                      else
-                                                      {
-                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
-                                                            .show();
-                                                      }
+                                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                                    @Override
+                                                    public void onTaskCompleted(JSONObject jsonObject) {
+                                                        try {
+                                                            if (jsonObject.getString("PV").equals("removed")) {
+                                                                Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
+                                                                        .show();
+                                                            } else {
+                                                                Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                                        .show();
+                                                            }
 
-                                                  } catch (JSONException e1) {
-                                                      e1.printStackTrace();
-                                                  }
-                                              }
-                                          }).execute();
+                                                        } catch (JSONException e1) {
+                                                            e1.printStackTrace();
+                                                        }
+                                                    }
+                                                }).execute();
 
 
-
-
-
-
-                                      }
-                                  }).show();
+                                            }
+                                        }).show();
                             }
                             return true;
                         }
@@ -263,6 +265,23 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                 }
             }
         }).execute();
+    }
+
+    Boolean isUserJoined(int channelId) { //todo does not working completely
+        updateChannelLists();
+        ArrayList<IChannel> channels = chls;
+        for (int i = 0; i < channels.size(); i++) {
+            if (channels.get(i).getId() == channelId) {
+                List<? extends IUser> users = channels.get(i).getUsers();
+                for (int j = 0; j < users.size(); j++) {
+                    if (users.get(j).getName().trim().equals(PlumbleActivity.plumbleUserName)) {
+                        Log.e("heeeeeeeeellllllll", "heeelloooo  -------- i = " + i);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -386,5 +405,22 @@ public class RecentChatsFragment extends JumbleServiceFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    ArrayList<IChannel> updateChannelLists() {
+
+        chls = new ArrayList<IChannel>();
+        if (chls.size() == 0) {
+            chls.add(PlumbleActivity.mService.getSession().getChannel(0));
+        }
+        for (int i = 0; i < chls.size(); i++) {
+            IChannel channel = PlumbleActivity.mService.getSession().getChannel(chls.get(i).getId());
+            if (channel != null) {
+//                constructNodes(null, channel, 0, mNodes);
+                iChannels.add(channel);
+                chls.addAll(channel.getSubchannels());
+            }
+        }
+        return iChannels;
     }
 }
