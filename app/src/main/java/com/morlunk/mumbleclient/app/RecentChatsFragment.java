@@ -235,6 +235,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                                       {
                                                           Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
                                                             .show();
+                                                          updateListView();
                                                       }
                                                       else
                                                       {

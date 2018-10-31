@@ -113,6 +113,11 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                 } else if (ed_username.getText().toString().isEmpty()) {
                     ed_username.setError("نام کاربری وارد کنید!");
                 } else {
+                    if (ed_fullname.getText().toString().contains(",")) {
+                        ed_fullname.setError("در نام خود از ',' استفاده نکنید");
+                    }
+                    else
+                    {
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                     nameValuePairs.add(new BasicNameValuePair("func", "register"));
                     nameValuePairs.add(new BasicNameValuePair("phone", getIntent().getStringExtra("phone_number")));
@@ -134,8 +139,8 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                             if (userId.equals("username")) {
                                 pDialog.dismiss();
                                 Snackbar
-                                        .make(findViewById(android.R.id.content), "این نام کاربری گرفته شده است", Snackbar.LENGTH_SHORT)
-                                        .show();
+                                  .make(findViewById(android.R.id.content), "این نام کاربری گرفته شده است", Snackbar.LENGTH_SHORT)
+                                  .show();
                             } else {
                                 SharedPreferences sharedPreferences = SignupActivity.this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -177,6 +182,7 @@ public class SignupActivity extends AppCompatActivity implements OnTaskCompleted
                             }
                         }
                     }).execute();
+                }
                 }
             }
         });
