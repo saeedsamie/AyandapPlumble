@@ -3,6 +3,7 @@ package com.morlunk.mumbleclient.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.morlunk.mumbleclient.util.JumbleServiceFragment;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -207,6 +209,57 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             getActivity().startActivity(intent);
                         }
                     });
+
+                    listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> arg0, final View arg1,
+                                                       final int pos, long id) {
+
+                            if(listValues.get(pos).get("type").equals("pv")) {
+                                Snackbar
+                                  .make(arg1, "آیا ار حذف این چت اطمینان دارید ؟",
+                                    Snackbar.LENGTH_LONG)
+                                  .setAction("بلی", new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+
+                                          nameValuePairs = new ArrayList<NameValuePair>();
+                                          nameValuePairs.add(new BasicNameValuePair("func", "removePV"));
+                                          nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
+
+                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                              @Override
+                                              public void onTaskCompleted(JSONObject jsonObject) {
+                                                  try {
+                                                      if (jsonObject.getString("PV").equals("removed"))
+                                                      {
+                                                          Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      }
+                                                      else
+                                                      {
+                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      }
+
+                                                  } catch (JSONException e1) {
+                                                      e1.printStackTrace();
+                                                  }
+                                              }
+                                          }).execute();
+
+
+
+
+
+
+                                      }
+                                  }).show();
+                            }
+                            return true;
+                        }
+                    });
+
                 }
             }
         }).execute();

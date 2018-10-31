@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
-import android.provider.Telephony;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -30,8 +28,6 @@ import android.widget.TextView;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.morlunk.mumbleclient.SmsListener;
-import com.morlunk.mumbleclient.SmsReceiver;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -89,18 +85,18 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
         new ServerFetchAsync(nameValuePairs, this).execute();
 
         context = this;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(context);
+//        }
 
 
-        SmsReceiver.bindListener(new SmsListener() {
-            @Override
-            public void onMessageReceived(String messageText) {
-                Log.e("Text", messageText);
-                vcode.setText(messageText);
-            }
-        });
+//        SmsReceiver.bindListener(new SmsListener() {
+//            @Override
+//            public void onMessageReceived(String messageText) {
+//                Log.e("Text", messageText);
+//                vcode.setText(messageText);
+//            }
+//        });
 
 
         android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
@@ -125,9 +121,9 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
             public void onTick(long millisUntilFinished) {
                 timer.setTextColor(Color.parseColor("#ffffff"));
                 timer.setText(String.format("%s (%d)  ", getString(R.string.verificationPageNote), millisUntilFinished / 1000));
-                if (flag == 0) {
-                    searchSmsForCode();
-                }
+//                if (flag == 0) {
+////                    searchSmsForCode();
+//                }
             }
 
             public void onFinish() {
@@ -241,7 +237,7 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
             //todo change String code to JSONObject
             TextView textView = (TextView) findViewById(R.id.verification_code_holder);
             textView.setText(c);
-            sendFakeSms();
+//            sendFakeSms();
         } catch (Exception e) {
             e.printStackTrace();
         }
