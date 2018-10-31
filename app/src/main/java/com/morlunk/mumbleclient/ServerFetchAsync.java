@@ -2,6 +2,7 @@ package com.morlunk.mumbleclient;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.morlunk.mumbleclient.app.LoginActivity;
 import com.morlunk.mumbleclient.app.RecentChatsFragment;
@@ -14,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -31,7 +33,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     private VerificationActivity verificationActivity;
     private LoginActivity loginActivity;
 
-    public ServerFetchAsync(List<NameValuePair> nameValuePairs,OnTaskCompletedListener onTaskCompletedListener) {
+    public ServerFetchAsync(List<NameValuePair> nameValuePairs, OnTaskCompletedListener onTaskCompletedListener) {
         this.nameValuePairs = nameValuePairs;
         this.listener = onTaskCompletedListener;
     }
@@ -66,7 +68,7 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
     protected JSONObject doInBackground(Void... voids) {
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(LoginActivity.URL+"sqlite.php");
+        HttpPost httpPost = new HttpPost(LoginActivity.URL + "sqlite.php");
         try {
 
             UrlEncodedFormEntity form;
@@ -88,11 +90,19 @@ public class ServerFetchAsync extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject s) {
-        try {
-            listener.onTaskCompleted(new JSONObject(jsonResponse));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (jsonResponse.trim().split("Gateway Timeout").length > 1) {
+            try {
+                JSONObject jsonObject = new JSONObject("{response:\"TimeOut\"}");
+                listener.onTaskCompleted(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else
+            try {
+                listener.onTaskCompleted(new JSONObject(jsonResponse));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         super.onPostExecute(s);
     }
 }

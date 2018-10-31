@@ -1,69 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/m_primary"
-            android:fitsSystemWindows="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_basePanel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/m_primary"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginBottom="50dp"
-    android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="56dp">
-
-    <ImageView
-      android:layout_width="wrap_content"
-      android:layout_height="72dp"
-      android:layout_gravity="center_horizontal"
-      android:layout_marginBottom="60dp"
-      android:src="@drawable/logo"/>
-
-    <!-- Email Label -->
-    <android.support.design.widget.TextInputLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="8dp"
-      android:textColorHint="#FFFFFF">
-
-      <EditText
-        android:id="@+id/login_phone"
+    <FrameLayout
+        android:id="@+id/progress_bar_page"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/login_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
-        android:hint="تلفن همراه"
-        android:inputType="text|phone"
-        android:maxLength="11"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"
-        android:shadowColor="#FFFFFF"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textColorLink="#FFFFFF"
-        android:textSize="20sp"/>
-    </android.support.design.widget.TextInputLayout>
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="56dp">
 
-    <!-- Password Label -->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="60dp"
+            android:src="@drawable/logo" />
 
-    <Button
-      android:id="@+id/login_continue"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="24dp"
-      android:layout_marginTop="24dp"
-      android:background="@drawable/rounded_button"
-      android:padding="12dp"
-      android:text="ادامه"
-      android:textColor="#FFFFFF"
-      android:textSize="18sp"/>
+        <!-- Email Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:textColorHint="#FFFFFF">
 
-  </LinearLayout>
-</ScrollView>
+            <EditText
+                android:id="@+id/login_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="تلفن همراه"
+                android:inputType="text|phone"
+                android:lines="1"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:shadowColor="#FFFFFF"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textColorLink="#FFFFFF"
+                android:textSize="20sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Password Label -->
+
+        <Button
+            android:id="@+id/login_continue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button"
+            android:padding="12dp"
+            android:text="ادامه"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/error_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</LinearLayout>
