@@ -38,6 +38,7 @@
       android:layout_weight="1"
       android:fontFamily="sans-serif-light"
       android:gravity="center_vertical"
+      android:paddingRight="10dp"
       android:text="@string/action_settings"
       android:textColor="@color/solarized_base3"
       android:textSize="16sp"/>

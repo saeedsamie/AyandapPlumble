@@ -12,8 +12,10 @@ public final class R {
     }
     public static final class string {
         public static int Login=0x7f02002d;
-        public static int Signup=0x7f02002e;
-        public static int Verification=0x7f02002f;
+        public static int Profile=0x7f02002e;
+        public static int Requests=0x7f02002f;
+        public static int Signup=0x7f020030;
+        public static int Verification=0x7f020031;
         public static int audio_max_bandwidth=0x7f020000;
         public static int bluetooth_connected=0x7f020001;
         public static int bluetooth_disconnected=0x7f020002;

@@ -183,10 +183,17 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".app.ChatActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".app.CreateChatActivity"
             android:theme="@style/Theme.CreateChat" />
+        <activity
+          android:name=".app.CreateGroupActivity"
+          android:theme="@style/Theme.CreateChat" />
+        <activity
+          android:name=".app.FinishUpGroupActivity"
+          android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".app.RequestActivity"
             android:label="@string/Requests"

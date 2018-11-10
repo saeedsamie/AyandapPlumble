@@ -58,6 +58,8 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     public static final int ITEM_RECENTS = 12;
     public static final int EXIT = 14;
     public static final int ITEM_CREATE_CHAT = 15;
+    public static final int ITEM_CREATE_CHANNEL = 16;
+    public static final int ITEM_CREATE_GROUP = 17;
 
     private static final int HEADER_TYPE = 0;
     private static final int ITEM_TYPE = 1;
@@ -79,9 +81,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
         add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, userid));
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
+        add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "صفحه ی اصلی", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
-        add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "گفتگوها", R.drawable.ic_action_favourite_on));
-        add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));
+//        add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHANNEL, "ایجاد کانال", R.drawable.channel_c));
+        add(new DrawerAdapter.DrawerItem(ITEM_CREATE_GROUP, "ایجاد گروه", R.drawable.group_c));
+//        add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));
 //        add(new DrawerAdapter.DrawerItem(ITEM_PINNED_CHANNELS, context.getString(R.string.drawer_pinned), R.drawable.ic_action_comment));
 //        add(new DrawerAdapter.DrawerItem(ITEM_ACCESS_TOKENS, context.getString(R.string.drawer_tokens), R.drawable.ic_action_save));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_SERVERS, context.getString(R.string.drawer_header_servers)));
@@ -90,7 +94,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 //        add(new DrawerAdapter.DrawerItem(ITEM_PUBLIC, context.getString(R.string.drawer_public), R.drawable.ic_action_search));
 //        add(new DrawerAdapter.DrawerHeader(HEADER_GENERAL, context.getString(R.string.general)));
         add(new DrawerAdapter.DrawerItem(ITEM_SETTINGS, context.getString(R.string.action_settings), R.drawable.ic_action_settings));
-        add(new DrawerAdapter.DrawerItem(ITEM_INFO, context.getString(R.string.information), R.drawable.ic_action_info_dark));
+//        add(new DrawerAdapter.DrawerItem(ITEM_INFO, context.getString(R.string.information), R.drawable.ic_action_info_dark));
         add(new DrawerAdapter.DrawerItem(EXIT, context.getString(R.string.exit), R.drawable.ic_action_expanded));
 
 

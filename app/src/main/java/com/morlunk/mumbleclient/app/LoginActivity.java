@@ -1,5 +1,6 @@
 package com.morlunk.mumbleclient.app;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -7,14 +8,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -54,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
     private LinearLayout loginPanel;
     private LinearLayout loginBasePanel;
     private TextView errorBox;
+    private static String TAG = "PermissionDemo";
+    static final int RECORD_REQUEST_CODE=1;
 
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -85,6 +92,33 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        int permission = ContextCompat.checkSelfPermission(this,
+          Manifest.permission.RECORD_AUDIO);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission to record denied");
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+              Manifest.permission.RECORD_AUDIO)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Permission to access the microphone is required for this app to record audio.")
+                  .setTitle("Permission required");
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i(TAG, "Clicked");
+                        makeRequest();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                makeRequest();
+            }
+        }
 
         loginContinue = (Button) findViewById(R.id.login_continue);
         phone = (EditText) findViewById(R.id.login_phone);
@@ -222,6 +256,12 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
                 e.printStackTrace();
             }
         }
+    }
+
+    protected void makeRequest() {
+        ActivityCompat.requestPermissions(this,
+          new String[]{Manifest.permission.RECORD_AUDIO},
+          RECORD_REQUEST_CODE);
     }
 
     @Override

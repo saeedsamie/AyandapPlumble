@@ -2,22 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+  >
 
   <LinearLayout
+    android:id="@+id/search_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <ImageView
       android:id="@+id/appIconIV"
-      android:layout_width="50dp"
+      android:layout_width="60dp"
       android:layout_height="60dp"
       android:background="@drawable/profilepic"
+      android:padding="3dp"
       android:src="@drawable/ic_launcher"/>
 
     <LinearLayout
@@ -35,7 +37,7 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/appIconIV"
         android:layout_toRightOf="@+id/appIconIV"
-        android:layout_weight="1"
+        android:layout_weight="0.55"
         android:gravity="bottom|right"
         android:maxLines="1"
         android:padding="3dp"
@@ -51,7 +53,7 @@
         android:layout_alignLeft="@+id/roomname"
         android:layout_alignStart="@+id/roomname"
         android:layout_below="@+id/roomname"
-        android:layout_weight="1"
+        android:layout_weight="0.45"
         android:gravity="top|right"
         android:maxLines="1"
         android:padding="3dp"

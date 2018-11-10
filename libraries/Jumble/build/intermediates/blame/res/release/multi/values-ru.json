@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-ru\\values-ru.xml",
+        "outputFile": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-ru\\values-ru.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 117
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 33,
                         "startColumn": 2,
@@ -30,7 +30,7 @@
                     "endOffset": 189
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 34,
                         "startColumn": 2,
@@ -49,7 +49,7 @@
                     "endOffset": 255
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 2,
@@ -68,7 +68,7 @@
                     "endOffset": 326
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 2,
@@ -87,7 +87,7 @@
                     "endOffset": 411
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 24,
                         "startColumn": 2,
@@ -106,7 +106,7 @@
                     "endOffset": 518
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 23,
                         "startColumn": 2,
@@ -125,7 +125,7 @@
                     "endOffset": 630
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 2,
@@ -144,7 +144,7 @@
                     "endOffset": 721
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 22,
                         "startColumn": 2,
@@ -163,7 +163,7 @@
                     "endOffset": 799
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 2,
@@ -182,7 +182,7 @@
                     "endOffset": 864
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 2,
@@ -201,7 +201,7 @@
                     "endOffset": 945
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 2,
@@ -220,7 +220,7 @@
                     "endOffset": 1050
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 2,
@@ -239,7 +239,7 @@
                     "endOffset": 1139
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 2,
@@ -258,7 +258,7 @@
                     "endOffset": 1214
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 2,
@@ -277,7 +277,7 @@
                     "endOffset": 1305
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 2,
@@ -296,7 +296,7 @@
                     "endOffset": 1381
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 2,
@@ -315,7 +315,7 @@
                     "endOffset": 1475
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 2,
@@ -334,7 +334,7 @@
                     "endOffset": 1552
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 25,
                         "startColumn": 2,
@@ -353,7 +353,7 @@
                     "endOffset": 1634
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 26,
                         "startColumn": 2,
@@ -372,7 +372,7 @@
                     "endOffset": 1709
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 2,
@@ -391,7 +391,7 @@
                     "endOffset": 1798
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 2,
@@ -410,7 +410,7 @@
                     "endOffset": 1864
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 2,
@@ -429,7 +429,7 @@
                     "endOffset": 1954
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 2,
@@ -448,7 +448,7 @@
                     "endOffset": 2038
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 2,
@@ -467,7 +467,7 @@
                     "endOffset": 2146
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 2,
@@ -486,7 +486,7 @@
                     "endOffset": 2221
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 2,
@@ -505,7 +505,7 @@
                     "endOffset": 2313
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 2,
@@ -524,7 +524,7 @@
                     "endOffset": 2393
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 29,
                         "startColumn": 2,
@@ -543,7 +543,7 @@
                     "endOffset": 2488
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 31,
                         "startColumn": 2,
@@ -562,7 +562,7 @@
                     "endOffset": 2572
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 30,
                         "startColumn": 2,
@@ -581,7 +581,7 @@
                     "endOffset": 2664
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 32,
                         "startColumn": 2,
@@ -600,7 +600,7 @@
                     "endOffset": 2747
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 27,
                         "startColumn": 2,
@@ -619,7 +619,7 @@
                     "endOffset": 2834
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 28,
                         "startColumn": 2,
@@ -638,7 +638,7 @@
                     "endOffset": 2905
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 40,
                         "startColumn": 2,
@@ -657,7 +657,7 @@
                     "endOffset": 2989
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 35,
                         "startColumn": 2,
@@ -676,7 +676,7 @@
                     "endOffset": 3082
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 41,
                         "startColumn": 2,
@@ -695,7 +695,7 @@
                     "endOffset": 3166
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 39,
                         "startColumn": 2,
@@ -714,7 +714,7 @@
                     "endOffset": 3274
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 38,
                         "startColumn": 2,
@@ -733,7 +733,7 @@
                     "endOffset": 3385
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 37,
                         "startColumn": 2,
@@ -752,7 +752,7 @@
                     "endOffset": 3443
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 42,
                         "startColumn": 2,
@@ -771,7 +771,7 @@
                     "endOffset": 3544
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 36,
                         "startColumn": 2,
@@ -790,7 +790,7 @@
                     "endOffset": 3601
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 43,
                         "startColumn": 2,
@@ -809,7 +809,7 @@
                     "endOffset": 3643
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 44,
                         "startColumn": 2,
@@ -828,7 +828,7 @@
                     "endOffset": 3689
                 },
                 "from": {
-                    "file": "C:\\Users\\Saeed\\Documents\\AndroidProjects\\AyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
+                    "file": "C:\\dev\\workspace\\android-3.1.3\\GitAyandapPlumble\\GitAyandapPlumble\\libraries\\Jumble\\src\\main\\res\\values-ru\\strings.xml",
                     "position": {
                         "startLine": 45,
                         "startColumn": 2,

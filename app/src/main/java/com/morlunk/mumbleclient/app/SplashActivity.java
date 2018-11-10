@@ -1,6 +1,5 @@
 package com.morlunk.mumbleclient.app;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,9 +19,10 @@ public class SplashActivity extends AppCompatActivity {
       public void run() {
 
         Intent myIntent = new Intent(SplashActivity.this, LoginActivity.class);
-        ActivityOptions options =
-          ActivityOptions.makeCustomAnimation(SplashActivity.this, R.anim.fade_in, R.anim.fade_out);
-        SplashActivity.this.startActivity(myIntent, options.toBundle());
+//        ActivityOptions options =
+//          ActivityOptions.makeCustomAnimation(SplashActivity.this, R.anim.fade_in, R.anim.fade_out);
+//        SplashActivity.this.startActivity(myIntent, options.toBundle());
+        startActivity(myIntent);
         finish();
       }
     }, 2200);

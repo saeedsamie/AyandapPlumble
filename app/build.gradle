@@ -57,7 +57,7 @@ android {
             additionalParameters "--no-version-vectors"
         }
         multiDexEnabled true
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 28
         applicationId "com.morlunk.mumbleclient"
         versionCode 73

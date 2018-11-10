@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/m_primary"
+              android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/finishup_ivAttachment"
+    android:layout_width="160dp"
+    android:layout_height="160dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="20dp"
+    android:scaleType="centerCrop"
+    android:src="@drawable/profilepic"/>
+
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="32dp">
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/finishup_groupnamem"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
+      android:padding="5dp"
+      android:textColorHint="#FFFFFF">
+
+      <EditText
+        android:id="@+id/finishup_groupname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="نام گروه"
+        android:inputType="textNoSuggestions|textPersonName"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textColorLink="#FFFFFF"
+        android:textSize="18sp"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/finishup_groupbiom"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
+      android:padding="5dp"
+      android:textColorHint="#FFFFFF">
+
+      <EditText
+        android:id="@+id/finishup_groupbio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="بیو"
+        android:inputType="text|textNoSuggestions"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textColorLink="#FFFFFF"
+        android:textSize="18sp"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:gravity="bottom|center"
+      android:orientation="vertical">
+
+
+      <Button
+        android:id="@+id/group_finish_up_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        android:text="ثبت"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"/>
+
+
+    </LinearLayout>
+
+
+  </LinearLayout>
+
+
+</LinearLayout>

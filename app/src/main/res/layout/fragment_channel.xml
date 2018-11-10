@@ -74,14 +74,14 @@
         android:background="?attr/colorPrimary">
 
         <Button
-            android:id="@+id/pushtotalk"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="@string/ptt"
-            android:textColor="?android:attr/textColorPrimaryInverse"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:background="?attr/selectableItemBackground"/>
+          android:id="@+id/pushtotalk"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:background="?attr/selectableItemBackground"
+          android:text="@string/ptt"
+          android:textColor="?android:attr/textColorPrimaryInverse"
+          android:textSize="12sp"
+          android:textStyle="bold"/>
     </LinearLayout>
 
 </LinearLayout>

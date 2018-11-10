@@ -91,9 +91,9 @@ public class RequestActivity extends AppCompatActivity {
 
         });
 
-
         requests_list = (ListView) findViewById(R.id.requests_list);
         requests_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -134,6 +134,7 @@ public class RequestActivity extends AppCompatActivity {
                         hashMap.put("fullname", c.getString("fullname"));
                         hashMap.put("username", c.getString("username"));
                         hashMap.put("chatId", c.getString("chatId"));
+                        hashMap.put("type", c.getString("type"));
                         listValues.add(hashMap);
                         Log.i("test", "test");
                     }
@@ -177,24 +178,52 @@ public class RequestActivity extends AppCompatActivity {
 
                             switch (direction) {
                                 case DIRECTION_FAR_LEFT:
-                                    value.add(new BasicNameValuePair("func", "declinePV"));
-                                    value.add(new BasicNameValuePair("userId", userId));
-                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    if (listValues.get(position).get("type").equals("pv")) {
+                                        value.add(new BasicNameValuePair("func", "declinePV"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
+                                    else if (listValues.get(position).get("type").equals("group")) {
+                                        value.add(new BasicNameValuePair("func", "declineCG"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
                                     break;
                                 case DIRECTION_NORMAL_LEFT:
-                                    value.add(new BasicNameValuePair("func", "declinePV"));
-                                    value.add(new BasicNameValuePair("userId", userId));
-                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    if (listValues.get(position).get("type").equals("pv")) {
+                                        value.add(new BasicNameValuePair("func", "declinePV"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
+                                    else if (listValues.get(position).get("type").equals("group")) {
+                                        value.add(new BasicNameValuePair("func", "declineCG"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
                                     break;
                                 case DIRECTION_FAR_RIGHT:
-                                    value.add(new BasicNameValuePair("func", "acceptPV"));
-                                    value.add(new BasicNameValuePair("userId", userId));
-                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    if (listValues.get(position).get("type").equals("pv")) {
+                                        value.add(new BasicNameValuePair("func", "acceptPV"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
+                                    else if (listValues.get(position).get("type").equals("group")) {
+                                        value.add(new BasicNameValuePair("func", "acceptGroup"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
                                     break;
                                 case DIRECTION_NORMAL_RIGHT:
-                                    value.add(new BasicNameValuePair("func", "acceptPV"));
-                                    value.add(new BasicNameValuePair("userId", userId));
-                                    value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    if (listValues.get(position).get("type").equals("pv")) {
+                                        value.add(new BasicNameValuePair("func", "acceptPV"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
+                                    else if (listValues.get(position).get("type").equals("group")) {
+                                        value.add(new BasicNameValuePair("func", "acceptGroup"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    }
                                     break;
                             }
                             new ServerFetchAsync(value, new OnTaskCompletedListener() {

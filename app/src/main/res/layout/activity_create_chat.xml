@@ -23,8 +23,11 @@
       android:layout_width="match_parent"
       android:layout_height="fill_parent"
       android:layout_below="@+id/toolbar"
+      android:layout_marginLeft="12dp"
+      android:layout_marginRight="12dp"
       android:divider="@color/cardOutline"
-      android:dividerHeight="1dp"/>
+      android:dividerHeight="1dp"
+      android:padding="12dp"/>
 
     <!--app:searchBackground="@color/colorPrimary"-->
     <!--app:searchSuggestionBackground="@color/colorPrimary"-->

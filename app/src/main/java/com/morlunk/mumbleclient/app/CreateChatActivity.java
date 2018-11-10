@@ -98,6 +98,7 @@ public class CreateChatActivity extends AppCompatActivity {
                                     hashMap.put("username", c.getString("username"));
                                     hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
                                     hashMap.put("id", c.getString("id"));
+                                    hashMap.put("selected", "0");
 
                                     listValues.add(hashMap);
                                 }

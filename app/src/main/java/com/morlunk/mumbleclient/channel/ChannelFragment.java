@@ -27,6 +27,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -231,6 +232,7 @@ public class ChannelFragment extends JumbleServiceFragment implements SharedPref
             // XXX: This ensures that push to talk is disabled when we pause.
             // We don't want to leave the talk state active if the fragment is paused while pressed.
             getService().getSession().setTalkingState(false);
+            Log.i("KHBSCKHBA","taaadaaaaaaaaa");
         }
     }
 

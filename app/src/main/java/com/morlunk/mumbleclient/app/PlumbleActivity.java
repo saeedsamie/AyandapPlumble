@@ -695,6 +695,12 @@ public class PlumbleActivity extends AppCompatActivity implements
                 intent.putExtra("plumbleUserName", plumbleUserName);
                 startActivity(intent);
                 break;
+            case DrawerAdapter.ITEM_CREATE_GROUP:
+                fragmentchecker = false;
+                intent = new Intent(this, CreateGroupActivity.class);
+                intent.putExtra("plumbleUserName", plumbleUserName);
+                startActivity(intent);
+                break;
             case DrawerAdapter.ITEM_INFO:
                 fragmentClass = ServerInfoFragment.class;
                 setTitle("اطلاعات");

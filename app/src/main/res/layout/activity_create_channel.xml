@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorSecondaryDark">
+
+
+  <android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/m_primary"
+    android:gravity="right"/>
+
+  <com.miguelcatalan.materialsearchview.MaterialSearchView
+    android:id="@+id/search_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="#000" >
+
+  </com.miguelcatalan.materialsearchview.MaterialSearchView>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_below="@+id/toolbar"
+    android:orientation="vertical"
+    >
+
+    <ListView
+      android:id="@+id/create_channel_search_listview"
+      android:layout_width="match_parent"
+      android:layout_height="465dp"
+      android:layout_weight="1"
+      android:divider="@color/cardOutline"
+      android:dividerHeight="1dp"
+      android:paddingLeft="12dp"
+      android:paddingRight="12dp">
+
+    </ListView>
+
+    <Button
+      android:id="@+id/create_channel_continue"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="24dp"
+      android:layout_marginLeft="12dp"
+      android:layout_marginRight="12dp"
+      android:layout_marginTop="12dp"
+      android:background="@drawable/rounded_button"
+      android:padding="12dp"
+      android:text="ادامه"
+      android:textColor="#FFFFFF"
+      android:textSize="18sp"/>
+
+  </LinearLayout>
+
+  <!--app:searchBackground="@color/colorPrimary"-->
+  <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+  <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+  <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
+  <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
+
+</RelativeLayout>

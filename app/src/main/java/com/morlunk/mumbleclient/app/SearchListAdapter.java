@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -74,6 +76,7 @@ public class SearchListAdapter extends BaseAdapter {
       viewHolder.userFullname = (TextView) convertView.findViewById(R.id.userFullname);
       viewHolder.username = (TextView) convertView.findViewById(R.id.username);
       viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
+      viewHolder.search_layout = (LinearLayout) convertView.findViewById(R.id.search_layout);
 
       result = convertView;
       convertView.setTag(viewHolder);
@@ -83,6 +86,19 @@ public class SearchListAdapter extends BaseAdapter {
     }
     viewHolder.userFullname.setText(values.get(position).get("fullname"));
     viewHolder.username.setText(values.get(position).get("username"));
+    if (values.get(position).get("selected").equals("1"))
+    {
+      Log.i("UIHSDCIUHVDIU",""+position);
+      viewHolder.search_layout.setBackgroundColor(Color.parseColor("#839496"));
+      viewHolder.userFullname.setTextColor(Color.parseColor("#000000"));
+      viewHolder.username.setTextColor(Color.parseColor("#000000"));
+    }
+    else
+    {
+      viewHolder.search_layout.setBackgroundColor(Color.parseColor("#00000000"));
+      viewHolder.userFullname.setTextColor(Color.parseColor("#FFFFFF"));
+      viewHolder.username.setTextColor(Color.parseColor("#FFFFFF"));
+    }
 //    new AsyncTaskLoadImage(viewHolder.icon).execute(values.get(position).get("image"));
 //     Glide.with(context)
 //      .load(values.get(position).get("image"))
@@ -135,6 +151,7 @@ public class SearchListAdapter extends BaseAdapter {
     TextView userFullname;
     TextView username;
     ImageView icon;
+    LinearLayout search_layout;
   }
 //  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
 //    private final static String TAG = "AsyncTaskLoadImage";
