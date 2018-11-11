@@ -18,6 +18,7 @@
 package com.morlunk.mumbleclient.service;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,10 +26,13 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.WindowManager;
 
 import com.morlunk.jumble.Constants;
@@ -39,11 +43,19 @@ import com.morlunk.jumble.model.IUser;
 import com.morlunk.jumble.model.TalkState;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
+import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
+import com.morlunk.mumbleclient.ServerFetchAsync;
 import com.morlunk.mumbleclient.Settings;
+import com.morlunk.mumbleclient.app.PlumbleActivity;
+import com.morlunk.mumbleclient.app.RequestActivity;
 import com.morlunk.mumbleclient.service.ipc.TalkBroadcastReceiver;
 import com.morlunk.mumbleclient.util.HtmlUtils;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -51,6 +63,7 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * An extension of the Jumble service with some added Plumble-exclusive non-standard Mumble features.
@@ -67,6 +80,7 @@ public class PlumbleService extends JumbleService implements
     public static final int TTS_THRESHOLD = 250; // Maximum number of characters to read
     public static final int RECONNECT_DELAY = 10000;
     public String timer;
+    int requestsNumberTemp = -2;
 
     private Settings mSettings;
     private PlumbleConnectionNotification mNotification;
@@ -150,6 +164,15 @@ public class PlumbleService extends JumbleService implements
                 mNotification.setActionsShown(true);
                 mNotification.show();
             }
+            // request receiving check
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    receivedNotifications();
+                    handler.postDelayed(this, 10000);
+                }
+            }, 0);
         }
 
         @Override
@@ -616,6 +639,37 @@ public class PlumbleService extends JumbleService implements
         mSuppressNotifications = suppressNotifications;
     }
 
+    public void receivedNotifications() {
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("func", "requests"));
+        nameValuePairs.add(new BasicNameValuePair("userId", PlumbleActivity.userId));
+        new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+            @Override
+            public void onTaskCompleted(JSONObject jsonObject) {
+                JSONArray jsonArray = new JSONArray();
+                try {
+                    jsonArray = jsonObject.getJSONArray("requests");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (jsonArray.length() != requestsNumberTemp && jsonArray.length() != 0) {
+                    Intent intent = new Intent(PlumbleService.this, RequestActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(PlumbleService.this, 0, intent, 0);
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(PlumbleActivity.context, null)
+                            .setSmallIcon(R.drawable.notification_icon)
+                            .setContentTitle("Requests")
+                            .setContentText("You have " + (jsonArray.length()) + " new Requests!")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setAutoCancel(true)
+                            .setContentIntent(pendingIntent);
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(PlumbleActivity.context);
+                    notificationManager.notify(new Random().nextInt(), mBuilder.build());
+                    requestsNumberTemp = jsonArray.length();
+                }
+            }
+        }).execute();
+    }
+
     public static class PlumbleBinder extends Binder {
         private final PlumbleService mService;
 
@@ -627,5 +681,4 @@ public class PlumbleService extends JumbleService implements
             return mService;
         }
     }
-
 }

@@ -103,6 +103,8 @@ public class PlumbleActivity extends AppCompatActivity implements
     public static final String EXTRA_DRAWER_FRAGMENT = "drawer_fragment";
     public static IPlumbleService mService;
     public static String username;
+    public static String userId;
+    public static Context context;
     public static String plumbleUserName;
     public static ArrayList<IChannel> iChannels = new ArrayList<>();
     /**
@@ -224,8 +226,6 @@ public class PlumbleActivity extends AppCompatActivity implements
             setTitle("اتصال قطع است");
         }
     };
-    private String userId;
-
     public static void deleteCache(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             File[] dirs = context.getExternalCacheDirs();
@@ -350,6 +350,7 @@ public class PlumbleActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);

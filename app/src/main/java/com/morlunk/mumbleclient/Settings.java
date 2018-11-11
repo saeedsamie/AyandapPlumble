@@ -170,9 +170,9 @@ public class Settings {
 
     static {
         ARRAY_INPUT_METHODS = new HashSet<String>();
-        ARRAY_INPUT_METHODS.add(ARRAY_INPUT_METHOD_VOICE);
+//        ARRAY_INPUT_METHODS.add(ARRAY_INPUT_METHOD_VOICE);
         ARRAY_INPUT_METHODS.add(ARRAY_INPUT_METHOD_PTT);
-        ARRAY_INPUT_METHODS.add(ARRAY_INPUT_METHOD_CONTINUOUS);
+//        ARRAY_INPUT_METHODS.add(ARRAY_INPUT_METHOD_CONTINUOUS);
     }
 
     private final SharedPreferences preferences;
