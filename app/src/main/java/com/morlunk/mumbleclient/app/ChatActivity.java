@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -44,6 +46,8 @@ public class ChatActivity extends AppCompatActivity  {
     ImageView image;
     TextView title;
     TextView bio ;
+    LinearLayout chat_layout;
+
   public static Picasso picassoWithCache;
 
 
@@ -55,11 +59,28 @@ public class ChatActivity extends AppCompatActivity  {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         setContentView(R.layout.activity_chat);
-        int chatId = getIntent().getIntExtra("chatId", -1);
+        final int chatId = getIntent().getIntExtra("chatId", -1);
         String chatTitle = getIntent().getStringExtra("ChatTitle");
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
+        chat_layout  =findViewById(R.id.chat_layout);
+      final String finalChatTitle = chatTitle;
+      chat_layout.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View view) {
+                                           Intent intent = new Intent(ChatActivity.this, GroupInfoActivity.class);
 
-        image = findViewById(id.c_image);
+                                           Log.i("INTENTYPUTS",getIntent().getStringExtra("type")+"///"+getIntent().getStringExtra("ChatTitle")+"///"+getIntent().getStringExtra("chatId")+"///"+getIntent().getStringExtra("bio"));
+
+                                           intent.putExtra("type",getIntent().getStringExtra("type"));
+                                           intent.putExtra("ChatTitle", finalChatTitle);
+                                           intent.putExtra("chatId",chatId+"");
+                                           intent.putExtra("bio",getIntent().getStringExtra("bio"));
+                                           if (getIntent().getStringExtra("type").equals("group")) {
+                                             startActivity(intent);
+                                           }
+                                         }
+                                       });
+          image = findViewById(id.c_image);
         title = findViewById(id.c_name);
         bio = findViewById(id.c_bio);
         cmTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {

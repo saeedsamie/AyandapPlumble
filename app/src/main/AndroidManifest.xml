@@ -203,6 +203,9 @@
             android:name=".app.ProfileActivity"
             android:label="@string/Profile" />
 
+        <activity android:name=".app.GroupInfoActivity"
+                  android:theme="@style/Theme.CreateChat"/>
+
     </application>
 
 </manifest>
