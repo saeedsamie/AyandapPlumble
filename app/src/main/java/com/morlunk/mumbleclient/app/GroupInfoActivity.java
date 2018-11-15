@@ -5,8 +5,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,6 +53,9 @@ public class GroupInfoActivity extends AppCompatActivity {
     bio = findViewById(R.id.group_info_bio);
     image = findViewById(R.id.group_info_image);
 
+
+
+
     Toolbar toolbar = (Toolbar)findViewById(R.id.group_info_toolbar);
     setSupportActionBar(toolbar);
     if(getSupportActionBar() != null)
@@ -89,6 +95,7 @@ public class GroupInfoActivity extends AppCompatActivity {
 
           ChatUsersListAdapter adapter = new ChatUsersListAdapter(GroupInfoActivity.this, listValues);
           listView.setAdapter(adapter);
+          setListViewHeightBasedOnChildren(listView);
 
         } catch (Exception e) {
           e.printStackTrace();
@@ -97,5 +104,28 @@ public class GroupInfoActivity extends AppCompatActivity {
 
     }}).execute();
 
+  }
+
+  public static void setListViewHeightBasedOnChildren(ListView listView) {
+    ListAdapter listAdapter = listView.getAdapter();
+    if (listAdapter == null)
+      return;
+
+    int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+    int totalHeight = 0;
+    View view = null;
+    for (int i = 0; i < listAdapter.getCount(); i++) {
+      view = listAdapter.getView(i, view, listView);
+      if (i == 0)
+        view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+      view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+      totalHeight += view.getMeasuredHeight();
+      totalHeight += 40;
+      Log.i("HBDJHBVD",totalHeight+"");
+    }
+    ViewGroup.LayoutParams params = listView.getLayoutParams();
+    params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+    listView.setLayoutParams(params);
   }
 }

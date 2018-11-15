@@ -109,6 +109,9 @@ public class CreateChatActivity extends AppCompatActivity {
 
                             Log.i("WEAKMEWAKM", "" + listValues);
 
+
+
+
                             SearchListAdapter adapter = new SearchListAdapter(CreateChatActivity.this, listValues);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
