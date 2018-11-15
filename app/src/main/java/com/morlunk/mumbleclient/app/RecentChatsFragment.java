@@ -207,6 +207,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             if (channelId == -2 && PlumbleActivity.mService.getSession() != null) {
                                 try {
                                     PlumbleActivity.mService.getSession().createChannel(0, String.valueOf(chatId), "", 0, true);
+                                    progressDialog.hide();
+                                    getActivity().startActivity(intent);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
