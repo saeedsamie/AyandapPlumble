@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/cl"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
@@ -9,8 +10,8 @@
     android:id="@+id/app_bar_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:fitsSystemWindows="true"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
 
     <android.support.design.widget.CollapsingToolbarLayout
@@ -43,74 +44,88 @@
     </android.support.design.widget.CollapsingToolbarLayout>
 
 
-
   </android.support.design.widget.AppBarLayout>
 
   <android.support.v4.widget.NestedScrollView
+    android:id="@+id/nasted"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      app:cardElevation="5dp"
-      app:cardUseCompatPadding="true"
+      android:orientation="vertical">
 
-      >
-
-      <LinearLayout
+      <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent"
+        app:cardElevation="5dp"
+
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
+          android:id="@+id/layout_card"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:padding="12dp">
+          android:layout_height="match_parent"
+          android:orientation="vertical">
 
-          <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="2dp"
-            android:contentDescription="@string/app_name"
-            android:padding="5dp"
-            android:src="@drawable/bio"/>
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-          <TextView
-            android:id="@+id/group_info_bio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="9"
-            android:padding="12dp"
-            android:text="bio"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
+            <ImageView
+              android:layout_width="40dp"
+              android:layout_height="40dp"
+              android:layout_marginTop="2dp"
+              android:contentDescription="@string/app_name"
+              android:padding="5dp"
+              android:src="@drawable/bio"/>
+
+            <TextView
+              android:id="@+id/group_info_bio"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:layout_weight="9"
+              android:padding="12dp"
+              android:text="bio"
+              android:textColor="#000000"
+              android:textSize="15sp"
+              android:textStyle="bold"/>
+
+          </LinearLayout>
+
 
         </LinearLayout>
 
+
+      </android.support.v7.widget.CardView>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="761dp"
+        android:layout_weight="1"
+        app:layout_anchor="@+id/card_view">
+
         <ListView
           android:id="@+id/group_info_listview"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
+          android:layout_width="match_parent"
+          android:layout_height="812dp"
+          android:layout_gravity="bottom"
           android:lineSpacingMultiplier="1.5"
           android:padding="12dp"
           android:textSize="13sp"/>
 
+      </RelativeLayout>
 
-      </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
-
+    </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

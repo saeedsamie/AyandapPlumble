@@ -60,7 +60,7 @@ public class ChatUsersListAdapter extends BaseAdapter {
 
       viewHolder = new ViewHolder();
       LayoutInflater inflater = LayoutInflater.from(context);
-      convertView = inflater.inflate(R.layout.chat_row, parent, false);
+      convertView = inflater.inflate(R.layout.group_users_row, parent, false);
       viewHolder.chatTitle = (TextView) convertView.findViewById(R.id.chatTitle);
       viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
 
