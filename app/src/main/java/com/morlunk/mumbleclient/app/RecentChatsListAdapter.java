@@ -59,10 +59,10 @@ public class RecentChatsListAdapter extends BaseAdapter {
 
     //
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
 
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         final View result;
 
@@ -117,12 +117,13 @@ public class RecentChatsListAdapter extends BaseAdapter {
 ////              }
 ////          });
 
-      File httpCacheDirectory = new File(context.getCacheDir(), "picasso-cache");
-      Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
-      OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+        File httpCacheDirectory = new File(context.getCacheDir(), "picasso-cache");
+        Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+        final OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
 
-      picassoWithCache = new Picasso.Builder(context).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-      picassoWithCache.load(values.get(position).get("image")).transform(new CropCircleTransformation()).into(viewHolder.icon);
+        picassoWithCache = new Picasso.Builder(context).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+        picassoWithCache.load(values.get(position).get("image")).transform(new CropCircleTransformation()).into(viewHolder.icon);
+
 
         return convertView;
 
@@ -152,8 +153,7 @@ public class RecentChatsListAdapter extends BaseAdapter {
                 URL url = new URL(params[0]);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
-                bitmap = BitmapFactory.decodeStream((InputStream)url.getContent(), null, options);
-
+                bitmap = BitmapFactory.decodeStream((InputStream) url.getContent(), null, options);
 
 
             } catch (Exception e) {
@@ -165,16 +165,16 @@ public class RecentChatsListAdapter extends BaseAdapter {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-          Bitmap circleBitmap = null;
-          circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
-          BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-          Paint paint = new Paint();
-          paint.setShader(shader);
-          paint.setAntiAlias(true);
-          Canvas c = new Canvas(circleBitmap);
-          c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+            Bitmap circleBitmap = null;
+            circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_4444);
+            BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            Paint paint = new Paint();
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+            Canvas c = new Canvas(circleBitmap);
+            c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
 
-          imageView.setImageBitmap(circleBitmap);
+            imageView.setImageBitmap(circleBitmap);
         }
     }
 }

@@ -1,8 +1,11 @@
 package com.morlunk.mumbleclient.app;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -53,8 +56,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         @Override
         public void onChannelAdded(IChannel channel) {
             if (PlumbleActivity.mService.isConnected()) {
-                updateListView();
-                Log.e("channel", "addded" + iChannels.toString());
+//                updateListView();
+//                Log.e("channel", "addded" + iChannels.toString());
                 super.onChannelAdded(channel);
             }
         }
@@ -62,8 +65,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
         @Override
         public void onChannelRemoved(IChannel channel) {
             if (PlumbleActivity.mService.isConnected()) {
-                updateListView();
-                Log.e("channels", "removed" + iChannels.toString());
+//                updateListView();
+//                Log.e("channels", "removed" + iChannels.toString());
                 super.onChannelRemoved(channel);
             }
         }
@@ -174,7 +177,14 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getContext(), ChatActivity.class);
+                            final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setIndeterminate(true);
+                            progressDialog.setCancelable(true);
+
+                            progressDialog.setMessage("لطفا صبر کنید..");
+                            progressDialog.show();
+
+                            final Intent intent = new Intent(getContext(), ChatActivity.class);
                             HashMap<String, String> map = listValues.get(position);
                             Log.e("map", "map" + map.toString());
                             int chatId = Integer.valueOf(listValues.get(position).get("chatId"));
@@ -201,21 +211,32 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                     e.printStackTrace();
                                 }
                             } else {
-                                for (int i = 0; i < 10; i++) {
-                                    try {
-                                        PlumbleActivity.mService.getSession().joinChannel(channelId);
-                                        wait(1000);
-                                    } catch (Exception e) {
-                                    }
-                                    if (isUserJoined(channelId)) {
-                                        Log.e("sadsfasfsafasfasi", String.valueOf(i));
-                                        break;
-                                    }
+                                try {
+                                    final Handler handler = new Handler();
+                                    final int finalChannelId = channelId;
+                                    Runnable runnable = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            PlumbleActivity.mService.getSession().joinChannel(finalChannelId);
+                                            handler.postDelayed(this, 1000);
+                                            if (isUserJoined(finalChannelId)) {
+                                                handler.removeCallbacksAndMessages(null);
+                                                progressDialog.hide();
+                                                getActivity().startActivity(intent);
+                                            }
+                                        }
+                                    };
+                                    handler.postDelayed(runnable, 1000);
+                                    progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            handler.removeCallbacksAndMessages(null);
+                                        }
+                                    });
+                                } catch (Exception e) {
                                 }
                             }
-
                             Log.i("kufsekusgfskeug", channelId + "");
-                            getActivity().startActivity(intent);
                         }
                     });
 
@@ -236,20 +257,19 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                                 nameValuePairs.add(new BasicNameValuePair("func", "removePV"));
                                                 nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
 
-                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
-                                              @Override
-                                              public void onTaskCompleted(JSONObject jsonObject) {
-                                                  try {
-                                                      if (jsonObject.getString("PV").equals("removed")){
+                                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                                    @Override
+                                                    public void onTaskCompleted(JSONObject jsonObject) {
+                                                        try {
+                                                            if (jsonObject.getString("PV").equals("removed")) {
 
-                                                          Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
-                                                            .show();
-                                                      updateListView();}
-                                                      else
-                                                      {
-                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
-                                                            .show();
-                                                      }
+                                                                Snackbar.make(arg1, "چت مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
+                                                                        .show();
+                                                                updateListView();
+                                                            } else {
+                                                                Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                                        .show();
+                                                            }
 
                                                         } catch (JSONException e1) {
                                                             e1.printStackTrace();
@@ -277,7 +297,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
             if (channels.get(i).getId() == channelId) {
                 List<? extends IUser> users = channels.get(i).getUsers();
                 for (int j = 0; j < users.size(); j++) {
-                    if (users.get(j).getName().trim().equals(PlumbleActivity.plumbleUserName)) {
+                    if (users.get(j).getName().trim().split("|")[0].equals(PlumbleActivity.plumbleUserName.split("|")[0])) {
                         Log.e("heeeeeeeeellllllll", "heeelloooo  -------- i = " + i);
                         return true;
                     }

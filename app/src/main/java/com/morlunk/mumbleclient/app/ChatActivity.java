@@ -35,21 +35,19 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.morlunk.mumbleclient.R.drawable;
 import static com.morlunk.mumbleclient.R.id;
 
-public class ChatActivity extends AppCompatActivity  {
+public class ChatActivity extends AppCompatActivity {
 
+    public static Picasso picassoWithCache;
     Chronometer cmTimer;
+    ImageView image;
+    TextView title;
+    TextView bio;
+    LinearLayout chat_layout;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private IPlumbleService service;
     private boolean resume = false;
     private long elapsedTime;
-    ImageView image;
-    TextView title;
-    TextView bio ;
-    LinearLayout chat_layout;
-
-  public static Picasso picassoWithCache;
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -62,25 +60,25 @@ public class ChatActivity extends AppCompatActivity  {
         final int chatId = getIntent().getIntExtra("chatId", -1);
         String chatTitle = getIntent().getStringExtra("ChatTitle");
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
-        chat_layout  =findViewById(R.id.chat_layout);
-      final String finalChatTitle = chatTitle;
-      chat_layout.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View view) {
-                                           Intent intent = new Intent(ChatActivity.this, GroupInfoActivity.class);
+        chat_layout = findViewById(R.id.chat_layout);
+        final String finalChatTitle = chatTitle;
+        chat_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatActivity.this, GroupInfoActivity.class);
 
-                                           Log.i("INTENTYPUTS",getIntent().getStringExtra("type")+"///"+getIntent().getStringExtra("ChatTitle")+"///"+getIntent().getStringExtra("chatId")+"///"+getIntent().getStringExtra("bio"));
+                Log.i("INTENTYPUTS", getIntent().getStringExtra("type") + "///" + getIntent().getStringExtra("ChatTitle") + "///" + getIntent().getStringExtra("chatId") + "///" + getIntent().getStringExtra("bio"));
 
-                                           intent.putExtra("type",getIntent().getStringExtra("type"));
-                                           intent.putExtra("ChatTitle", finalChatTitle);
-                                           intent.putExtra("chatId",chatId+"");
-                                           intent.putExtra("bio",getIntent().getStringExtra("bio"));
-                                           if (getIntent().getStringExtra("type").equals("group")) {
-                                             startActivity(intent);
-                                           }
-                                         }
-                                       });
-          image = findViewById(id.c_image);
+                intent.putExtra("type", getIntent().getStringExtra("type"));
+                intent.putExtra("ChatTitle", finalChatTitle);
+                intent.putExtra("chatId", chatId + "");
+                intent.putExtra("bio", getIntent().getStringExtra("bio"));
+                if (getIntent().getStringExtra("type").equals("group")) {
+                    startActivity(intent);
+                }
+            }
+        });
+        image = findViewById(id.c_image);
         title = findViewById(id.c_name);
         bio = findViewById(id.c_bio);
         cmTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -97,33 +95,33 @@ public class ChatActivity extends AppCompatActivity  {
 
         if ((chatId != -1 && chatTitle != null)) {
 //            textView.setText(chatId + "\n" + chatTitle);
-    }
-    chatTitle = "ChatTitle";
-    this.setTitle(chatTitle);
+        }
+        chatTitle = "ChatTitle";
+        this.setTitle(chatTitle);
 
-    if (chatId!=-1)
-      try {
-        IJumbleSession session = PlumbleActivity.mService.getSession();
-        session.joinChannel(chatId);
-      } catch (JumbleDisconnectedException e) {
-        e.printStackTrace();
-      } catch (NumberFormatException e) {
-        e.printStackTrace();
-      }
+//        if (chatId != -1)
+//            try {
+//                IJumbleSession session = PlumbleActivity.mService.getSession();
+//                session.joinChannel(chatId);
+//            } catch (JumbleDisconnectedException e) {
+//                e.printStackTrace();
+//            } catch (NumberFormatException e) {
+//                e.printStackTrace();
+//            }
 
-    if (getIntent().getStringExtra("type").equals("pv")) {
-      bio.setVisibility(View.GONE);
-      title.setText(getIntent().getStringExtra("fullname"));
-      File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
-      Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
-      OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
-      picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-      picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(image);
+        if (getIntent().getStringExtra("type").equals("pv")) {
+            bio.setVisibility(View.GONE);
+            title.setText(getIntent().getStringExtra("fullname"));
+            File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
+            Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+            picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+            picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(image);
 
-    } else {
-        title.setText(getIntent().getStringExtra("fullname"));
-        bio.setText(getIntent().getStringExtra("bio"));
-    }
+        } else {
+            title.setText(getIntent().getStringExtra("fullname"));
+            bio.setText(getIntent().getStringExtra("bio"));
+        }
 //        this.setServiceBound(true);
         final ImageView pushButton = (ImageView) findViewById(id.push_button);
         final int width = 400;
@@ -147,32 +145,32 @@ public class ChatActivity extends AppCompatActivity  {
 
     }
 
-  @Override
-  protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-  }
-
-  @Override
-  public void onBackPressed() {
-
-    IJumbleService iPlumbleService = PlumbleActivity.mService;
-    int parentChannel;
-    try {
-      parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
-    } catch (Exception e) {
-      parentChannel = 0;
-      e.printStackTrace();
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-    try {
-      iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
-    } catch (Exception e) {
-      e.printStackTrace();
+
+    @Override
+    public void onBackPressed() {
+
+        IJumbleService iPlumbleService = PlumbleActivity.mService;
+        int parentChannel;
+        try {
+            parentChannel = iPlumbleService.getSession().getSessionChannel().getParent().getId();
+        } catch (Exception e) {
+            parentChannel = 0;
+            e.printStackTrace();
+        }
+        try {
+            iPlumbleService.getSession().joinChannel(iPlumbleService.getSession().getRootChannel().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onBackPressed();
     }
-    super.onBackPressed();
-  }
 
-  @Override
-  public void onPointerCaptureChanged(boolean hasCapture) {
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
-  }
+    }
 }

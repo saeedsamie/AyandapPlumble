@@ -356,7 +356,7 @@ public class PlumbleActivity extends AppCompatActivity implements
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
-        plumbleUserName = username + new Random().nextInt();
+        plumbleUserName = username+"|"+ new Random().nextInt();
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server
