@@ -1,8 +1,14 @@
 package com.morlunk.mumbleclient.app;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
+import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
@@ -25,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +49,9 @@ public class GroupInfoActivity extends AppCompatActivity {
   private ImageView image;
   public static Picasso picassoWithCache;
   List<NameValuePair> nameValuePairs;
+  FloatingActionButton floatingActionButton;
+  private static final int PICK_FILE_REQUEST = 1;
+  private String selectedFilePath;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +64,15 @@ public class GroupInfoActivity extends AppCompatActivity {
     listView = findViewById(R.id.group_info_listview);
     bio = findViewById(R.id.group_info_bio);
     image = findViewById(R.id.group_info_image);
+    floatingActionButton = findViewById(R.id.group_image_button);
 
 
+    floatingActionButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showFileChooser();
+      }
+    });
 
 
     Toolbar toolbar = (Toolbar)findViewById(R.id.group_info_toolbar);
@@ -62,7 +81,7 @@ public class GroupInfoActivity extends AppCompatActivity {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     String chatTitle = getIntent().getStringExtra("ChatTitle");
-    this.setTitle(chatTitle);
+    this.setTitle("  "+chatTitle);
     bio.setText(getIntent().getStringExtra("bio"));
     File httpCacheDirectory = new File(this.getCacheDir(), "picasso-cache");
     Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
@@ -128,4 +147,47 @@ public class GroupInfoActivity extends AppCompatActivity {
     params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
     listView.setLayoutParams(params);
   }
+
+  private void showFileChooser() {
+    Intent intent = new Intent();
+    intent.setType("*/*");
+    intent.setAction(Intent.ACTION_GET_CONTENT);
+    startActivityForResult(Intent.createChooser(intent, "عکس گروه را انتخاب کنید..."), PICK_FILE_REQUEST);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == Activity.RESULT_OK) {
+      if (requestCode == PICK_FILE_REQUEST) {
+        if (data == null) {
+          //no data present
+          return;
+        }
+
+        Uri selectedFileUri = data.getData();
+        selectedFilePath = FilePath.getPath(this, selectedFileUri);
+
+        if (selectedFilePath != null && !selectedFilePath.equals("")) {
+
+          String TAG = "AsyncTaskLoadImage";
+          Bitmap bitmap = null;
+          Bitmap circleBitmap = null;
+
+          try {
+
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedFileUri);
+
+          } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+          }
+          image.setImageBitmap(bitmap);
+
+        } else {
+          Toast.makeText(this, "Cannot upload file to server", Toast.LENGTH_SHORT).show();
+        }
+      }
+    }
+  }
+
 }

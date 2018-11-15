@@ -143,6 +143,13 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#344955</item>
+        <item name="colorPrimaryDark">#232F34</item>
+        <item name="colorAccent">#616161</item>
+    </style>
+
 
 
 

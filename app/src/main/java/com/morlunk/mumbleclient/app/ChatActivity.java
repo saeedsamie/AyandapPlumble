@@ -19,8 +19,6 @@ import android.widget.TextView;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.jumble.IJumbleService;
-import com.morlunk.jumble.IJumbleSession;
-import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.squareup.picasso.Picasso;
@@ -58,7 +56,8 @@ public class ChatActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_chat);
         final int chatId = getIntent().getIntExtra("chatId", -1);
-        String chatTitle = getIntent().getStringExtra("ChatTitle");
+        String chatTitle = getIntent().getStringExtra("fullname");
+        Log.i("VDKHBVDKHBSDVKHBVSDKHB",chatTitle);
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
         chat_layout = findViewById(R.id.chat_layout);
         final String finalChatTitle = chatTitle;

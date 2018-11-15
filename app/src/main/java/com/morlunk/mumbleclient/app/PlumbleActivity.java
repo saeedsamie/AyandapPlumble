@@ -287,6 +287,7 @@ public class PlumbleActivity extends AppCompatActivity implements
             } catch (Exception e) {
                 e.printStackTrace();
                 adb.setMessage(x509.toString());
+                adb.setCancelable(false);
             }
             adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
                 @Override
