@@ -27,7 +27,8 @@
       android:layout_marginRight="12dp"
       android:divider="@color/cardOutline"
       android:dividerHeight="1dp"
-      android:padding="12dp"/>
+      android:padding="12dp"
+      android:scrollingCache="true"/>
 
     <!--app:searchBackground="@color/colorPrimary"-->
     <!--app:searchSuggestionBackground="@color/colorPrimary"-->
