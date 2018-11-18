@@ -17,11 +17,9 @@
 
 package com.morlunk.mumbleclient.channel;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -36,7 +34,6 @@ import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
-import com.morlunk.jumble.JumbleService;
 import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.model.WhisperTargetChannel;
@@ -76,7 +73,7 @@ public class ChannelMenu implements PermissionsPopupMenu.IOnMenuPrepareListener,
                 .setVisible(mChannel.getDescription() != null ||
                         mChannel.getDescriptionHash() != null);
         Server server = mService.getTargetServer();
-        if(server != null) {
+        if (server != null) {
             menu.findItem(R.id.context_channel_pin)
                     .setChecked(mDatabase.isChannelPinned(server.getId(), mChannel.getId()));
         }
@@ -92,7 +89,7 @@ public class ChannelMenu implements PermissionsPopupMenu.IOnMenuPrepareListener,
             return false;
 
         boolean adding = false;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.context_channel_join:
                 mService.getSession().joinChannel(mChannel.getId());
                 break;
@@ -134,7 +131,7 @@ public class ChannelMenu implements PermissionsPopupMenu.IOnMenuPrepareListener,
             case R.id.context_channel_pin:
                 long serverId = mService.getTargetServer().getId();
                 boolean pinned = mDatabase.isChannelPinned(serverId, mChannel.getId());
-                if(!pinned) mDatabase.addPinnedChannel(serverId, mChannel.getId());
+                if (!pinned) mDatabase.addPinnedChannel(serverId, mChannel.getId());
                 else mDatabase.removePinnedChannel(serverId, mChannel.getId());
                 break;
             case R.id.context_channel_link: {

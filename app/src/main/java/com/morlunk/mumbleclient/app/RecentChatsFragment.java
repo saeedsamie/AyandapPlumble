@@ -165,7 +165,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
                             }
                             listValues.add(hashMap);
-                            Log.i("HBJFDHB", listValues.toString());
+//                            Log.i("HBJFDHB", listValues.toString());
                         }
 
                     } catch (Exception e) {
@@ -196,7 +196,6 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("type", (listValues.get(position).get("type")));
                             ArrayList<IChannel> channels = iChannels;
                             int channelId = -2;
-                            Log.i("sczniljxdvlili", channels.size() + "");
                             for (int i = 0; i < channels.size(); i++) {
                                 if (channels.get(i).getName().trim().equals(String.valueOf(chatId).trim())) {
                                     channelId = channels.get(i).getId();
@@ -238,7 +237,6 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                 } catch (Exception e) {
                                 }
                             }
-                            Log.i("kufsekusgfskeug", channelId + "");
                         }
                     });
 

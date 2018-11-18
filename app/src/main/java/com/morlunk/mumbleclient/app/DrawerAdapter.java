@@ -26,22 +26,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.jakewharton.picasso.OkHttp3Downloader;
+import com.morlunk.mumbleclient.ImageUploadListener;
 import com.morlunk.mumbleclient.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
+
 
 /**
  * Created by andrew on 01/08/13.
  */
 public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
-    public static Picasso picassoWithCache;
+
     // Drawer rows, integer value is id
     public static final int PROFILE_PROFILE = 0;
     public static final int ITEM_SERVER = 1;
@@ -64,22 +64,29 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     private static final int HEADER_TYPE = 0;
     private static final int ITEM_TYPE = 1;
     private static final int PROFILE_TYPE = 2;
-
-    private DrawerDataProvider mProvider;
-
+    public static ImageUploadListener imageUploadListener;
+    String userId;
+    Context context;
     // TODO clean this up.
-
-    String userid;
+    private DrawerDataProvider mProvider;
+    private ImageView profile_pic;
 
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
+        this.context = context;
         mProvider = provider;
+        imageUploadListener = new ImageUploadListener() {
+            @Override
+            public void imageUploaded() {
+                loadProfileImage(this);
+            }
+        };
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(context.getString(R.string.PREF_TAG_username), "Default Username");
-        userid = sharedPreferences.getString(context.getString(R.string.PREF_TAG_userid), "0");
+        userId = sharedPreferences.getString(context.getString(R.string.PREF_TAG_userid), "0");
 //        add(new DrawerAdapter.DrawerHeader(HEADER_USERNAME, username));
 
-        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, userid));
+        add(new DrawerAdapter.DrawerProfile(PROFILE_PROFILE, username, userId));
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "صفحه ی اصلی", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
@@ -149,50 +156,8 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         } else if (viewType == PROFILE_TYPE) {
             DrawerProfile profile = (DrawerProfile) getItem(position);
             TextView name = (TextView) v.findViewById(R.id.drawer_profile_name);
-            final ImageView profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
+            profile_pic = (ImageView) v.findViewById(R.id.drawer_profile_pic);
             name.setText(profile.title);
-//            Glide.with(getContext())
-//              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
-//              .apply(RequestOptions.circleCropTransform())
-//              .into(profile_pic);
-
-
-//            Picasso.with(getContext())
-//              .load(LoginActivity.URL+"profile_image/" + userid + ".png")
-//              .networkPolicy(NetworkPolicy.OFFLINE)
-//              .into(profile_pic, new Callback() {
-//                  @Override
-//                  public void onSuccess() {
-//
-//                  }
-//
-//                  @Override
-//                  public void onError() {
-//                      //Try again online if cache failed
-//                      Picasso.with(getContext())
-//                        .load(LoginActivity.URL+"profile_image/0.png")
-//                        .error(R.drawable.ic_action_error)
-//                        .into(profile_pic, new Callback() {
-//                            @Override
-//                            public void onSuccess() {
-//
-//                            }
-//
-//                            @Override
-//                            public void onError() {
-//                                Log.v("Picasso","Could not fetch image");
-//                            }
-//                        });
-//                  }
-//              });
-
-            File httpCacheDirectory = new File(getContext().getCacheDir(), "picasso-cache");
-            Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
-            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
-            picassoWithCache = new Picasso.Builder(getContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-            picassoWithCache.load(LoginActivity.URL+"profile_image/" + userid + ".png").transform(new CropCircleTransformation()).into(profile_pic);
-
-
 
 
             boolean enabled = isEnabled(position);
@@ -204,6 +169,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             name.setTextColor(textColor);
 //            profile_pic.setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
+            loadProfileImage(null);
         }
 
         return v;
@@ -256,6 +222,39 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     @Override
     public int getViewTypeCount() {
         return 3;
+    }
+
+    public void loadProfileImage(final ImageUploadListener imageUploadListener) {
+
+        Picasso.with(context)
+                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .transform(new CropCircleTransformation())
+                .fit().centerCrop()
+                .into(profile_pic, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(context, "load from cache!", Toast.LENGTH_LONG).show();
+//                        if (imageUploadListener != null)
+//                            imageUploadListener.imageUploaded();
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(context, "Download from Server!", Toast.LENGTH_LONG).show();
+
+                        // Try again online if cache failed
+                        Picasso.with(context)
+                                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
+                                .transform(new CropCircleTransformation())
+//                                .placeholder(R.drawable.default_profile)
+//                                .error(R.drawable.ic_action_error)
+                                .fit().centerCrop()
+                                .into(profile_pic);
+//                        if (imageUploadListener != null)
+//                            imageUploadListener.imageUploaded();
+                    }
+                });
     }
 
     /**

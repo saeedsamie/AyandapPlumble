@@ -37,8 +37,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -107,6 +107,7 @@ public class PlumbleActivity extends AppCompatActivity implements
     public static Context context;
     public static String plumbleUserName;
     public static ArrayList<IChannel> iChannels = new ArrayList<>();
+    public static File httpCacheDirectory;
     /**
      * List of fragments to be notified about service state changes.
      */
@@ -226,6 +227,7 @@ public class PlumbleActivity extends AppCompatActivity implements
             setTitle("اتصال قطع است");
         }
     };
+
     public static void deleteCache(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             File[] dirs = context.getExternalCacheDirs();
@@ -351,13 +353,14 @@ public class PlumbleActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        httpCacheDirectory = new File(getCacheDir(), "picasso-cache");
         context = this;
         sharedPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         username = sharedPreferences.getString(getString(R.string.PREF_TAG_username), "DEFAULT Username");
-        plumbleUserName = username+"|"+ new Random().nextInt();
+        plumbleUserName = username + "|" + new Random().nextInt();
         userId = sharedPreferences.getString(getString(R.string.PREF_TAG_userid), "UserId");
         Log.e("ENTERED", "Plumble Activity ----- OnCreate");
         server = new Server
@@ -367,8 +370,6 @@ public class PlumbleActivity extends AppCompatActivity implements
 
         mSettings = Settings.getInstance(this);
         setTheme(mSettings.getTheme());
-
-        setContentView(R.layout.activity_main);
 
         setStayAwake(mSettings.shouldStayAwake());
 

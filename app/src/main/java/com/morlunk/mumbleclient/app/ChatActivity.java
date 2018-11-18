@@ -17,17 +17,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.morlunk.mumbleclient.R.drawable;
@@ -35,7 +32,6 @@ import static com.morlunk.mumbleclient.R.id;
 
 public class ChatActivity extends AppCompatActivity {
 
-    public static Picasso picassoWithCache;
     Chronometer cmTimer;
     ImageView image;
     TextView title;
@@ -57,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         final int chatId = getIntent().getIntExtra("chatId", -1);
         String chatTitle = getIntent().getStringExtra("fullname");
-        Log.i("VDKHBVDKHBSDVKHBVSDKHB",chatTitle);
+        Log.i("VDKHBVDKHBSDVKHBVSDKHB", chatTitle);
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
         chat_layout = findViewById(R.id.chat_layout);
         final String finalChatTitle = chatTitle;
@@ -97,26 +93,33 @@ public class ChatActivity extends AppCompatActivity {
         }
         chatTitle = "ChatTitle";
         this.setTitle(chatTitle);
-
-//        if (chatId != -1)
-//            try {
-//                IJumbleSession session = PlumbleActivity.mService.getSession();
-//                session.joinChannel(chatId);
-//            } catch (JumbleDisconnectedException e) {
-//                e.printStackTrace();
-//            } catch (NumberFormatException e) {
-//                e.printStackTrace();
-//            }
-
         if (getIntent().getStringExtra("type").equals("pv")) {
             bio.setVisibility(View.GONE);
             title.setText(getIntent().getStringExtra("fullname"));
-            File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
-            Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
-            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
-            picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
-            picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(image);
 
+            Picasso.with(this)
+                    .load(getIntent().getStringExtra("image"))
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .transform(new CropCircleTransformation())
+                    .fit()
+                    .into(image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            // Try again online if cache failed
+                            Picasso.with(ChatActivity.this)
+                                    .load(getIntent().getStringExtra("image"))
+                                    .transform(new CropCircleTransformation())
+//                                .placeholder(R.drawable.default_profile)
+//                                .error(R.drawable.ic_action_error)
+                                    .fit()
+                                    .into(image);
+                        }
+                    });
         } else {
             title.setText(getIntent().getStringExtra("fullname"));
             bio.setText(getIntent().getStringExtra("bio"));
