@@ -2,6 +2,8 @@ package com.morlunk.mumbleclient.app;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,71 +11,55 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 
 public class GroupInfoActivity extends AppCompatActivity {
 
-    private static final int PICK_FILE_REQUEST = 1;
-
-    List<NameValuePair> nameValuePairs;
-    FloatingActionButton floatingActionButton;
     private ListView listView;
     private TextView bio;
     private ImageView image;
+    public static Picasso picassoWithCache;
+    List<NameValuePair> nameValuePairs;
+    FloatingActionButton floatingActionButton;
+    private static final int PICK_FILE_REQUEST = 1;
     private String selectedFilePath;
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-            totalHeight += 40;
-            Log.i("HBDJHBVD", totalHeight + "");
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
-
+    ArrayList<HashMap<String, String>> listValues;
+    ChatUsersListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,44 +82,135 @@ public class GroupInfoActivity extends AppCompatActivity {
         });
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.group_info_toolbar);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(GroupInfoActivity.this);
+                builderSingle.setTitle(listValues.get(position).get("name"));
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(GroupInfoActivity.this, android.R.layout.simple_list_item_1);
+                arrayAdapter.add("mute");
+                arrayAdapter.add("deafen");
+                arrayAdapter.add("mute & deafen");
+                arrayAdapter.add("kick");
+                arrayAdapter.add("make admin");
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, final int which) {
+//                        String strName = arrayAdapter.getItem(which);
+                        switch (arrayAdapter.getItem(which))
+                        {
+                            case "make admin" :
+                                final CharSequence[] items = {"اضافه کردن کاربر","حذف کردن کاربر","تغییر عکس","Mute کردن کاربر","Deafen کردن کاربر","اضافه کردن ادمین"};
+                                final ArrayList selectedItems=new ArrayList();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                                builder.setTitle("دسترسی های ادمین");
+                                builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                        if (isChecked) {
+                                            selectedItems.add(which);
+                                        } else if (selectedItems.contains(which)) {
+                                            selectedItems.remove(Integer.valueOf(which));
+                                        }
+                                    }
+                                });
+                                builder.setPositiveButton("اعمال", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                });
+                                builder.setNegativeButton("انصراف", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        //Do something else if you want
+                                    }
+                                });
+                                builder.create();
+                                builder.show();
+
+                                break;
+
+                            case "kick" :
+                                nameValuePairs = new ArrayList<NameValuePair>();
+                                nameValuePairs.add(new BasicNameValuePair("func", "kickUser"));
+                                nameValuePairs.add(new BasicNameValuePair("userId", listValues.get(position).get("id")));
+                                nameValuePairs.add(new BasicNameValuePair("chatId", getIntent().getStringExtra("chatId")));
+
+                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                    @Override
+                                    public void onTaskCompleted(JSONObject jsonObject) {
+                                        try {
+                                            if (jsonObject.getString("USER").equals("KICKED"))
+                                            {
+                                                Snackbar.make(findViewById(android.R.id.content), "کاربر مورد نظر حذف شد", Snackbar.LENGTH_SHORT)
+                                                  .show();
+                                                listValues.remove(position);
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            else
+                                            {
+                                                Snackbar
+                                                  .make(findViewById(android.R.id.content),"خطایی پیش آمده ، مجددا تلاش کنید", Snackbar.LENGTH_SHORT)
+                                                  .show();
+                                            }
+
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                }).execute();
+                                break;
+                        }
+
+
+
+                    }
+                });
+                builderSingle.show();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+        });
+
+
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.group_info_toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
+        if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String chatTitle = getIntent().getStringExtra("ChatTitle");
-        this.setTitle("  " + chatTitle);
+        this.setTitle("  "+chatTitle);
         bio.setText(getIntent().getStringExtra("bio"));
+        File httpCacheDirectory = new File(this.getCacheDir(), "picasso-cache");
+        Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+        picassoWithCache = new Picasso.Builder(this).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+        picassoWithCache.load(LoginActivity.URL+"profile_image/" + "def" + ".png").transform(new CropCircleTransformation()).fit().into(image);
 
-        Picasso.with(this)
-                .load(getIntent().getStringExtra("image"))
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .transform(new CropCircleTransformation())
-                .fit()
-                .into(image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError() {
-                        // Try again online if cache failed
-                        Picasso.with(GroupInfoActivity.this)
-                                .load(getIntent().getStringExtra("image"))
-                                .transform(new CropCircleTransformation())
-//                                .placeholder(R.drawable.default_profile)
-//                                .error(R.drawable.ic_action_error)
-                                .fit()
-                                .into(image);
-                    }
-                });
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "getUsers"));
         nameValuePairs.add(new BasicNameValuePair("chatId", getIntent().getStringExtra("chatId")));
         new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
             @Override
             public void onTaskCompleted(JSONObject jsonObject) {
-                final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
+                listValues = new ArrayList<>();
                 try {
                     JSONArray jsonArray;
                     jsonArray = jsonObject.getJSONArray("getUsers");
@@ -143,15 +220,14 @@ public class GroupInfoActivity extends AppCompatActivity {
                         JSONObject c = jsonArray.getJSONObject(i);
 
                         hashMap.put("name", c.getString("fullname"));
-                        hashMap.put("access", c.getString("access"));
-                        hashMap.put("property", c.getString("property"));
+                        hashMap.put("role", c.getString("role"));
                         hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
                         hashMap.put("id", c.getString("id"));
 
                         listValues.add(hashMap);
                     }
 
-                    ChatUsersListAdapter adapter = new ChatUsersListAdapter(GroupInfoActivity.this, listValues);
+                    adapter = new ChatUsersListAdapter(GroupInfoActivity.this, listValues);
                     listView.setAdapter(adapter);
                     setListViewHeightBasedOnChildren(listView);
 
@@ -160,9 +236,31 @@ public class GroupInfoActivity extends AppCompatActivity {
                 }
 
 
-            }
-        }).execute();
+            }}).execute();
 
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+            totalHeight += 40;
+            Log.i("HBDJHBVD",totalHeight+"");
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
     private void showFileChooser() {
