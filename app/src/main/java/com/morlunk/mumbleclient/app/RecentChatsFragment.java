@@ -141,7 +141,8 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             HashMap hashMap = new HashMap();
                             JSONObject c = jsonArray.getJSONObject(i);
 
-                            hashMap.put("role", c.getString("role"));
+                            hashMap.put("access", c.getString("access"));
+                            hashMap.put("property", c.getString("property"));
                             hashMap.put("title", c.getString("title"));
                             hashMap.put("type", c.getString("type"));
                             hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));

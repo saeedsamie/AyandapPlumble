@@ -143,7 +143,8 @@ public class GroupInfoActivity extends AppCompatActivity {
                         JSONObject c = jsonArray.getJSONObject(i);
 
                         hashMap.put("name", c.getString("fullname"));
-                        hashMap.put("role", c.getString("role"));
+                        hashMap.put("access", c.getString("access"));
+                        hashMap.put("property", c.getString("property"));
                         hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
                         hashMap.put("id", c.getString("id"));
 

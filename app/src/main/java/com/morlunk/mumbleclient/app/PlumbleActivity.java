@@ -276,6 +276,7 @@ public class PlumbleActivity extends AppCompatActivity implements
         try {
             final X509Certificate x509 = chain[0];
             AlertDialog.Builder adb = new AlertDialog.Builder(PlumbleActivity.this);
+            adb.setCancelable(false);
             adb.setTitle(R.string.untrusted_certificate);
             try {
                 MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -289,7 +290,6 @@ public class PlumbleActivity extends AppCompatActivity implements
             } catch (Exception e) {
                 e.printStackTrace();
                 adb.setMessage(x509.toString());
-                adb.setCancelable(false);
             }
             adb.setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
                 @Override

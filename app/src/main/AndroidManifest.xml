@@ -44,7 +44,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Plumble"
         android:largeHeap="true"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="true"
+        android:adjustViewBounds="true">
 
         <!-- <activity android:name=".wizard.WizardActivity" /> -->
         <activity
