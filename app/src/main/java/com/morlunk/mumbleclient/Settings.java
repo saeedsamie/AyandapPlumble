@@ -79,10 +79,10 @@ public class Settings {
     public static final Boolean DEFAULT_PTT_TOGGLE = false;
 
     public static final String PREF_INPUT_RATE = "input_quality";
-    public static final String DEFAULT_RATE = "8000";
+    public static final String DEFAULT_RATE = "22800";
 
     public static final String PREF_INPUT_QUALITY = "input_bitrate";
-    public static final int DEFAULT_INPUT_QUALITY = 22800;
+    public static final int DEFAULT_INPUT_QUALITY = 8000;
 
     public static final String PREF_AMPLITUDE_BOOST = "inputVolume";
     public static final Integer DEFAULT_AMPLITUDE_BOOST = 100;
