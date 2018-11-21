@@ -26,7 +26,6 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.morlunk.jumble.Constants;
-import com.morlunk.mumbleclient.app.SignupActivity;
 import com.morlunk.mumbleclient.db.DatabaseCertificate;
 import com.morlunk.mumbleclient.db.PlumbleSQLiteDatabase;
 
@@ -80,10 +79,10 @@ public class Settings {
     public static final Boolean DEFAULT_PTT_TOGGLE = false;
 
     public static final String PREF_INPUT_RATE = "input_quality";
-    public static final String DEFAULT_RATE = "48000";
+    public static final String DEFAULT_RATE = "8000";
 
     public static final String PREF_INPUT_QUALITY = "input_bitrate";
-    public static final int DEFAULT_INPUT_QUALITY = 40000;
+    public static final int DEFAULT_INPUT_QUALITY = 22800;
 
     public static final String PREF_AMPLITUDE_BOOST = "inputVolume";
     public static final Integer DEFAULT_AMPLITUDE_BOOST = 100;

@@ -62,8 +62,6 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ChatActivity.this, GroupInfoActivity.class);
 
-                Log.i("INTENTYPUTS", getIntent().getStringExtra("type") + "///" + getIntent().getStringExtra("ChatTitle") + "///" + getIntent().getStringExtra("chatId") + "///" + getIntent().getStringExtra("bio"));
-
                 intent.putExtra("type", getIntent().getStringExtra("type"));
                 intent.putExtra("ChatTitle", finalChatTitle);
                 intent.putExtra("chatId", chatId + "");
