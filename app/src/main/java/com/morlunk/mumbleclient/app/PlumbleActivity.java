@@ -108,6 +108,8 @@ public class PlumbleActivity extends AppCompatActivity implements
     public static String plumbleUserName;
     public static ArrayList<IChannel> iChannels = new ArrayList<>();
     public static File httpCacheDirectory;
+    public DrawerAdapter mDrawerAdapter;
+    PlumbleActivity plumbleActivity;
     /**
      * List of fragments to be notified about service state changes.
      */
@@ -123,7 +125,6 @@ public class PlumbleActivity extends AppCompatActivity implements
     private Settings mSettings;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private DrawerAdapter mDrawerAdapter;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private Fragment currentFragment;
@@ -201,7 +202,8 @@ public class PlumbleActivity extends AppCompatActivity implements
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            setTitle(currentFragment.getTag());
+            if (currentFragment != null)
+                setTitle(currentFragment.getTag());
             mService = ((PlumbleService.PlumbleBinder) service).getService();
             mService.setSuppressNotifications(true);
             mService.registerObserver(mObserver);
@@ -269,6 +271,10 @@ public class PlumbleActivity extends AppCompatActivity implements
 
     }
 
+    public PlumbleActivity getPlumbleActivity() {
+        return plumbleActivity;
+    }
+
     private void createCertificate(X509Certificate[] chain) {
         final Server lastServer = server;
         if (chain.length == 0)
@@ -282,11 +288,16 @@ public class PlumbleActivity extends AppCompatActivity implements
                 MessageDigest digest = MessageDigest.getInstance("SHA-1");
                 byte[] certDigest = digest.digest(x509.getEncoded());
                 String hexDigest = new String(Hex.encode(certDigest));
-                adb.setMessage(getString(R.string.certificate_info,
-                        x509.getSubjectDN().getName(),
-                        x509.getNotBefore().toString(),
-                        x509.getNotAfter().toString(),
-                        hexDigest));
+                adb.setMessage(getString(R.string.certificate_info) +
+                        x509.getSubjectDN().getName() +
+                        x509.getNotBefore().toString() +
+                        x509.getNotAfter().toString() +
+                        hexDigest);
+//                adb.setMessage(getString(R.string.certificate_info,
+//                        x509.getSubjectDN().getName(),
+//                        x509.getNotBefore().toString(),
+//                        x509.getNotAfter().toString(),
+//                        hexDigest));
             } catch (Exception e) {
                 e.printStackTrace();
                 adb.setMessage(x509.toString());
@@ -381,7 +392,7 @@ public class PlumbleActivity extends AppCompatActivity implements
         mDatabase.open();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        final ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -430,6 +441,7 @@ public class PlumbleActivity extends AppCompatActivity implements
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                mDrawerAdapter.loadProfileImage();
                 supportInvalidateOptionsMenu();
             }
         };

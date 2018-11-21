@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -34,8 +35,6 @@ import com.morlunk.mumbleclient.FilePath;
 import com.morlunk.mumbleclient.OnTaskCompletedListener;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.ServerFetchAsync;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
@@ -86,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String SERVER_URL = LoginActivity.URL + "image.php";
     private TextView textView;
     private BackgroundTask backgroundTask;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,32 +105,32 @@ public class ProfileActivity extends AppCompatActivity {
         ed_username.setEnabled(false);
         ivAttachment = findViewById(R.id.profile_image);
 
-        Picasso.with(this)
+//        Picasso.with(this)
+//                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
+//                .networkPolicy(NetworkPolicy.OFFLINE)
+//                .transform(new CropCircleTransformation())
+//                .fit().centerCrop()
+//                .into(ivAttachment, new Callback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Toast.makeText(ProfileActivity.this, "load from cache!", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//                        // Try again online if cache failed
+//                        Toast.makeText(ProfileActivity.this, "Download from Server!", Toast.LENGTH_LONG).show();
+
+        Picasso.with(ProfileActivity.this)
                 .load(LoginActivity.URL + "profile_image/" + userId + ".png")
-                .networkPolicy(NetworkPolicy.OFFLINE)
+                .skipMemoryCache()
                 .transform(new CropCircleTransformation())
-                .fit().centerCrop()
-                .into(ivAttachment, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(ProfileActivity.this, "load from cache!", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError() {
-                        // Try again online if cache failed
-                        Toast.makeText(ProfileActivity.this, "Download from Server!", Toast.LENGTH_LONG).show();
-
-                        Picasso.with(ProfileActivity.this)
-                                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
-                                .transform(new CropCircleTransformation())
 //                                .placeholder(R.drawable.default_profile)
 //                                .error(R.drawable.ic_action_error)
-                                .fit().centerCrop()
-                                .into(ivAttachment);
-                    }
-                });
-
+                .fit().centerCrop()
+                .into(ivAttachment);
+//                    }
+//                });
         profileView();
 
         ivAttachment.setOnClickListener(new View.OnClickListener() {
@@ -385,12 +385,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void profileUpdate() {
+        try {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(true);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("wait..");
+            progressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "profileUpdate"));
         nameValuePairs.add(new BasicNameValuePair("userId", userId));
         nameValuePairs.add(new BasicNameValuePair("fullname", ed_fullname.getText().toString()));
 
-        new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+        final ServerFetchAsync serverFetchAsync = new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
             @Override
             public void onTaskCompleted(JSONObject jsonObject) {
                 try {
@@ -403,8 +413,13 @@ public class ProfileActivity extends AppCompatActivity {
                                     uploadFile(selectedFilePath);
                                 }
                             }).start();
+                        } else {
+                            if (progressDialog != null) {
+                                progressDialog.hide();
+                            }
+                            finish();
                         }
-                        finish();
+//                        finish();
                     } else {
                         Snackbar
                                 .make(findViewById(android.R.id.content), "خطایی پیش آمده ، مجددا تلاش کنید", Snackbar.LENGTH_SHORT)
@@ -415,7 +430,14 @@ public class ProfileActivity extends AppCompatActivity {
                     e1.printStackTrace();
                 }
             }
-        }).execute();
+        });
+        serverFetchAsync.execute();
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                serverFetchAsync.cancel(false);
+            }
+        });
     }
 
     private class BackgroundTask extends AsyncTask<Void, Void, String> {
@@ -424,12 +446,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         private BackgroundTask(TextView textView) {
             this.messageViewReference = new WeakReference<>(textView);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            Picasso.with(ProfileActivity.this).invalidate(LoginActivity.URL + "profile_image/" + userId + ".png");
-            super.onPreExecute();
         }
 
         @Override
@@ -460,11 +476,17 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+//            Picasso.with(ProfileActivity.this).invalidate(LoginActivity.URL + "profile_image/" + userId + ".png");
+            Picasso.with(PlumbleActivity.context).invalidate(LoginActivity.URL + "profile_image/" + userId + ".png");
             TextView textView = messageViewReference.get();
             if (textView != null) {
                 textView.setText(s);
             }
-            DrawerAdapter.imageUploadListener.imageUploaded();
+            if (progressDialog != null) {
+                progressDialog.hide();
+            }
+            finish();
+
             Log.e("imageUpload", "imageUpload" + s);
         }
 

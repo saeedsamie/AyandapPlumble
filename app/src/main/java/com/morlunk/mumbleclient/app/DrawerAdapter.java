@@ -65,22 +65,17 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
     private static final int ITEM_TYPE = 1;
     private static final int PROFILE_TYPE = 2;
     public static ImageUploadListener imageUploadListener;
+    public ImageView profile_pic;
     String userId;
     Context context;
     // TODO clean this up.
     private DrawerDataProvider mProvider;
-    private ImageView profile_pic;
 
     public DrawerAdapter(Context context, DrawerDataProvider provider) {
         super(context, 0);
         this.context = context;
         mProvider = provider;
-        imageUploadListener = new ImageUploadListener() {
-            @Override
-            public void imageUploaded() {
-                loadProfileImage(this);
-            }
-        };
+
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(context.getString(R.string.PREF_TAG_username), "Default Username");
         userId = sharedPreferences.getString(context.getString(R.string.PREF_TAG_userid), "0");
@@ -169,7 +164,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
             name.setTextColor(textColor);
 //            profile_pic.setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
-            loadProfileImage(null);
+            loadProfileImage();
         }
 
         return v;
@@ -224,37 +219,38 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
         return 3;
     }
 
-    public void loadProfileImage(final ImageUploadListener imageUploadListener) {
-
-        Picasso.with(context)
-                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .transform(new CropCircleTransformation())
-                .fit().centerCrop()
-                .into(profile_pic, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(context, "load from cache!", Toast.LENGTH_LONG).show();
+    public void loadProfileImage() {
+        if (profile_pic != null)
+            Picasso.with(context)
+                    .load(LoginActivity.URL + "profile_image/" + userId + ".png")
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .transform(new CropCircleTransformation())
+                    .fit().centerCrop()
+                    .into(profile_pic, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(context, "load from cache!", Toast.LENGTH_LONG).show();
 //                        if (imageUploadListener != null)
 //                            imageUploadListener.imageUploaded();
-                    }
+                        }
 
-                    @Override
-                    public void onError() {
-                        Toast.makeText(context, "Download from Server!", Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onError() {
+                            Toast.makeText(context, "Download from Server!", Toast.LENGTH_LONG).show();
 
-                        // Try again online if cache failed
-                        Picasso.with(context)
-                                .load(LoginActivity.URL + "profile_image/" + userId + ".png")
-                                .transform(new CropCircleTransformation())
+            // Try again online if cache failed
+            Picasso.with(context)
+                    .load(LoginActivity.URL + "profile_image/" + userId + ".png")
+//                    .skipMemoryCache()
+                    .transform(new CropCircleTransformation())
 //                                .placeholder(R.drawable.default_profile)
 //                                .error(R.drawable.ic_action_error)
-                                .fit().centerCrop()
-                                .into(profile_pic);
-//                        if (imageUploadListener != null)
-//                            imageUploadListener.imageUploaded();
-                    }
-                });
+                    .fit().centerCrop()
+                    .into(profile_pic);
+                        if (imageUploadListener != null)
+                            imageUploadListener.imageUploaded();
+                        }
+                    });
     }
 
     /**

@@ -183,6 +183,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             progressDialog.setCancelable(true);
 
                             progressDialog.setMessage("لطفا صبر کنید..");
+
                             progressDialog.show();
 
                             final Intent intent = new Intent(getContext(), ChatActivity.class);

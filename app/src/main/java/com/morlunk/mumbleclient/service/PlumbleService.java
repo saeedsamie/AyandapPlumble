@@ -170,7 +170,7 @@ public class PlumbleService extends JumbleService implements
                 @Override
                 public void run() {
                     receivedNotifications();
-                    handler.postDelayed(this, 30000);
+                    handler.postDelayed(this, 60000);
                 }
             }, 0);
         }
