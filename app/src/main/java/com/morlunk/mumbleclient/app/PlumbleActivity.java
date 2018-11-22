@@ -745,6 +745,11 @@ public class PlumbleActivity extends AppCompatActivity implements
                 fragmentClass = ServerInfoFragment.class;
                 setTitle("اطلاعات");
                 break;
+            case DrawerAdapter.ITEM_LOGCAT:
+                fragmentchecker = false;
+                intent = new Intent(this, LogActivity.class);
+                startActivity(intent);
+                break;
 //            case DrawerAdapter.ITEM_ACCESS_TOKENS:
 //                fragmentClass = AccessTokenFragment.class;
 //                Server connectedServer = getService().getTargetServer();
