@@ -133,6 +133,7 @@ public class ChatActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         pushButton.setBackgroundResource(drawable.push_to_talk_pressed);
                         PlumbleActivity.mService.onTalkKeyDown();
+                        Log.i("AIUHDIUH", "");
                         break;
                     case MotionEvent.ACTION_UP:
                         pushButton.setBackgroundResource(drawable.push_to_talk_unpressed);
