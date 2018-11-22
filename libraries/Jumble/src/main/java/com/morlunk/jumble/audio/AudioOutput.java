@@ -18,7 +18,6 @@
 package com.morlunk.jumble.audio;
 
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Handler;
 import android.os.Looper;
@@ -61,6 +60,9 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
     private AudioOutputListener mListener;
     private final IAudioMixer<float[], short[]> mMixer;
     private ExecutorService mDecodeExecutorService;
+    private long lastsequence = 0;
+    public static long lostpacketscount = 0;
+    public static String log = "";
 
     public AudioOutput(AudioOutputListener listener) {
         mListener = listener;
@@ -214,8 +216,17 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
         User user = mListener.getUser(session);
         if(user != null && !user.isLocalMuted()) {
             // TODO check for whispers here
+
             int seq = (int) pds.readLong();
 
+            if (seq>lastsequence+2)
+            {
+                lostpacketscount+=seq-lastsequence-2;
+            }
+            lastsequence = seq;
+
+
+            Log.i("AUDIOANALYSIS","seq : "+seq);
             // Synchronize so we don't destroy an output while we add a buffer to it.
             mPacketLock.lock();
             AudioOutputSpeech aop = mAudioOutputs.get(session);
@@ -255,6 +266,19 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
                 if(user != null && user.getTalkState() != state) {
                     user.setTalkState(state);
                     mListener.onUserTalkStateUpdated(user);
+
+                    if (AudioOutput.lostpacketscount>0)
+                    {
+                        Log.v("AUDIOPACKETANALYSIS",AudioOutput.lostpacketscount+" بسته ی صدا گم شد");
+                        log += AudioOutput.lostpacketscount+" بسته ی صدا گم شد" + "\n";
+                    }
+                    else
+                    {
+                        Log.v("AUDIOPACKETANALYSIS","هیچ بسته ی صدایی گم نشد");
+                        log += "هیچ بسته ی صدایی گم نشد" + "\n";
+                    }
+                    AudioOutput.lostpacketscount = 0 ;
+
                 }
             }
         });
@@ -265,6 +289,7 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
          * Called when a user's talking state is changed.
          * @param user The user whose talking state has been modified.
          */
+
         public void onUserTalkStateUpdated(User user);
 
         /**

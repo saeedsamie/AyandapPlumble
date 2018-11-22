@@ -118,6 +118,7 @@ public class AudioHandler extends JumbleNetworkListener implements AudioInput.Au
 
         mInput = new AudioInput(this, mAudioSource, mSampleRate);
         mOutput = new AudioOutput(mOutputListener);
+
     }
 
     /**
@@ -480,6 +481,9 @@ public class AudioHandler extends JumbleNetworkListener implements AudioInput.Au
         ds.writeLong(mFrameCounter - frames);
         mEncoder.getEncodedData(ds);
         int length = ds.size();
+
+        Log.i("AUDIOLOG",ds.readLong()+"");
+
         ds.rewind();
 
         byte[] packet = ds.dataBlock(length);

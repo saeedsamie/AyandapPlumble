@@ -38,7 +38,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.ByteBuffer;
-import java.nio.channels.NotYetConnectedException;
 import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -868,6 +867,8 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
             case UDPVoiceCELTBeta:
             case UDPVoiceOpus:
                 handler.messageVoiceData(data, messageType);
+                Log.i("AUDIOANALYSIS","DATA : "+data.toString());
+                Log.i("AUDIOANALYSIS","TYPE : "+messageType.toString());
                 break;
         }
     }
