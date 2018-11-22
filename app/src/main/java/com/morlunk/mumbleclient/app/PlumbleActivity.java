@@ -60,6 +60,7 @@ import com.morlunk.jumble.IJumbleSession;
 import com.morlunk.jumble.model.IChannel;
 import com.morlunk.jumble.model.Server;
 import com.morlunk.jumble.protobuf.Mumble;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleObserver;
 import com.morlunk.mumbleclient.BuildConfig;
@@ -171,7 +172,11 @@ public class PlumbleActivity extends AppCompatActivity implements
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    long l = getService().getSession().getTCPLatency() / 1000;
+                    long l = 0;
+                    try {
+                        l = getService().getSession().getTCPLatency() / 1000;
+                    } catch (JumbleDisconnectedException e) {
+                    }
                     if(l<200)
                         textView.setBackgroundColor(Color.GREEN);
                     else if(l<500)
