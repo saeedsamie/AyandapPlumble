@@ -27,11 +27,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -50,6 +52,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.morlunk.jumble.IJumbleService;
@@ -163,7 +166,29 @@ public class PlumbleActivity extends AppCompatActivity implements
 
             updateConnectionState(getService());
             setTitle(currentFragment.getTag());
+            final TextView textView = findViewById(R.id.server_TCP_ping);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    long l = getService().getSession().getTCPLatency() / 1000;
+                    if(l<200)
+                        textView.setBackgroundColor(Color.GREEN);
+                    else if(l<500)
+                        textView.setBackgroundColor(Color.YELLOW);
+                    else if(500<l)
+                        textView.setBackgroundColor(Color.RED);
 
+                    textView.setText( l + "ms");
+                    handler.postDelayed(this, 10);
+                }
+            }, 0);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                }
+            });
         }
 
         @Override
