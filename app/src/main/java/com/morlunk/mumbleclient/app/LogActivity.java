@@ -39,6 +39,8 @@ public class LogActivity extends AppCompatActivity{
           switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
               PlumbleActivity.mService.onTalkKeyDown();
+              long time = System.currentTimeMillis();
+              AudioOutput.log += time + "\n";
               break;
             case MotionEvent.ACTION_UP:
               PlumbleActivity.mService.onTalkKeyUp();

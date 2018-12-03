@@ -128,9 +128,10 @@ public class ChatActivity extends AppCompatActivity  {
                         cmTimer.setBase(SystemClock.elapsedRealtime());
                         cmTimer.start();
                         //
+                        long time = System.currentTimeMillis();
+                        AudioOutput.log += time + "\n";
 
-                        Date aa = Calendar.getInstance().getTime();
-                        AudioOutput.log += aa.toString() + "\n";
+
 
                         //jgfjvjv
 
