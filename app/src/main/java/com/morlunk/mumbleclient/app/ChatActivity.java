@@ -132,6 +132,7 @@ public class ChatActivity extends AppCompatActivity  {
                         Date aa = Calendar.getInstance().getTime();
                         AudioOutput.log += aa.toString() + "\n";
 
+                        //jgfjvjv
 
                         pushButton.setBackgroundResource(drawable.push_to_talk_pressed);
                         PlumbleActivity.mService.onTalkKeyDown();
