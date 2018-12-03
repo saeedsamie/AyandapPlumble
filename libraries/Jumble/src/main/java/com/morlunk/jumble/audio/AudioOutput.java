@@ -35,6 +35,8 @@ import com.morlunk.jumble.protocol.AudioHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -267,10 +269,14 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
                     user.setTalkState(state);
                     mListener.onUserTalkStateUpdated(user);
 
+                    Date aa = Calendar.getInstance().getTime();
+                        AudioOutput.log += aa.toString() + "\n";
+
                     if (AudioOutput.lostpacketscount>0)
                     {
                         Log.v("AUDIOPACKETANALYSIS",AudioOutput.lostpacketscount+" پاکت صدا گم شد");
                         log += AudioOutput.lostpacketscount+" بسته ی صدا گم شد" + "\n";
+
                     }
                     else
                     {
