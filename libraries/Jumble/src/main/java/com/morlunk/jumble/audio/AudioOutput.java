@@ -269,7 +269,7 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
 
                     if (AudioOutput.lostpacketscount>0)
                     {
-                        Log.v("AUDIOPACKETANALYSIS",AudioOutput.lostpacketscount+" بسته ی صدا گم شد");
+                        Log.v("AUDIOPACKETANALYSIS",AudioOutput.lostpacketscount+" پاکت صدا گم شد");
                         log += AudioOutput.lostpacketscount+" بسته ی صدا گم شد" + "\n";
                     }
                     else
