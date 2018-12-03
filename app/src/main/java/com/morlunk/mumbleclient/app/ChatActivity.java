@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -14,34 +13,39 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.jumble.IJumbleService;
+import com.morlunk.jumble.IJumbleSession;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.morlunk.mumbleclient.R.drawable;
 import static com.morlunk.mumbleclient.R.id;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity  {
 
     Chronometer cmTimer;
-    ImageView image;
-    TextView title;
-    TextView bio;
-    LinearLayout chat_layout;
     private ProgressDialog mConnectingDialog;
     private AlertDialog mErrorDialog;
     private IPlumbleService service;
     private boolean resume = false;
     private long elapsedTime;
+    ImageView image;
+    TextView title;
+    TextView bio ;
+    public static Picasso picassoWithCache;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -51,38 +55,27 @@ public class ChatActivity extends AppCompatActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         setContentView(R.layout.activity_chat);
-        final int chatId = getIntent().getIntExtra("chatId", -1);
-        String chatTitle = getIntent().getStringExtra("fullname");
-        Log.i("VDKHBVDKHBSDVKHBVSDKHB", chatTitle);
+        int chatId = getIntent().getIntExtra("chatId", -1);
+        String chatTitle = getIntent().getStringExtra("ChatTitle");
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
-        chat_layout = findViewById(R.id.chat_layout);
-        final String finalChatTitle = chatTitle;
-        chat_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, GroupInfoActivity.class);
 
-                intent.putExtra("type", getIntent().getStringExtra("type"));
-                intent.putExtra("ChatTitle", finalChatTitle);
-                intent.putExtra("chatId", chatId + "");
-                intent.putExtra("bio", getIntent().getStringExtra("bio"));
-                if (getIntent().getStringExtra("type").equals("group")) {
-                    startActivity(intent);
-                }
-            }
-        });
         image = findViewById(id.c_image);
         title = findViewById(id.c_name);
         bio = findViewById(id.c_bio);
+
         cmTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             public void onChronometerTick(Chronometer arg0) {
+                long minutes , seconds;
                 if (!resume) {
-                    long minutes = ((SystemClock.elapsedRealtime() - cmTimer.getBase()) / 1000) / 60;
-                    long seconds = ((SystemClock.elapsedRealtime() - cmTimer.getBase()) / 1000) % 60;
+                    minutes = ((SystemClock.elapsedRealtime() - cmTimer.getBase()) / 1000) / 60;
+                    seconds = ((SystemClock.elapsedRealtime() - cmTimer.getBase()) / 1000) % 60;
                     elapsedTime = SystemClock.elapsedRealtime();
 
                     Log.d("choronometer", "onChronometerTick: " + minutes + " : " + seconds);
+                    Log.d("ascv", ":        " +resume);
                 }
+
+
             }
         });
 
@@ -91,33 +84,26 @@ public class ChatActivity extends AppCompatActivity {
         }
         chatTitle = "ChatTitle";
         this.setTitle(chatTitle);
+
+        if (chatId!=-1)
+            try {
+                IJumbleSession session = PlumbleActivity.mService.getSession();
+                session.joinChannel(chatId);
+            } catch (JumbleDisconnectedException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
         if (getIntent().getStringExtra("type").equals("pv")) {
             bio.setVisibility(View.GONE);
             title.setText(getIntent().getStringExtra("fullname"));
+            File httpCacheDirectory = new File(getBaseContext().getCacheDir(), "picasso-cache");
+            Cache cache = new Cache(httpCacheDirectory, 15 * 1024 * 1024);
+            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().cache(cache);
+            picassoWithCache = new Picasso.Builder(getBaseContext()).downloader(new OkHttp3Downloader(okHttpClientBuilder.build())).build();
+            picassoWithCache.load(getIntent().getStringExtra("image")).transform(new CropCircleTransformation()).into(image);
 
-            Picasso.with(this)
-                    .load(getIntent().getStringExtra("image"))
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .transform(new CropCircleTransformation())
-                    .fit()
-                    .into(image, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            // Try again online if cache failed
-                            Picasso.with(ChatActivity.this)
-                                    .load(getIntent().getStringExtra("image"))
-                                    .transform(new CropCircleTransformation())
-//                                .placeholder(R.drawable.default_profile)
-//                                .error(R.drawable.ic_action_error)
-                                    .fit()
-                                    .into(image);
-                        }
-                    });
         } else {
             title.setText(getIntent().getStringExtra("fullname"));
             bio.setText(getIntent().getStringExtra("bio"));
@@ -131,11 +117,18 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        //start and stop counter
+                        cmTimer.setBase(SystemClock.elapsedRealtime());
+                        cmTimer.start();
+                        //
                         pushButton.setBackgroundResource(drawable.push_to_talk_pressed);
                         PlumbleActivity.mService.onTalkKeyDown();
-                        Log.i("AIUHDIUH", "");
                         break;
                     case MotionEvent.ACTION_UP:
+                        //start and stop counter
+                        cmTimer.setBase(SystemClock.elapsedRealtime());
+                        cmTimer.stop();
+                        //
                         pushButton.setBackgroundResource(drawable.push_to_talk_unpressed);
                         PlumbleActivity.mService.onTalkKeyUp();
                         break;
