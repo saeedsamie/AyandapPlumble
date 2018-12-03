@@ -18,12 +18,15 @@ import android.widget.TextView;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.morlunk.jumble.IJumbleService;
 import com.morlunk.jumble.IJumbleSession;
+import com.morlunk.jumble.audio.AudioOutput;
 import com.morlunk.jumble.util.JumbleDisconnectedException;
 import com.morlunk.mumbleclient.R;
 import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import okhttp3.Cache;
@@ -112,6 +115,10 @@ public class ChatActivity extends AppCompatActivity  {
         final ImageView pushButton = (ImageView) findViewById(id.push_button);
         final int width = 400;
         final int hight = 400;
+
+
+
+
         pushButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -121,9 +128,16 @@ public class ChatActivity extends AppCompatActivity  {
                         cmTimer.setBase(SystemClock.elapsedRealtime());
                         cmTimer.start();
                         //
+
+                        Date aa = Calendar.getInstance().getTime();
+                        AudioOutput.log += aa.toString() + "\n";
+
+
                         pushButton.setBackgroundResource(drawable.push_to_talk_pressed);
                         PlumbleActivity.mService.onTalkKeyDown();
                         break;
+
+
                     case MotionEvent.ACTION_UP:
                         //start and stop counter
                         cmTimer.setBase(SystemClock.elapsedRealtime());
