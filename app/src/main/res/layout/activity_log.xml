@@ -4,6 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+  <TextView
+      android:id="@+id/server_TCP_ping_log"
+      android:layout_width="match_parent"
+      android:layout_height="20dp"
+      android:gravity="center"
+      android:text="Ping"
+      android:textColor="@color/white" />
+
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="0dp"
