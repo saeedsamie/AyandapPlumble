@@ -222,17 +222,18 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
             long elapsed = getElapsed();
             mLastTCPPing = elapsed-msg.getTimestamp();
 
-            if(((mCryptState.mUiRemoteGood == 0) || (mCryptState.mUiGood == 0)) && mUsingUDP && elapsed > 20000000) {
-                mUsingUDP = false;
-                if(!shouldForceTCP() && mListener != null) {
-                    if((mCryptState.mUiRemoteGood == 0) && (mCryptState.mUiGood == 0))
-                        mListener.onConnectionWarning("UDP packets cannot be sent to or received from the server. Switching to TCP mode.");
-                    else if(mCryptState.mUiRemoteGood == 0)
-                        mListener.onConnectionWarning("UDP packets cannot be sent to the server. Switching to TCP mode.");
-                    else
-                        mListener.onConnectionWarning("UDP packets cannot be received from the server. Switching to TCP mode.");
-                }
-            } else if (!mUsingUDP && (mCryptState.mUiRemoteGood > 3) && (mCryptState.mUiGood > 3)) {
+//            if(((mCryptState.mUiRemoteGood == 0) || (mCryptState.mUiGood == 0)) && mUsingUDP && elapsed > 20000000) {
+//                mUsingUDP = false;
+//                if(!shouldForceTCP() && mListener != null) {
+//                    if((mCryptState.mUiRemoteGood == 0) && (mCryptState.mUiGood == 0))
+//                        mListener.onConnectionWarning("UDP packets cannot be sent to or received from the server. Switching to TCP mode.");
+//                    else if(mCryptState.mUiRemoteGood == 0)
+//                        mListener.onConnectionWarning("UDP packets cannot be sent to the server. Switching to TCP mode.");
+//                    else
+//                        mListener.onConnectionWarning("UDP packets cannot be received from the server. Switching to TCP mode.");
+//                }
+//            } else
+                if (!mUsingUDP && (mCryptState.mUiRemoteGood > 3) && (mCryptState.mUiGood > 3)) {
                 mUsingUDP = true;
                 if (!shouldForceTCP() && mListener != null)
                     mListener.onConnectionWarning("UDP packets can be sent to and received from the server. Switching back to UDP mode.");
