@@ -195,6 +195,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "getUsers"));
         nameValuePairs.add(new BasicNameValuePair("chatId", getIntent().getStringExtra("chatId")));
+        Log.i("kighbsdhb",getIntent().getStringExtra("chatId"));
         new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
             @Override
             public void onTaskCompleted(JSONObject jsonObject) {
@@ -203,17 +204,21 @@ public class GroupInfoActivity extends AppCompatActivity {
                     JSONArray jsonArray;
                     jsonArray = jsonObject.getJSONArray("getUsers");
 
+                    Log.i("TESTJSONNNN",jsonObject.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         HashMap hashMap = new HashMap();
                         JSONObject c = jsonArray.getJSONObject(i);
 
                         hashMap.put("name", c.getString("fullname"));
-                        hashMap.put("role", c.getString("role"));
+                        hashMap.put("property", c.getString("property"));
+                        hashMap.put("access", c.getString("access"));
                         hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
                         hashMap.put("id", c.getString("id"));
 
                         listValues.add(hashMap);
                     }
+
+
 
                     adapter = new ChatUsersListAdapter(GroupInfoActivity.this, listValues);
                     listView.setAdapter(adapter);

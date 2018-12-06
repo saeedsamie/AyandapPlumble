@@ -114,6 +114,7 @@ public class PlumbleActivity extends AppCompatActivity implements
     public static File httpCacheDirectory;
     public DrawerAdapter mDrawerAdapter;
     PlumbleActivity plumbleActivity;
+    public static long l = 0;
     /**
      * List of fragments to be notified about service state changes.
      */
@@ -123,7 +124,6 @@ public class PlumbleActivity extends AppCompatActivity implements
      * List of fragments to be notified about service state changes.
      */
     ArrayList<IChannel> chls = new ArrayList<IChannel>();
-    public static long l;
     private boolean isCertificateCreated = false;
     private Server server;
     private PlumbleDatabase mDatabase;
@@ -173,7 +173,6 @@ public class PlumbleActivity extends AppCompatActivity implements
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         l = getService().getSession().getTCPLatency() / 1000;
                     } catch (JumbleDisconnectedException e) {

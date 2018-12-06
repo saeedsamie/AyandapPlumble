@@ -222,21 +222,23 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
             long elapsed = getElapsed();
             mLastTCPPing = elapsed-msg.getTimestamp();
 
-//            if(((mCryptState.mUiRemoteGood == 0) || (mCryptState.mUiGood == 0)) && mUsingUDP && elapsed > 20000000) {
-//                mUsingUDP = false;
-//                if(!shouldForceTCP() && mListener != null) {
-//                    if((mCryptState.mUiRemoteGood == 0) && (mCryptState.mUiGood == 0))
-//                        mListener.onConnectionWarning("UDP packets cannot be sent to or received from the server. Switching to TCP mode.");
-//                    else if(mCryptState.mUiRemoteGood == 0)
-//                        mListener.onConnectionWarning("UDP packets cannot be sent to the server. Switching to TCP mode.");
-//                    else
-//                        mListener.onConnectionWarning("UDP packets cannot be received from the server. Switching to TCP mode.");
-//                }
-//            } else
-                if (!mUsingUDP && (mCryptState.mUiRemoteGood > 3) && (mCryptState.mUiGood > 3)) {
+            if(((mCryptState.mUiRemoteGood == 0) || (mCryptState.mUiGood == 0)) && mUsingUDP && elapsed > 20000000) {
+                Log.i("UDPTCPTESTING","STATE CHANGED TO TCP");
+                mUsingUDP = false;
+                if(!shouldForceTCP() && mListener != null) {
+                    if((mCryptState.mUiRemoteGood == 0) && (mCryptState.mUiGood == 0))
+                        mListener.onConnectionWarning("UDP packets cannot be sent to or received from the server. Switching to TCP mode.");
+                    else if(mCryptState.mUiRemoteGood == 0)
+                        mListener.onConnectionWarning("UDP packets cannot be sent to the server. Switching to TCP mode.");
+                    else
+                        mListener.onConnectionWarning("UDP packets cannot be received from the server. Switching to TCP mode.");
+                }
+            } else if (!mUsingUDP && (mCryptState.mUiRemoteGood > 3) && (mCryptState.mUiGood > 3)) {
                 mUsingUDP = true;
-                if (!shouldForceTCP() && mListener != null)
+                if (!shouldForceTCP() && mListener != null) {
+                    Log.i("UDPTCPTESTING","STATE CHANGED TO UDP");
                     mListener.onConnectionWarning("UDP packets can be sent to and received from the server. Switching back to UDP mode.");
+                }
             }
         }
     };
@@ -282,7 +284,9 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
             pb.setLost(mCryptState.mUiLost);
             pb.setResync(mCryptState.mUiResync);
             // TODO accumulate stats and send with ping
+            Log.i("UDPTCPTESTING","SENDING TCP   //// PING");
             sendTCPMessage(pb.build(), JumbleTCPMessageType.Ping);
+
         }
     };
 
@@ -556,6 +560,7 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
      * @param messageType The corresponding protobuf message type.
      */
     public void sendTCPMessage(Message message, JumbleTCPMessageType messageType) {
+
         if(!mConnected || mTCP == null) return;
         mTCP.sendMessage(message, messageType);
     }
@@ -567,6 +572,7 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
      * @param force Whether to avoid tunneling this data over TCP.
      */
     public void sendUDPMessage(final byte[] data, final int length, final boolean force) {
+        Log.i("UDPTCPTESTING","SENDING UDP");
         if (!mConnected) return;
         if (length > data.length) {
             throw new IllegalArgumentException("Requested length " + length + " is longer than " +
@@ -586,6 +592,8 @@ public class JumbleConnection implements JumbleTCP.TCPConnectionListener, Jumble
         if(!mConnected) return;
         Mumble.UDPTunnel.Builder utb = Mumble.UDPTunnel.newBuilder();
         utb.setPacket(ByteString.copyFrom(new byte[3]));
+        Log.i("UDPTCPTESTING","SENDING TCP ///////UDP Tunnel ");
+
         sendTCPMessage(utb.build(), JumbleTCPMessageType.UDPTunnel);
     }
 

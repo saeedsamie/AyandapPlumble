@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorSecondaryDark">
+                android:background="#cccccc">
 
 
   <android.support.v7.widget.Toolbar
@@ -16,7 +16,7 @@
     android:id="@+id/search_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="#000" >
+    android:textColor="#000">
 
   </com.miguelcatalan.materialsearchview.MaterialSearchView>
 
@@ -31,14 +31,12 @@
       android:id="@+id/create_group_search_listview"
       android:layout_width="match_parent"
       android:layout_height="465dp"
+      android:layout_below="@+id/toolbar"
       android:layout_weight="1"
-      android:divider="@color/cardOutline"
-      android:dividerHeight="1dp"
-      android:paddingLeft="12dp"
-      android:paddingRight="12dp"
-      android:scrollingCache="true">
-
-    </ListView>
+      android:divider="#cccccc"
+      android:dividerHeight="4dp"
+      android:padding="5dp"
+      android:scrollingCache="true"/>
 
     <Button
       android:id="@+id/create_group_continue"

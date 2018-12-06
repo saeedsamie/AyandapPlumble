@@ -190,7 +190,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             HashMap<String, String> map = listValues.get(position);
                             Log.e("map", "map" + map.toString());
                             int chatId = Integer.valueOf(listValues.get(position).get("chatId"));
-                            intent.putExtra("chatId", chatId);
+                            intent.putExtra("chatId", listValues.get(position).get("chatId"));
                             Log.e("chatId", "recentChats:" + chatId);
                             intent.putExtra("bio", (listValues.get(position).get("bio")));
                             intent.putExtra("fullname", (listValues.get(position).get("title")));

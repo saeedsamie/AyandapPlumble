@@ -27,8 +27,6 @@ import com.morlunk.mumbleclient.service.IPlumbleService;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import okhttp3.Cache;
@@ -69,13 +67,10 @@ public class ChatActivity extends AppCompatActivity  {
         group_info_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bio = getIntent().getStringExtra("bio");
-                String chatId = getIntent().getStringExtra("chatId");
-                String ChatTitle = getIntent().getStringExtra("ChatTitle");
                 Intent intent = new Intent(ChatActivity.this,GroupInfoActivity.class);
-                intent.putExtra("bio",bio);
-                intent.putExtra("chatId",chatId);
-                intent.putExtra("ChatTitle",ChatTitle);
+                intent.putExtra("bio",getIntent().getStringExtra("bio"));
+                intent.putExtra("chatId",getIntent().getStringExtra("chatId"));
+                intent.putExtra("ChatTitle",getIntent().getStringExtra("fullname"));
                 startActivity(intent);
 
             }

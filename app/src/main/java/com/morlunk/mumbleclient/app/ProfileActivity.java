@@ -389,7 +389,7 @@ public class ProfileActivity extends AppCompatActivity {
             progressDialog = new ProgressDialog(this);
             progressDialog.setCancelable(true);
             progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("wait..");
+            progressDialog.setMessage("لطفا صبر کنید...");
             progressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();

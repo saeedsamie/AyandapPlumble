@@ -1,14 +1,7 @@
 package com.morlunk.mumbleclient.app;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Shader;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +16,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -73,6 +64,7 @@ public class SearchListAdapter extends BaseAdapter {
             viewHolder.username = (TextView) convertView.findViewById(R.id.username);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
             viewHolder.search_layout = (LinearLayout) convertView.findViewById(R.id.search_layout);
+            viewHolder.search_selected = (LinearLayout) convertView.findViewById(R.id.search_selected);
 
             result = convertView;
             convertView.setTag(viewHolder);
@@ -84,13 +76,13 @@ public class SearchListAdapter extends BaseAdapter {
         viewHolder.username.setText(values.get(position).get("username"));
         if (values.get(position).get("selected").equals("1")) {
             Log.i("UIHSDCIUHVDIU", "" + position);
-            viewHolder.search_layout.setBackgroundColor(Color.parseColor("#839496"));
+            viewHolder.search_selected.setBackgroundColor(Color.parseColor("#4eb9ef"));
             viewHolder.userFullname.setTextColor(Color.parseColor("#000000"));
             viewHolder.username.setTextColor(Color.parseColor("#000000"));
         } else {
-            viewHolder.search_layout.setBackgroundColor(Color.parseColor("#00000000"));
-            viewHolder.userFullname.setTextColor(Color.parseColor("#FFFFFF"));
-            viewHolder.username.setTextColor(Color.parseColor("#FFFFFF"));
+            viewHolder.search_selected.setBackgroundColor(Color.parseColor("#00000000"));
+            viewHolder.userFullname.setTextColor(Color.parseColor("#000000"));
+            viewHolder.username.setTextColor(Color.parseColor("#8c8c8c"));
         }
 
         final int pos = position;
@@ -127,6 +119,7 @@ public class SearchListAdapter extends BaseAdapter {
         TextView username;
         ImageView icon;
         LinearLayout search_layout;
+        LinearLayout search_selected;
     }
 
 

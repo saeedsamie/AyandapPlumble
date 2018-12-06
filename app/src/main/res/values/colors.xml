@@ -17,7 +17,7 @@
   -->
 
 <resources>
-    <color name="cardOutline">#d3d3d3</color>
+    <color name="cardOutline">#cecece</color>
     <color name="push_to_talk_background">#555555</color>
     <color name="card_dark">#111111</color>
     <color name="list_highlight_colour">#55CCCCCC</color>

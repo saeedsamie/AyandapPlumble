@@ -238,7 +238,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 
                         @Override
                         public void onError() {
-                            Toast.makeText(context, "Download from Server!", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context, "Download from Server!", Toast.LENGTH_LONG).show();
 
             // Try again online if cache failed
             Picasso.with(context)
