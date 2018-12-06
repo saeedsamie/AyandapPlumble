@@ -8,12 +8,14 @@
     android:id="@+id/search_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
     android:orientation="horizontal"
-    android:padding="10dp"
-    android:layout_alignParentLeft="true">
-
+    android:paddingBottom="13dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="13dp">
 
 
     <ImageView

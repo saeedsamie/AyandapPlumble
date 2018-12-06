@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class CreateChatActivity extends AppCompatActivity {
     List<NameValuePair> nameValuePairs;
     Boolean chatCreated = false;
     private ListView listView;
+    String old = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,111 +78,130 @@ public class CreateChatActivity extends AppCompatActivity {
                 return false;
             }
 
+
+
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(final String newText) {
                 if (newText != null && !newText.isEmpty()) {
-                    nameValuePairs = new ArrayList<NameValuePair>();
-                    nameValuePairs.add(new BasicNameValuePair("func", "search"));
-                    nameValuePairs.add(new BasicNameValuePair("username", newText));
-                    new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+
+                    old = newText;
+
+                    new Handler().postDelayed(new Runnable() {
                         @Override
-                        public void onTaskCompleted(JSONObject jsonObject) {
-                            final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
-                            try {
-                                JSONArray jsonArray;
-                                jsonArray = jsonObject.getJSONArray("search");
-
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    HashMap hashMap = new HashMap();
-                                    JSONObject c = jsonArray.getJSONObject(i);
-
-                                    hashMap.put("fullname", c.getString("fullname"));
-                                    hashMap.put("username", c.getString("username"));
-                                    hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
-                                    hashMap.put("id", c.getString("id"));
-                                    hashMap.put("selected", "0");
-
-                                    listValues.add(hashMap);
-                                }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            Log.i("WEAKMEWAKM", "" + listValues);
+                        public void run() {
 
 
 
+                            if(old.equals(newText)){
+                                Log.i("SFKIGUEFSIKUGF","REQUESTED");
+                                nameValuePairs = new ArrayList<NameValuePair>();
+                                nameValuePairs.add(new BasicNameValuePair("func", "search"));
+                                nameValuePairs.add(new BasicNameValuePair("username", newText));
+                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                    @Override
+                                    public void onTaskCompleted(JSONObject jsonObject) {
+                                        final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
+                                        try {
+                                            JSONArray jsonArray;
+                                            jsonArray = jsonObject.getJSONArray("search");
 
-                            SearchListAdapter adapter = new SearchListAdapter(CreateChatActivity.this, listValues);
-                            listView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                HashMap hashMap = new HashMap();
+                                                JSONObject c = jsonArray.getJSONObject(i);
 
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    nameValuePairs = new ArrayList<NameValuePair>();
-                                    nameValuePairs.add(new BasicNameValuePair("func", "createPV"));
-                                    String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
-                                            .getString(getString(R.string.PREF_TAG_userid), "-2");
-                                    String fullName = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
-                                            .getString(getString(R.string.PREF_TAG_fullname), "--3");
-                                    nameValuePairs.add(new BasicNameValuePair("fromName", fullName));
-                                    nameValuePairs.add(new BasicNameValuePair("toName", listValues.get(position).get("fullname")));
-                                    nameValuePairs.add(new BasicNameValuePair("fromId", userId));
-                                    nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
-                                    Log.e("channels", PlumbleActivity.iChannels.toString());
+                                                hashMap.put("fullname", c.getString("fullname"));
+                                                hashMap.put("username", c.getString("username"));
+                                                hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
+                                                hashMap.put("id", c.getString("id"));
+                                                hashMap.put("selected", "0");
 
-                                    final int p = position;
-                                    new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                                listValues.add(hashMap);
+                                            }
 
-                                        @Override
-                                        public void onTaskCompleted(JSONObject jsonObject) {
-                                            IPlumbleService iPlumbleService = PlumbleActivity.mService;
-                                            try {
-                                                switch (jsonObject.getString("PV")) {
-                                                    case "DB ERROR":
-                                                        Toast.makeText(CreateChatActivity.this, "DataBase problem Chat didn't create!", Toast.LENGTH_LONG).show();
-                                                        break;
-                                                    case "CHAT NOT FOUND":
-                                                        Toast.makeText(CreateChatActivity.this, "Chat Not found!", Toast.LENGTH_LONG).show();
-                                                        break;
-                                                    case "CREATED":
-                                                        int chatId = Integer.valueOf(jsonObject.getString("chatId"));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        Log.i("WEAKMEWAKM", "" + listValues);
+
+
+
+
+                                        SearchListAdapter adapter = new SearchListAdapter(CreateChatActivity.this, listValues);
+                                        listView.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
+
+                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                nameValuePairs = new ArrayList<NameValuePair>();
+                                                nameValuePairs.add(new BasicNameValuePair("func", "createPV"));
+                                                String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                                                  .getString(getString(R.string.PREF_TAG_userid), "-2");
+                                                String fullName = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                                                  .getString(getString(R.string.PREF_TAG_fullname), "--3");
+                                                nameValuePairs.add(new BasicNameValuePair("fromName", fullName));
+                                                nameValuePairs.add(new BasicNameValuePair("toName", listValues.get(position).get("fullname")));
+                                                nameValuePairs.add(new BasicNameValuePair("fromId", userId));
+                                                nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
+                                                Log.e("channels", PlumbleActivity.iChannels.toString());
+
+                                                final int p = position;
+                                                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+
+                                                    @Override
+                                                    public void onTaskCompleted(JSONObject jsonObject) {
+                                                        IPlumbleService iPlumbleService = PlumbleActivity.mService;
                                                         try {
-                                                            iPlumbleService.getSession()
-                                                                    .createChannel(0, String.valueOf(chatId), "felan", 0, true);//todo delete description
-                                                            Log.e("CreateChat", "channel created");
+                                                            switch (jsonObject.getString("PV")) {
+                                                                case "DB ERROR":
+                                                                    Toast.makeText(CreateChatActivity.this, "DataBase problem Chat didn't create!", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case "CHAT NOT FOUND":
+                                                                    Toast.makeText(CreateChatActivity.this, "Chat Not found!", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case "CREATED":
+                                                                    int chatId = Integer.valueOf(jsonObject.getString("chatId"));
+                                                                    try {
+                                                                        iPlumbleService.getSession()
+                                                                          .createChannel(0, String.valueOf(chatId), "felan", 0, true);//todo delete description
+                                                                        Log.e("CreateChat", "channel created");
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                        Log.e("CreateChat", "channel Didn't create in jumble request!");
+                                                                    }
+                                                                    Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
+                                                                    intent.putExtra("chatId", chatId);
+                                                                    intent.putExtra("bio", (listValues.get(p).get("bio")));
+                                                                    intent.putExtra("fullname", (listValues.get(p).get("fullname")));
+                                                                    intent.putExtra("image", (listValues.get(p).get("image")));
+                                                                    intent.putExtra("type", ("private"));
+                                                                    startActivity(intent);
+                                                                    break;
+                                                                case "EXIST":
+                                                                    Log.e("Ex", "Exist");
+                                                                    Toast.makeText(CreateChatActivity.this, "Chat Exist", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                default:
+                                                                    Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                            }
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
-                                                            Log.e("CreateChat", "channel Didn't create in jumble request!");
                                                         }
-                                                        Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
-                                                        intent.putExtra("chatId", chatId);
-                                                        intent.putExtra("bio", (listValues.get(p).get("bio")));
-                                                        intent.putExtra("fullname", (listValues.get(p).get("fullname")));
-                                                        intent.putExtra("image", (listValues.get(p).get("image")));
-                                                        intent.putExtra("type", ("private"));
-                                                        startActivity(intent);
-                                                        break;
-                                                    case "EXIST":
-                                                        Log.e("Ex", "Exist");
-                                                        Toast.makeText(CreateChatActivity.this, "Chat Exist", Toast.LENGTH_LONG).show();
-                                                        break;
-                                                    default:
-                                                        Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
-                                                        break;
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }).execute();
+                                                    }
+                                                }).execute();
 
-                                }
-                            });
+                                            }
+                                        });
+                                    }
+                                }).execute();
+                            }
+
                         }
-                    }).execute();
+                    }, 500);
+
+
                 } else {
                     listView.setAdapter(null);
                 }

@@ -9,7 +9,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/m_primary"
+    android:background="@color/m_primary_light"
     android:gravity="right"/>
 
   <com.miguelcatalan.materialsearchview.MaterialSearchView
@@ -23,8 +23,8 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:layout_below="@+id/toolbar"
-    android:divider="#cccccc"
-    android:dividerHeight="4dp"
+    android:divider="#bbbbbb"
+    android:dividerHeight="1dp"
     android:padding="5dp"
     android:scrollingCache="true"/>
 

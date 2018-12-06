@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.morlunk.mumbleclient.ImageUploadListener;
 import com.morlunk.mumbleclient.R;
@@ -231,7 +230,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
                     .into(profile_pic, new Callback() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(context, "load from cache!", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context, "load from cache!", Toast.LENGTH_LONG).show();
 //                        if (imageUploadListener != null)
 //                            imageUploadListener.imageUploaded();
                         }

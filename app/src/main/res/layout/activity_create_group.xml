@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#cccccc">
 
@@ -9,7 +10,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/m_primary"
+    android:background="@color/m_primary_light"
     android:gravity="right"/>
 
   <com.miguelcatalan.materialsearchview.MaterialSearchView
@@ -32,25 +33,26 @@
       android:layout_width="match_parent"
       android:layout_height="465dp"
       android:layout_below="@+id/toolbar"
+      android:layout_marginTop="?attr/actionBarSize"
       android:layout_weight="1"
-      android:divider="#cccccc"
-      android:dividerHeight="4dp"
+      android:divider="#bbbbbb"
+      android:dividerHeight="1dp"
       android:padding="5dp"
       android:scrollingCache="true"/>
 
-    <Button
-      android:id="@+id/create_group_continue"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="24dp"
-      android:layout_marginLeft="12dp"
-      android:layout_marginRight="12dp"
-      android:layout_marginTop="12dp"
-      android:background="@drawable/rounded_button"
-      android:padding="12dp"
-      android:text="ادامه"
-      android:textColor="#FFFFFF"
-      android:textSize="18sp"/>
+    <!--<Button-->
+      <!--android:id="@+id/create_group_continue"-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_marginBottom="24dp"-->
+      <!--android:layout_marginLeft="12dp"-->
+      <!--android:layout_marginRight="12dp"-->
+      <!--android:layout_marginTop="12dp"-->
+      <!--android:background="@drawable/rounded_button"-->
+      <!--android:padding="12dp"-->
+      <!--android:text="ادامه"-->
+      <!--android:textColor="#FFFFFF"-->
+      <!--android:textSize="18sp"/>-->
 
   </LinearLayout>
 
@@ -60,4 +62,14 @@
   <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
   <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
 
-</RelativeLayout>
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/create_group_continue"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_gravity="bottom|start"
+    android:layout_margin="20dp"
+    android:background="#3d535e"
+    android:src="@drawable/arrow"
+    app:backgroundTint="#3d535e"/>
+
+</android.support.design.widget.CoordinatorLayout>
