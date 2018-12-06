@@ -92,15 +92,15 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                 break;
         }
 
-        mBuffer = new float[mAudioBufferSize*2]; // Make initial buffer size larger so we can save performance by not resizing at runtime.
+        mBuffer = new float[mAudioBufferSize * 2]; // Make initial buffer size larger so we can save performance by not resizing at runtime.
         mOut = new float[mAudioBufferSize];
         mFadeIn = new float[AudioHandler.FRAME_SIZE];
         mFadeOut = new float[AudioHandler.FRAME_SIZE];
 
         // Sine function to represent fade in/out. Period is FRAME_SIZE.
-        float mul = (float)(Math.PI / (2.0 * (float) AudioHandler.FRAME_SIZE));
+        float mul = (float) (Math.PI / (2.0 * (float) AudioHandler.FRAME_SIZE));
         for (int i = 0; i < AudioHandler.FRAME_SIZE; i++)
-            mFadeIn[i] = mFadeOut[AudioHandler.FRAME_SIZE-i-1] = (float) Math.sin((float) i * mul);
+            mFadeIn[i] = mFadeOut[AudioHandler.FRAME_SIZE - i - 1] = (float) Math.sin((float) i * mul);
 
         mJitterBuffer = new Speex.JitterBuffer(AudioHandler.FRAME_SIZE);
         IntPointer margin = new IntPointer(1);
@@ -109,7 +109,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
     }
 
     public void addFrameToBuffer(PacketBuffer pb, byte flags, int seq) {
-        if(pb.capacity() < 2)
+        if (pb.capacity() < 2)
             return;
 
         synchronized (mJitterLock) {
@@ -164,16 +164,16 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
 
         mLastConsume = mRequestedSamples;
 
-        if(mBufferFilled >= mRequestedSamples)
+        if (mBufferFilled >= mRequestedSamples)
             return new Result(this, mLastAlive, mBuffer, mBufferFilled);
 
         boolean nextAlive = mLastAlive;
 
-        while(mBufferFilled < mRequestedSamples) {
+        while (mBufferFilled < mRequestedSamples) {
             int decodedSamples = AudioHandler.FRAME_SIZE;
             resizeBuffer(mBufferFilled + mAudioBufferSize);
 
-            if(!mLastAlive)
+            if (!mLastAlive)
                 Arrays.fill(mOut, 0);
             else {
                 avail.put(0);
@@ -189,11 +189,11 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                 // buffer before we even begin decoding, based on the average # of packets available.
                 // It's useful in preventing a metallic 'twang' when the user starts talking,
                 // caused by buffer underrun. The official Mumble project uses the same technique.
-                if(ts == 0) {
+                if (ts == 0) {
                     int want = (int) Math.ceil(mUser.getAverageAvailable());
                     if (availPackets < want) {
                         mMissCount++;
-                        if(mMissCount < 20) {
+                        if (mMissCount < 20) {
                             Arrays.fill(mOut, 0);
                             System.arraycopy(mOut, 0, mBuffer, mBufferFilled, decodedSamples);
                             mBufferFilled += decodedSamples;
@@ -202,7 +202,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                     }
                 }
 
-                if(mFrames.isEmpty()) {
+                if (mFrames.isEmpty()) {
                     ByteBuffer packet = ByteBuffer.allocateDirect(4096);
                     Speex.JitterBufferPacket jbp = new Speex.JitterBufferPacket(packet, 4096, 0, 0, 0, 0);
                     int result;
@@ -211,7 +211,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                         result = mJitterBuffer.get(jbp, null);
                     }
 
-                    if(result == Speex.JitterBuffer.JITTER_BUFFER_OK) {
+                    if (result == Speex.JitterBuffer.JITTER_BUFFER_OK) {
                         packet.limit(jbp.getLength());
                         PacketBuffer pb = new PacketBuffer(packet);
 
@@ -245,7 +245,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                             e.printStackTrace();
                         }
 
-                        if(availPackets >= mUser.getAverageAvailable())
+                        if (availPackets >= mUser.getAverageAvailable())
                             mUser.setAverageAvailable(availPackets);
                         else
                             mUser.setAverageAvailable(mUser.getAverageAvailable() * 0.99f);
@@ -256,23 +256,23 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                         }
 
                         mMissCount++;
-                        if(mMissCount > 10)
+                        if (mMissCount > 10)
                             nextAlive = false;
                     }
                 }
 
                 try {
-                    if(!mFrames.isEmpty()) {
+                    if (!mFrames.isEmpty()) {
                         ByteBuffer data = mFrames.poll();
 
                         decodedSamples = mDecoder.decodeFloat(data, data.limit(), mOut, mAudioBufferSize);
 
-                        if(mFrames.isEmpty())
+                        if (mFrames.isEmpty())
                             synchronized (mJitterLock) {
                                 mJitterBuffer.updateDelay(null, new IntPointer(1));
                             }
 
-                        if(mFrames.isEmpty() && mHasTerminator)
+                        if (mFrames.isEmpty() && mHasTerminator)
                             nextAlive = false;
                     } else {
                         decodedSamples = mDecoder.decodeFloat(null, 0, mOut, AudioHandler.FRAME_SIZE);
@@ -293,7 +293,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
                 }
 
                 synchronized (mJitterLock) {
-                    for(int i = decodedSamples / AudioHandler.FRAME_SIZE; i > 0; i--)
+                    for (int i = decodedSamples / AudioHandler.FRAME_SIZE; i > 0; i--)
                         mJitterBuffer.tick();
                 }
             }
@@ -302,7 +302,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
             mBufferFilled += decodedSamples;
         }
 
-        if(!nextAlive) ucFlags = 0xFF;
+        if (!nextAlive) ucFlags = 0xFF;
 
         TalkState talkState;
         switch (ucFlags) {
@@ -329,7 +329,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
     }
 
     private void resizeBuffer(int newSize) {
-        if(newSize > mBuffer.length) {
+        if (newSize > mBuffer.length) {
             float[] newBuffer = Arrays.copyOf(mBuffer, newSize);
             mBuffer = newBuffer;
         }
@@ -337,6 +337,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
 
     /**
      * Sets the preferred number of samples to return when the callable is executed.
+     *
      * @param samples The number of floating point samples to retrieve.
      */
     public void setRequestedSamples(int samples) {
@@ -360,7 +361,7 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
      * This MUST be called eventually, otherwise we get memory leaks!
      */
     public void destroy() {
-        if(mDecoder != null) mDecoder.destroy();
+        if (mDecoder != null) mDecoder.destroy();
         mJitterBuffer.destroy();
     }
 
@@ -374,9 +375,9 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
         private int mNumSamples;
 
         private Result(AudioOutputSpeech speechOutput,
-                      boolean alive,
-                      float[] samples,
-                      int numSamples) {
+                       boolean alive,
+                       float[] samples,
+                       int numSamples) {
             mSpeechOutput = speechOutput;
             mAlive = alive;
             mSamples = samples;

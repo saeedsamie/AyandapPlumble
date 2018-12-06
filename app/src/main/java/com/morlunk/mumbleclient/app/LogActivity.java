@@ -18,7 +18,7 @@ import com.morlunk.mumbleclient.util.JumbleServiceProvider;
 
 import static com.morlunk.mumbleclient.app.PlumbleActivity.mService;
 
-public class LogActivity extends AppCompatActivity implements JumbleServiceProvider {
+public class LogActivity extends AppCompatActivity {
 
   public static String log = "";
 
@@ -26,7 +26,7 @@ public class LogActivity extends AppCompatActivity implements JumbleServiceProvi
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_log);
-    final TextView textView = findViewById(R.id.server_TCP_ping);
+    final TextView textView = findViewById(R.id.server_TCP_ping_log);
 
     final Button pushButton = findViewById(R.id.log_ptt);
     Button clear = findViewById(R.id.log_clear);
@@ -38,7 +38,7 @@ public class LogActivity extends AppCompatActivity implements JumbleServiceProvi
       public void run() {
         long l = 0;
         try {
-          l = getService().getSession().getTCPLatency() / 1000;
+          l = PlumbleActivity.l;
         } catch (JumbleDisconnectedException e) {
         }
         log.setText(AudioOutput.log);
@@ -87,19 +87,4 @@ public class LogActivity extends AppCompatActivity implements JumbleServiceProvi
 
   }
 
-
-  @Override
-  public IPlumbleService getService() {
-    return null;
-  }
-
-  @Override
-  public void addServiceFragment(JumbleServiceFragment fragment) {
-
-  }
-
-  @Override
-  public void removeServiceFragment(JumbleServiceFragment fragment) {
-
-  }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -48,6 +50,7 @@ public class ChatActivity extends AppCompatActivity  {
     TextView title;
     TextView bio ;
     public static Picasso picassoWithCache;
+    private LinearLayout group_info_layout;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -62,6 +65,21 @@ public class ChatActivity extends AppCompatActivity  {
         String chatTitle = getIntent().getStringExtra("ChatTitle");
         cmTimer = (Chronometer) findViewById(R.id.cmTimer);
 
+        group_info_layout = findViewById(id.group_info_layout);
+        group_info_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String bio = getIntent().getStringExtra("bio");
+                String chatId = getIntent().getStringExtra("chatId");
+                String ChatTitle = getIntent().getStringExtra("ChatTitle");
+                Intent intent = new Intent(ChatActivity.this,GroupInfoActivity.class);
+                intent.putExtra("bio",bio);
+                intent.putExtra("chatId",chatId);
+                intent.putExtra("ChatTitle",ChatTitle);
+                startActivity(intent);
+
+            }
+        });
         image = findViewById(id.c_image);
         title = findViewById(id.c_name);
         bio = findViewById(id.c_bio);

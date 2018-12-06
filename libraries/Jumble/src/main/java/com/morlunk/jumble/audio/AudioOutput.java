@@ -269,8 +269,8 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
                     user.setTalkState(state);
                     mListener.onUserTalkStateUpdated(user);
 
-                    Date aa = Calendar.getInstance().getTime();
-                        AudioOutput.log += aa.toString() + "\n";
+                    long time = System.currentTimeMillis();
+                        AudioOutput.log += time + "\n";
 
                     if (AudioOutput.lostpacketscount>0)
                     {

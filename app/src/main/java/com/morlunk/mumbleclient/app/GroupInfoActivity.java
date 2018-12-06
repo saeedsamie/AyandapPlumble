@@ -174,20 +174,8 @@ public class GroupInfoActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
             }
         });
-
 
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.group_info_toolbar);

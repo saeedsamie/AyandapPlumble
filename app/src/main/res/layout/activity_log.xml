@@ -7,10 +7,11 @@
   <TextView
       android:id="@+id/server_TCP_ping_log"
       android:layout_width="match_parent"
-      android:layout_height="20dp"
+      android:layout_height="wrap_content"
       android:gravity="center"
       android:text="Ping"
-      android:textColor="@color/white" />
+      android:textColor="#000"
+      android:textSize="25sp" />
 
   <ScrollView
     android:layout_width="match_parent"
