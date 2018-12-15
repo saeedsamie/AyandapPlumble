@@ -249,7 +249,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
                             if (listValues.get(pos).get("type").equals("pv")) {
                                 Snackbar
-                                        .make(arg1, "آیا ار حذف این چت اطمینان دارید ؟",
+                                        .make(arg1, "آیا از حذف این چت اطمینان دارید ؟",
                                                 Snackbar.LENGTH_LONG)
                                         .setAction("بلی", new View.OnClickListener() {
                                             @Override
@@ -392,28 +392,28 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         IJumbleSession session = getService().getSession();
         switch (item.getItemId()) {
-//            case R.id.menu_mute_button: {
-//                IUser self = session.getSessionUser();
-//
-//                boolean muted = !self.isSelfMuted();
-//                boolean deafened = self.isSelfDeafened();
-//                deafened &= muted; // Undeafen if mute is off
-//                session.setSelfMuteDeafState(muted, deafened);
-//
-//                getActivity().supportInvalidateOptionsMenu();
-//                return true;
-//            }
-//            case R.id.menu_deafen_button: {
-//                IUser self = session.getSessionUser();
-//
-//                boolean deafened = !self.isSelfDeafened();
-//                session.setSelfMuteDeafState(deafened, deafened);
-//
-//                getActivity().supportInvalidateOptionsMenu();
-//                return true;
-//            }
-//            case R.id.menu_requests:
-//                return false;
+            case R.id.menu_mute_button: {
+                IUser self = session.getSessionUser();
+
+                boolean muted = !self.isSelfMuted();
+                boolean deafened = self.isSelfDeafened();
+                deafened &= muted; // Undeafen if mute is off
+                session.setSelfMuteDeafState(muted, deafened);
+
+                getActivity().supportInvalidateOptionsMenu();
+                return true;
+            }
+            case R.id.menu_deafen_button: {
+                IUser self = session.getSessionUser();
+
+                boolean deafened = !self.isSelfDeafened();
+                session.setSelfMuteDeafState(deafened, deafened);
+
+                getActivity().supportInvalidateOptionsMenu();
+                return true;
+            }
+            case R.id.menu_requests:
+                return false;
 //            case R.id.menu_bluetooth:
 //                item.setChecked(!item.isChecked());
 //                if (item.isChecked()) {

@@ -76,7 +76,7 @@ public class SearchListAdapter extends BaseAdapter {
         viewHolder.username.setText(values.get(position).get("username"));
         if (values.get(position).get("selected").equals("1")) {
             Log.i("UIHSDCIUHVDIU", "" + position);
-            viewHolder.search_selected.setBackgroundColor(Color.parseColor("#3d535e"));
+            viewHolder.search_selected.setBackgroundColor(Color.parseColor("#00000000"));
             viewHolder.userFullname.setTextColor(Color.parseColor("#000000"));
             viewHolder.username.setTextColor(Color.parseColor("#000000"));
         } else {

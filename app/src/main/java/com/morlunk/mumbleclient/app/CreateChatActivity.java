@@ -94,6 +94,8 @@ public class CreateChatActivity extends AppCompatActivity {
 
                             if(old.equals(newText)){
                                 Log.i("SFKIGUEFSIKUGF","REQUESTED");
+                                final String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                                  .getString(getString(R.string.PREF_TAG_userid), "-2");
                                 nameValuePairs = new ArrayList<NameValuePair>();
                                 nameValuePairs.add(new BasicNameValuePair("func", "search"));
                                 nameValuePairs.add(new BasicNameValuePair("username", newText));
@@ -115,7 +117,11 @@ public class CreateChatActivity extends AppCompatActivity {
                                                 hashMap.put("id", c.getString("id"));
                                                 hashMap.put("selected", "0");
 
-                                                listValues.add(hashMap);
+                                                if (!c.getString("id").equals(userId))
+                                                {
+                                                    listValues.add(hashMap);
+                                                }
+
                                             }
 
                                         } catch (Exception e) {
@@ -199,7 +205,7 @@ public class CreateChatActivity extends AppCompatActivity {
                             }
 
                         }
-                    }, 500);
+                    }, 200);
 
 
                 } else {

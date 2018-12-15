@@ -6,14 +6,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -39,9 +42,22 @@ public class CreateGroupActivity extends AppCompatActivity {
   List<NameValuePair> nameValuePairs;
   Boolean chatCreated = false;
   private ListView listView;
-  private FloatingActionButton continue_button;
+  private static Button continue_button;
   String old;
-  private ArrayList<String> members = new ArrayList<>();
+  public static int position = -2;
+  public static ArrayList<HashMap<String, String>> choosen = new ArrayList<>();
+  RecyclerView mRecyclerView;
+  RecyclerView.LayoutManager mLayoutManager;
+  static RecyclerView.Adapter mAdapter;
+
+
+  private static final String TAG = "MainActivity";
+
+  //vars
+  private ArrayList<String> mNames = new ArrayList<>();
+  private ArrayList<String> mImageUrls = new ArrayList<>();
+
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +66,26 @@ public class CreateGroupActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
     }
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+    choosen.clear();
+
+    mRecyclerView = findViewById(R.id.recycler_view);
+    mRecyclerView.setHasFixedSize(true);
+    // The number of Columns
+    mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+    mRecyclerView.setLayoutManager(mLayoutManager);
+    mAdapter = new RecyclerViewAdapter(CreateGroupActivity.this, choosen);
+    mRecyclerView.setAdapter(mAdapter);
+
+    mRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+                                           @Override
+                                           public boolean onLongClick(View view) {
+                                             finish();
+                                             return false;
+                                           }
+                                         });
+
+      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle("جستجوی نام کاربری");
     toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
@@ -74,12 +109,13 @@ public class CreateGroupActivity extends AppCompatActivity {
     continue_button.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View view) {
+                                           List<String> userIds = getPropertyList(choosen,"id");
                                            String toUsers = "";
-                                           for (int i = 0 ; i < members.size()-1;i++)
+                                           for (int i = 0 ; i < userIds.size()-1;i++)
                                            {
-                                             toUsers += members.get(i) + ",";
+                                             toUsers += userIds.get(i) + ",";
                                            }
-                                           toUsers += members.get(members.size()-1);
+                                           toUsers += userIds.get(userIds.size()-1);
                                            Intent intent = new Intent(CreateGroupActivity.this,FinishUpGroupActivity.class);
                                            intent.putExtra("toUsers",toUsers);
                                            startActivity(intent);
@@ -101,6 +137,8 @@ public class CreateGroupActivity extends AppCompatActivity {
               @Override
               public void run() {
                 if(old.equals(newText)) {
+                  final String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                    .getString(getString(R.string.PREF_TAG_userid), "-2");
                   nameValuePairs = new ArrayList<NameValuePair>();
                   nameValuePairs.add(new BasicNameValuePair("func", "search"));
                   nameValuePairs.add(new BasicNameValuePair("username", newText));
@@ -120,21 +158,24 @@ public class CreateGroupActivity extends AppCompatActivity {
                           hashMap.put("username", c.getString("username"));
                           hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
                           hashMap.put("id", c.getString("id"));
-                          hashMap.put("selected", "0");
+                          List<String> userIds = getPropertyList(choosen,"id");
+                          if (userIds.contains(c.getString("id")) ) {
+                            hashMap.put("selected", "1");
+                          }
+                          else
+                          {
+                            hashMap.put("selected", "0");
+                          }
 
-                          listValues.add(hashMap);
+
+                          if (!c.getString("id").equals(userId))
+                          {
+                            listValues.add(hashMap);
+                          }
                         }
 
                       } catch (Exception e) {
                         e.printStackTrace();
-                      }
-
-                      for (int i = 0; i < listValues.size() - 1; i++) {
-                        for (int j = 0; j < members.size() - 1; j++) {
-                          if (listValues.get(i).get("id").equals(members.get(j))) {
-                            listValues.get(i).put("selected", "1");
-                          }
-                        }
                       }
 
                       final SearchListAdapter adapter = new SearchListAdapter(CreateGroupActivity.this, listValues);
@@ -142,23 +183,23 @@ public class CreateGroupActivity extends AppCompatActivity {
                       adapter.notifyDataSetChanged();
 
                       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.N)
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                          if (listValues.get(position).get("selected").equals("0")) {
-                            members.add(listValues.get(position).get("id"));
-                            listValues.get(position).put("selected", "1");
-                          } else if (listValues.get(position).get("selected").equals("1")) {
-                            members.remove(listValues.get(position).get("id"));
-                            listValues.get(position).put("selected", "0");
+                          HashMap h = new HashMap();
+                          h.put("fullname",listValues.get(position).get("fullname"));
+                          h.put("id",listValues.get(position).get("id"));
+                          h.put("image",listValues.get(position).get("image"));
+
+                          List<String> userIds = getPropertyList(choosen,"id");
+                          if (!userIds.contains(listValues.get(position).get("id")))
+                          {
+                            choosen.add(h);
+                            mAdapter.notifyDataSetChanged();
                           }
 
-                          adapter.notifyDataSetChanged();
-
-                          Log.i("MEBERSSSSSS", members.toString());
-                          Log.i("LISTTTTTTTT", listValues.toString());
-
-                          if (members.size() == 0) {
+                          if (choosen.size() == 0) {
                             continue_button.setVisibility(View.GONE);
                           } else {
                             continue_button.setVisibility(View.VISIBLE);
@@ -169,7 +210,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                   }).execute();
                 }
                 }
-              }, 500);
+              }, 200);
           } else {
             listView.setAdapter(null);
           }
@@ -189,6 +230,25 @@ public class CreateGroupActivity extends AppCompatActivity {
   @Override
   protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
+
+  public static List<String> getPropertyList(ArrayList<HashMap<String,String>> users, String key)
+  {
+    List<String> result = new ArrayList<String>();
+    for (Map<String,String> map : users) {
+      result.add(map.get(key));
+    }
+    return result;
+  }
+
+  public static void listRemover(int position) {
+    choosen.remove(position);
+    mAdapter.notifyDataSetChanged();
+    if (choosen.size() == 0) {
+      continue_button.setVisibility(View.GONE);
+    }
+
+
   }
 
 }

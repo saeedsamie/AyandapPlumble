@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,6 +127,7 @@ public class UserMenu implements PermissionsPopupMenu.IOnMenuPrepareListener, Po
                 break;
             case R.id.context_mute:
                 mService.setMuteDeafState(mUser.getSession(), !(mUser.isMuted() || mUser.isSuppressed()), mUser.isDeafened());
+                Log.i("VDSVDVSD","ZAGULO");
                 break;
             case R.id.context_deafen:
                 mService.setMuteDeafState(mUser.getSession(), mUser.isMuted(), !mUser.isDeafened());

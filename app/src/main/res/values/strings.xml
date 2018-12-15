@@ -152,9 +152,9 @@
     <string name="offline">آفلاین</string>
     <string name="clearChat">پاک کردن چت</string>
     <string name="connected">متصل</string>
-    <string name="plumbleConnected">Plumble Connected</string>
-    <string name="plumbleConnecting">Plumble Connecting</string>
-    <string name="plumbleDisconnected">Plumble Disconnected</string>
+    <string name="plumbleConnected">Ayandap Connected</string>
+    <string name="plumbleConnecting">Ayandap Connecting</string>
+    <string name="plumbleDisconnected">Ayandap Disconnected</string>
     <string name="lostConnection">Lost connection to the server.</string>
     <string name="resume">ادامه</string>
     <string name="channel">کانال</string>
@@ -284,6 +284,24 @@
     <string name="refresh">Refresh</string>
     <string name="Requests">درخواست ها</string>
     <string name="Profile">پروفایل</string>
+
+
+
+    <string name="next">بعدی</string>
+    <string name="skip">خلاصه</string>
+    <string name="start">ادامه</string>
+
+    <string name="slide_1_title">به آیندآپ خوش آمدید!</string>
+    <string name="slide_1_desc">آسان ترین راه برای انتقال صدا به صورت اینترنتی</string>
+
+    <string name="slide_2_title">بهینه ترین پروتکل انتقال</string>
+    <string name="slide_2_desc">تنظیم کیفیت صدا از 15.8kbps تا 124.8kbps با توجه به سرعت اینترنت شما</string>
+
+    <string name="slide_3_title">ایجاد گروه و کانال</string>
+    <string name="slide_3_desc">قابلیت ساخت گروه و کانال برای مکالمه ی گروهی</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
 
 
 </resources>

@@ -18,16 +18,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:plumble="http://schemas.android.com/apk/res-auto"
       xmlns:app="http://schemas.android.com/tools">
-    <!--<item-->
-        <!--android:id="@+id/menu_mute_button"-->
-        <!--android:title="@string/mute"-->
-        <!--plumble:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_action_microphone" />-->
-    <!--<item-->
-        <!--android:id="@+id/menu_deafen_button"-->
-        <!--android:title="@string/deafen"-->
-        <!--plumble:showAsAction="ifRoom"-->
-        <!--android:icon="@drawable/ic_action_audio" />-->
+    <item
+        android:id="@+id/menu_mute_button"
+        android:title="@string/mute"
+        plumble:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_microphone" />
+    <item
+        android:id="@+id/menu_deafen_button"
+        android:title="@string/deafen"
+        plumble:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_audio" />
     <!--<item-->
       <!--android:id="@+id/menu_requests"-->
       <!--android:checkable="true"-->

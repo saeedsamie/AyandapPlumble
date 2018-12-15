@@ -20,7 +20,6 @@ public class RequestListAdapter extends BaseAdapter {
   Context context;
 
   public RequestListAdapter(Context context, ArrayList<HashMap<String, String>> values) {
-    //super(context, R.layout.single_list_app_item, utilsArrayList);
     this.context = context;
     this.values = values;
   }
@@ -54,9 +53,8 @@ public class RequestListAdapter extends BaseAdapter {
       viewHolder = new ViewHolder();
       LayoutInflater inflater = LayoutInflater.from(context);
       convertView = inflater.inflate(R.layout.requests_row, parent, false);
-      viewHolder.request_fullname = (TextView) convertView.findViewById(R.id.request_fullname);
-      viewHolder.request_username = (TextView) convertView.findViewById(R.id.request_username);
-//            viewHolder.icon = (ImageView) convertView.findViewById(R.id.appIconIV);
+      viewHolder.request_fullname = convertView.findViewById(R.id.request_fullname);
+      viewHolder.request_username = convertView.findViewById(R.id.request_username);
 
       result = convertView;
       convertView.setTag(viewHolder);
@@ -69,33 +67,11 @@ public class RequestListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  //
   private static class ViewHolder {
 
     TextView request_fullname;
     TextView request_username;
     ImageView icon;
   }
-//  public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
-//    private final static String TAG = "AsyncTaskLoadImage";
-//    private ImageView imageView;
-//    public AsyncTaskLoadImage(ImageView imageView) {
-//      this.imageView = imageView;
-//    }
-//    @Override
-//    protected Bitmap doInBackground(String... params) {
-//      Bitmap bitmap = null;
-//      try {
-//        URL url = new URL(params[0]);
-//        bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
-//      } catch (IOException e) {
-//        Log.e(TAG, e.getMessage());
-//      }
-//      return bitmap;
-//    }
-//    @Override
-//    protected void onPostExecute(Bitmap bitmap) {
-//      imageView.setImageBitmap(bitmap);
-//    }
-//  }
+
 }

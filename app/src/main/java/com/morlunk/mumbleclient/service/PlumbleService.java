@@ -33,7 +33,9 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.morlunk.jumble.Constants;
 import com.morlunk.jumble.JumbleService;
@@ -204,8 +206,9 @@ public class PlumbleService extends JumbleService implements
                 mSettings.setMutedAndDeafened(user.isSelfMuted(), user.isSelfDeafened()); // Update settings mute/deafen state
                 if (mNotification != null) {
                     String contentText;
-                    if (user.isSelfMuted() && user.isSelfDeafened())
+                    if (user.isSelfMuted() && user.isSelfDeafened()) {
                         contentText = getString(R.string.status_notify_muted_and_deafened);
+                    }
                     else if (user.isSelfMuted())
                         contentText = getString(R.string.status_notify_muted);
                     else
@@ -502,10 +505,14 @@ public class PlumbleService extends JumbleService implements
         }
     }
 
+    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA todo
+
     @Override
     public void onMuteToggled() {
         IUser user = getSessionUser();
         if (isConnectionEstablished() && user != null) {
+            Toast.makeText(getBaseContext(), "TOOOOOGGGGGGLLLLEED", Toast.LENGTH_LONG).show();
+            Log.i("MMMMMMMMMUTE","TOGGGGGGLED");
             boolean muted = !user.isSelfMuted();
             boolean deafened = user.isSelfDeafened() && muted;
             setSelfMuteDeafState(muted, deafened);

@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
       @Override
       public void run() {
 
-        Intent myIntent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent myIntent = new Intent(SplashActivity.this, WelcomeActivity.class);
 //        ActivityOptions options =
 //          ActivityOptions.makeCustomAnimation(SplashActivity.this, R.anim.fade_in, R.anim.fade_out);
 //        SplashActivity.this.startActivity(myIntent, options.toBundle());

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorSecondaryDark">
+                android:background="#ccc">
 
     <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/request_panel_swipeRefreshLayout"
@@ -13,9 +13,9 @@
           android:id="@+id/requests_list"
           android:layout_width="match_parent"
           android:layout_height="fill_parent"
-          android:background="@color/colorSecondaryDark"
-          android:divider="#049084"
-          android:dividerHeight="2dp"/>
+          android:background="#00000000"
+          android:divider="#bbbbbb"
+          android:dividerHeight="1dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <!--app:searchBackground="@color/colorPrimary"-->

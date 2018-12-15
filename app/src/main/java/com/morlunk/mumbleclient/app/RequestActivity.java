@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -106,12 +107,10 @@ public class RequestActivity extends AppCompatActivity {
                 value.add(new BasicNameValuePair("userId", userId));
                 value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
 
-                builder.setMessage("گفتگو پذیرفته شد").create().show();
                 new ServerFetchAsync(value, new OnTaskCompletedListener() {
                     @Override
                     public void onTaskCompleted(JSONObject jsonObject) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(RequestActivity.this);
-                        builder.setMessage(jsonObject.toString()).create().show();
                     }
                 }).execute();
                 updateListView();
@@ -230,7 +229,14 @@ public class RequestActivity extends AppCompatActivity {
                                 public void onTaskCompleted(JSONObject jsonObject) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(RequestActivity.this);
                                     try {
-                                        builder.setMessage(jsonObject.getString("request")).create().show();
+                                        if (jsonObject.getString("request").equals("ACCEPTED")) {
+                                            Snackbar.make(findViewById(android.R.id.content), "گفتگو پذیرفته شد", Snackbar.LENGTH_SHORT)
+                                              .show();
+                                        } else
+                                        {
+                                            Snackbar.make(findViewById(android.R.id.content), "گفتگو رد شد", Snackbar.LENGTH_SHORT)
+                                              .show();
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
