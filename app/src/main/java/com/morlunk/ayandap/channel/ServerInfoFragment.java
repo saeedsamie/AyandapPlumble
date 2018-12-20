@@ -20,7 +20,6 @@ package com.morlunk.ayandap.channel;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,7 +121,7 @@ public class ServerInfoFragment extends JumbleServiceFragment {
                     public void run() {
                         try {
                             if(isVisible()) updateData();
-                        } catch (RemoteException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

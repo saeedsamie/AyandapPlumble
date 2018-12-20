@@ -23,7 +23,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -297,7 +296,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
     public long getItemId(int position) {
         try {
             return mNodes.get(position).getId();
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -410,7 +409,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
                 if (node.getId() == itemId) {
                     return i;
                 }
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -425,7 +424,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter implements UserMenu
                 if (node.getId() == itemId) {
                     return i;
                 }
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
