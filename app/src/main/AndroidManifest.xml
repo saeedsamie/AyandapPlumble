@@ -15,7 +15,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.morlunk.mumbleclient"
+    package="com.morlunk.ayandap"
     android:installLocation="auto">
 
     <uses-feature
@@ -35,56 +35,71 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
-
     <application
-        android:name=".FontChanger"
+        android:name="com.morlunk.ayandap.FontChanger"
+        android:adjustViewBounds="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Plumble"
         android:largeHeap="true"
-        android:hardwareAccelerated="true"
-        android:adjustViewBounds="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Plumble">
 
         <!-- <activity android:name=".wizard.WizardActivity" /> -->
         <activity
-            android:name=".preference.Preferences"
-            android:parentActivityName=".app.PlumbleActivity">
-
+            android:name="com.morlunk.ayandap.preference.Preferences"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.morlunk.ayandap.app.PlumbleActivity">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.PREFS_GENERAL" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.PREFS_AUTHENTICATION" />
+                <action android:name="com.morlunk.ayandap.app.PREFS_GENERAL" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.PREFS_AUDIO" />
+                <action android:name="com.morlunk.ayandap.app.PREFS_AUTHENTICATION" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.PREFS_APPEARANCE" />
+                <action android:name="com.morlunk.ayandap.app.PREFS_AUDIO" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.PREFS_ABOUT" />
+                <action android:name="com.morlunk.ayandap.app.PREFS_APPEARANCE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.morlunk.ayandap.app.PREFS_ABOUT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service
-            android:name=".service.PlumbleService"
+            android:name="com.morlunk.ayandap.service.PlumbleService"
             android:enabled="true" />
+        <service
+            android:name="com.morlunk.ayandap.service.FirebaseInstanceID"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.morlunk.ayandap.service.MessagingService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
-      <activity
-            android:name=".app.PlumbleActivity"
+        <activity
+            android:name="com.morlunk.ayandap.app.PlumbleActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
@@ -113,107 +128,114 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".preference.CertificateSelectActivity"
+            android:name="com.morlunk.ayandap.preference.CertificateSelectActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.CERTIFICATE_SELECT" />
+                <action android:name="com.morlunk.ayandap.app.CERTIFICATE_SELECT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".preference.CertificateImportActivity"
+            android:name="com.morlunk.ayandap.preference.CertificateImportActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.CERTIFICATE_IMPORT" />
+                <action android:name="com.morlunk.ayandap.app.CERTIFICATE_IMPORT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".preference.CertificateExportActivity"
+            android:name="com.morlunk.ayandap.preference.CertificateExportActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.CERTIFICATE_EXPORT" />
+                <action android:name="com.morlunk.ayandap.app.CERTIFICATE_EXPORT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".preference.CertificateGenerateActivity"
+            android:name="com.morlunk.ayandap.preference.CertificateGenerateActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.CERTIFICATE_GENERATE" />
+                <action android:name="com.morlunk.ayandap.app.CERTIFICATE_GENERATE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".preference.ServerCertificateClearActivity"
+            android:name="com.morlunk.ayandap.preference.ServerCertificateClearActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog">
             <intent-filter>
-                <action android:name="com.morlunk.mumbleclient.app.CLEAR_SERVER_CERTIFICATES" />
+                <action android:name="com.morlunk.ayandap.app.CLEAR_SERVER_CERTIFICATES" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".app.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-
+            android:name="com.morlunk.ayandap.app.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
-          android:name=".app.SplashActivity"
-          android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
+            android:name="com.morlunk.ayandap.app.SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name=".app.VerificationActivity"
+            android:name="com.morlunk.ayandap.app.VerificationActivity"
             android:label="@string/Verification"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".app.SignupActivity"
+            android:name="com.morlunk.ayandap.app.SignupActivity"
             android:label="@string/Signup"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".app.ChatActivity"
+            android:name="com.morlunk.ayandap.app.ChatActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".app.CreateChatActivity"
-            android:theme="@style/Theme.CreateChat" />
+            android:name="com.morlunk.ayandap.app.CreateChatActivity"
+            android:theme="@style/Theme.CreateChat"
+            android:screenOrientation="portrait"/>
         <activity
-          android:name=".app.CreateGroupActivity"
-          android:theme="@style/Theme.CreateChat" />
+            android:name="com.morlunk.ayandap.app.CreateGroupActivity"
+            android:theme="@style/Theme.CreateChat"
+            android:screenOrientation="portrait"/>
         <activity
-          android:name=".app.FinishUpGroupActivity"
-          android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:name="com.morlunk.ayandap.app.FinishUpGroupActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".app.RequestActivity"
+            android:name="com.morlunk.ayandap.app.RequestActivity"
+            android:launchMode="singleTop"
             android:label="@string/Requests"
-            android:theme="@style/Theme.Plumble" />
-
+            android:theme="@style/Theme.Plumble"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".app.ProfileActivity"
-            android:label="@string/Profile" />
-
-        <activity android:name=".app.GroupInfoActivity"
-                  android:theme="@style/AppTheme"
-                  android:label="@string/app_name"/>
-
-        <activity android:name=".app.LogActivity"
-                  android:theme="@style/AppTheme"/>
+            android:name="com.morlunk.ayandap.app.ProfileActivity"
+            android:label="@string/Profile"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.morlunk.ayandap.app.GroupInfoActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.morlunk.ayandap.app.LogActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
       <activity android:name=".app.WelcomeActivity"
-                android:theme="@style/Theme.AppCompat.NoActionBar"/>
+                android:theme="@style/Theme.AppCompat.NoActionBar"
+          android:screenOrientation="portrait"/>
+
 
     </application>
 

@@ -17,7 +17,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen>
     <!--<ListPreference-->
         <!--android:defaultValue="lightDark"-->
         <!--android:entries="@array/themeNames"-->
@@ -32,7 +32,7 @@
         <!--android:title="@string/pref_show_user_count"-->
         <!--android:summary="@string/pref_show_user_count_summary" />-->
 
-	<!--<com.morlunk.mumbleclient.preference.SeekBarDialogPreference-->
+	<!--<com.morlunk.ayandap.preference.SeekBarDialogPreference-->
 		<!--android:key="pttButtonHeight"-->
 		<!--android:title="@string/pttButtonHeight"-->
 		<!--android:summary="@string/pttButtonHeightSum"-->

@@ -1,0 +1,65 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:1-36:12
+	package
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:19:5-33
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:21:5-30
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:18:11-69
+	android:versionCode
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:20:5-28
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:23:5-67
+	android:name
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:23:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:24:5-79
+	android:name
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:24:22-76
+application
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:26:5-34:19
+	android:allowBackup
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:26:18-44
+service#com.morlunk.jumble.JumbleService
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:27:9-33:19
+	android:exported
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:28:18-41
+	android:name
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:27:18-47
+intent-filter#action:name:com.morlunk.jumble.ACTION_CONNECT+action:name:com.morlunk.jumble.ACTION_DISCONNECT
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:29:13-32:29
+action#com.morlunk.jumble.ACTION_CONNECT
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:30:17-75
+	android:name
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:30:25-73
+action#com.morlunk.jumble.ACTION_DISCONNECT
+ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:31:17-78
+	android:name
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml:31:25-76
+uses-sdk
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Saeed\Documents\AndroidProjects\AyandapPlumble\libraries\Jumble\src\main\AndroidManifest.xml

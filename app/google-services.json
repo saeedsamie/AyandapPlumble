@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "289757086730",
+    "firebase_url": "https://ayandapplumble.firebaseio.com",
+    "project_id": "ayandapplumble",
+    "storage_bucket": "ayandapplumble.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289757086730:android:b776ae9f43f5de23",
+        "android_client_info": {
+          "package_name": "com.ayandap.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289757086730-2i8s3t63ramqcgbg8c83p0jr2o634k7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA24uuISIZpS842iq-Jwcu7m3i9RSUABJk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289757086730:android:4f741feb186c594e",
+        "android_client_info": {
+          "package_name": "com.morlunk.ayandap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289757086730-sj2e9hns95m7756u51mhmj9m88l526q3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.morlunk.ayandap",
+            "certificate_hash": "53e64ca93170fbf35128a7b373b41bdfe1b58092"
+          }
+        },
+        {
+          "client_id": "289757086730-2i8s3t63ramqcgbg8c83p0jr2o634k7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA24uuISIZpS842iq-Jwcu7m3i9RSUABJk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289757086730-2i8s3t63ramqcgbg8c83p0jr2o634k7p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

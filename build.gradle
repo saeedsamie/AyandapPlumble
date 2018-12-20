@@ -14,15 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+buildscript {
 
+    repositories {
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.google.gms:google-services:4.0.2'
 
+    }
 
+}
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+        google()
+        jcenter()
+    }
+}
 
-
-
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
+/* perv version
 repositories {
     maven {
         url 'https://maven.google.com/'
@@ -37,3 +57,4 @@ buildscript {
         }
     }
 }
+ */

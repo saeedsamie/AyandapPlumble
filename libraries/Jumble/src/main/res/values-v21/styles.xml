@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PlumbleV1" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:colorPrimary">@color/primary_material</item>
+        <item name="android:colorPrimaryDark">@color/primary_material_dark</item>
+        <item name="android:colorAccent">@color/primary_material_light</item>
+        <item name="android:colorBackground">@color/secondary_material_dark</item>
+        <item name="android:colorForeground">@color/foreground_material_light</item>
+        <item name="android:navigationBarColor">@color/secondary_material</item>
+        <item name="android:textColorPrimary">@color/text_color_primary</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/text_color_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/text_color_secondary</item>
+    </style>
+</resources>

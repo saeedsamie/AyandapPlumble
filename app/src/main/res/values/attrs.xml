@@ -28,6 +28,6 @@
   <declare-styleable name="TimerView">
     <attr name="circleColor" format="color"/>
   </declare-styleable>
-
+  <attr name="fontPath" format="string"/>
 
 </resources>

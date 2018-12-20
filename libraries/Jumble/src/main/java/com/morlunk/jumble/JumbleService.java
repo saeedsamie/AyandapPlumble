@@ -53,15 +53,15 @@ import com.morlunk.jumble.model.User;
 import com.morlunk.jumble.model.WhisperTarget;
 import com.morlunk.jumble.model.WhisperTargetList;
 import com.morlunk.jumble.net.JumbleConnection;
-import com.morlunk.jumble.net.JumbleUDPMessageType;
-import com.morlunk.jumble.util.IJumbleObserver;
-import com.morlunk.jumble.util.JumbleDisconnectedException;
-import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.net.JumbleTCPMessageType;
+import com.morlunk.jumble.net.JumbleUDPMessageType;
 import com.morlunk.jumble.protobuf.Mumble;
 import com.morlunk.jumble.protocol.AudioHandler;
 import com.morlunk.jumble.protocol.ModelHandler;
+import com.morlunk.jumble.util.IJumbleObserver;
 import com.morlunk.jumble.util.JumbleCallbacks;
+import com.morlunk.jumble.util.JumbleDisconnectedException;
+import com.morlunk.jumble.util.JumbleException;
 import com.morlunk.jumble.util.JumbleLogger;
 import com.morlunk.jumble.util.VoiceTargetMode;
 
@@ -72,18 +72,14 @@ import java.util.List;
 
 public class JumbleService extends Service implements IJumbleService, IJumbleSession, JumbleConnection.JumbleConnectionListener, JumbleLogger, BluetoothScoReceiver.Listener {
 
-    static {
-        // Use Spongy Castle for crypto implementation so we can create and manage PKCS #12 (.p12) certificates.
-        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
-    }
-
     /**
      * An action to immediately connect to a given Mumble server.
      * Requires that {@link #EXTRAS_SERVER} is provided.
      */
     public static final String ACTION_CONNECT = "com.morlunk.jumble.CONNECT";
-
-    /** A {@link Server} specifying the server to connect to. */
+    /**
+     * A {@link Server} specifying the server to connect to.
+     */
     public static final String EXTRAS_SERVER = "server";
     public static final String EXTRAS_AUTO_RECONNECT = "auto_reconnect";
     public static final String EXTRAS_AUTO_RECONNECT_DELAY = "auto_reconnect_delay";
@@ -102,18 +98,33 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     public static final String EXTRAS_AUDIO_SOURCE = "audio_source";
     public static final String EXTRAS_AUDIO_STREAM = "audio_stream";
     public static final String EXTRAS_FRAMES_PER_PACKET = "frames_per_packet";
-    /** An optional path to a trust store for CA certificates. */
+    /**
+     * An optional path to a trust store for CA certificates.
+     */
     public static final String EXTRAS_TRUST_STORE = "trust_store";
-    /** The trust store's password. */
+    /**
+     * The trust store's password.
+     */
     public static final String EXTRAS_TRUST_STORE_PASSWORD = "trust_store_password";
-    /** The trust store's format. */
+    /**
+     * The trust store's format.
+     */
     public static final String EXTRAS_TRUST_STORE_FORMAT = "trust_store_format";
     public static final String EXTRAS_HALF_DUPLEX = "half_duplex";
-    /** A list of users that should be local muted upon connection. */
+    /**
+     * A list of users that should be local muted upon connection.
+     */
     public static final String EXTRAS_LOCAL_MUTE_HISTORY = "local_mute_history";
-    /** A list of users that should be local ignored upon connection. */
+    /**
+     * A list of users that should be local ignored upon connection.
+     */
     public static final String EXTRAS_LOCAL_IGNORE_HISTORY = "local_ignore_history";
     public static final String EXTRAS_ENABLE_PREPROCESSOR = "enable_preprocessor";
+
+    static {
+        // Use Spongy Castle for crypto implementation so we can create and manage PKCS #12 (.p12) certificates.
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+    }
 
     // Service settings
     private Server mServer;
@@ -176,7 +187,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
             new AudioHandler.AudioEncodeListener() {
                 @Override
                 public void onAudioEncoded(byte[] data, int length) {
-                    if(mConnection != null && mConnection.isSynchronized()) {
+                    if (mConnection != null && mConnection.isSynchronized()) {
                         mConnection.sendUDPMessage(data, length, false);
                     }
                 }
@@ -190,7 +201,11 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
                                 if (!isSynchronized())
                                     throw new NotSynchronizedException();
 
-                                final User currentUser = mModelHandler.getUser(mConnection.getSession());
+                                User currentUser = null;
+                                try {
+                                    currentUser = mModelHandler.getUser(mConnection.getSession());
+                                } catch (NotSynchronizedException ignored) {
+                                }
                                 if (currentUser == null) return;
 
                                 currentUser.setTalkState(talking ? TalkState.TALKING : TalkState.PASSIVE);
@@ -384,7 +399,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
             mConnectionState = ConnectionState.DISCONNECTED;
         }
 
-        if(mWakeLock.isHeld()) {
+        if (mWakeLock.isHeld()) {
             mWakeLock.release();
         }
 
@@ -425,43 +440,6 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
         mCallbacks.onLogError(message);
     }
 
-    public void setReconnecting(boolean reconnecting) {
-        if (mReconnecting == reconnecting)
-            return;
-
-        mReconnecting = reconnecting;
-        if (reconnecting) {
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-            NetworkInfo info = cm.getActiveNetworkInfo();
-            if (info != null && info.isConnected()) {
-                Log.v(Constants.TAG, "Connection lost due to non-connectivity issue. Start reconnect polling.");
-                Handler mainHandler = new Handler();
-                mainHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mReconnecting) connect();
-                    }
-                }, mAutoReconnectDelay);
-            } else {
-                // In the event that we've lost connectivity, don't poll. Wait until network
-                // returns before we resume connection attempts.
-                Log.v(Constants.TAG, "Connection lost due to connectivity issue. Waiting until network returns.");
-                try {
-                    registerReceiver(mConnectivityReceiver,
-                            new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            try {
-                unregisterReceiver(mConnectivityReceiver);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     /**
      * Instantiates an audio handler with the current service settings, destroying any previous
      * handler. Requires synchronization with the server, as the maximum bandwidth and session must
@@ -493,6 +471,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     /**
      * Loads all defined settings from the given bundle into the JumbleService.
      * Some settings may only take effect after a reconnect.
+     *
      * @param extras A bundle with settings.
      * @return true if a reconnect is required for changes to take effect.
      * @see com.morlunk.jumble.JumbleService
@@ -646,6 +625,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
      * Exposes the current connection. The current connection is set once an attempt to connect to
      * a server is made, and remains set until a subsequent connection. It remains available
      * after disconnection to provide information regarding the terminated connection.
+     *
      * @return The active {@link JumbleConnection}.
      */
     public JumbleConnection getConnection() {
@@ -655,6 +635,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     /**
      * Returnes the current {@link AudioHandler}. An AudioHandler is instantiated upon connection
      * to a server, and destroyed upon disconnection.
+     *
      * @return the active AudioHandler, or null if there is no active connection.
      */
     private AudioHandler getAudioHandler() throws NotSynchronizedException {
@@ -668,6 +649,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     /**
      * Returns the current {@link ModelHandler}, containing the channel tree. A model handler is
      * valid for the lifetime of a connection.
+     *
      * @return the active ModelHandler, or null if there is no active connection.
      */
     private ModelHandler getModelHandler() throws NotSynchronizedException {
@@ -680,6 +662,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
 
     /**
      * Returns the bluetooth service provider, established after synchronization.
+     *
      * @return The {@link BluetoothScoReceiver} attached to this service.
      */
     private BluetoothScoReceiver getBluetoothReceiver() throws NotSynchronizedException {
@@ -704,6 +687,43 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
         return mReconnecting;
     }
 
+    public void setReconnecting(boolean reconnecting) {
+        if (mReconnecting == reconnecting)
+            return;
+
+        mReconnecting = reconnecting;
+        if (reconnecting) {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                Log.v(Constants.TAG, "Connection lost due to non-connectivity issue. Start reconnect polling.");
+                Handler mainHandler = new Handler();
+                mainHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mReconnecting) connect();
+                    }
+                }, mAutoReconnectDelay);
+            } else {
+                // In the event that we've lost connectivity, don't poll. Wait until network
+                // returns before we resume connection attempts.
+                Log.v(Constants.TAG, "Connection lost due to connectivity issue. Waiting until network returns.");
+                try {
+                    registerReceiver(mConnectivityReceiver,
+                            new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                unregisterReceiver(mConnectivityReceiver);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void cancelReconnect() {
         setReconnecting(false);
@@ -725,7 +745,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     public long getTCPLatency() {
         try {
             return getConnection().getTCPLatency();
-        } catch (NotConnectedException e) {
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
@@ -812,7 +832,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     }
 
     @Override
-    public IChannel getSessionChannel() {
+    synchronized public IChannel getSessionChannel() {
         IUser user = getSessionUser();
         if (user != null)
             return user.getChannel();
@@ -1130,6 +1150,11 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
     }
 
     @Override
+    public byte getVoiceTargetId() {
+        return mVoiceTargetId;
+    }
+
+    @Override
     public void setVoiceTargetId(byte targetId) {
         if ((targetId & ~0x1F) > 0) {
             throw new IllegalArgumentException("Target ID must be at most 5 bits.");
@@ -1137,11 +1162,6 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
         mVoiceTargetId = targetId;
         mAudioHandler.setVoiceTargetId(targetId);
         mCallbacks.onVoiceTargetChanged(VoiceTargetMode.fromId(targetId));
-    }
-
-    @Override
-    public byte getVoiceTargetId() {
-        return mVoiceTargetId;
     }
 
     @Override
@@ -1177,6 +1197,7 @@ public class JumbleService extends Service implements IJumbleService, IJumbleSes
         /**
          * The connection was lost due to either a kick/ban or socket I/O error.
          * Jumble may be reconnecting in this state.
+         *
          * @see #isReconnecting()
          * @see #cancelReconnect()
          */
