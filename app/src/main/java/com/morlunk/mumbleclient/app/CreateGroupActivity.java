@@ -106,6 +106,8 @@ public class CreateGroupActivity extends AppCompatActivity {
         //If closed Search View , lstView will return default
       }
     });
+    //branch V1.0 added
+
     continue_button.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View view) {
