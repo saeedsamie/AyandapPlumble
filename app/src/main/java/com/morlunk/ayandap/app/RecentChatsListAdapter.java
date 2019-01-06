@@ -61,6 +61,7 @@ public class RecentChatsListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.chat_row, parent, false);
             viewHolder.chatTitle = convertView.findViewById(R.id.chatTitle);
             viewHolder.icon = convertView.findViewById(R.id.appIconIV);
+            viewHolder.chatBio= convertView.findViewById(R.id.chatBio);
 
             result = convertView;
             convertView.setTag(viewHolder);
@@ -70,29 +71,36 @@ public class RecentChatsListAdapter extends BaseAdapter {
         }
 
         viewHolder.chatTitle.setText(values.get(position).get("title"));
-        Picasso.with(context)
-                .load(values.get(position).get("image"))
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .transform(new CropCircleTransformation())
-                .fit()
-                .into(viewHolder.icon, new Callback() {
-                    @Override
-                    public void onSuccess() {
+        if (values.get(position).get("type").equals("group"))
+        {
+            viewHolder.chatBio.setText(values.get(position).get("bio"));
+        }
+        else {
+            viewHolder.chatBio.setVisibility(View.GONE);
+            Picasso.with(context)
+              .load(values.get(position).get("image"))
+              .networkPolicy(NetworkPolicy.OFFLINE)
+              .transform(new CropCircleTransformation())
+              .fit()
+              .into(viewHolder.icon, new Callback() {
+                  @Override
+                  public void onSuccess() {
 
-                    }
+                  }
 
-                    @Override
-                    public void onError() {
-                        // Try again online if cache failed
-                        Picasso.with(context)
-                                .load(values.get(position).get("image"))
-                                .transform(new CropCircleTransformation())
+                  @Override
+                  public void onError() {
+                      // Try again online if cache failed
+                      Picasso.with(context)
+                        .load(values.get(position).get("image"))
+                        .transform(new CropCircleTransformation())
 //                                .placeholder(R.drawable.default_profile)
 //                                .error(R.drawable.ic_action_error)
-                                .fit()
-                                .into(viewHolder.icon);
-                    }
-                });
+                        .fit()
+                        .into(viewHolder.icon);
+                  }
+              });
+        }
 
         return convertView;
     }
@@ -100,6 +108,7 @@ public class RecentChatsListAdapter extends BaseAdapter {
     private static class ViewHolder {
         TextView chatTitle;
         ImageView icon;
+        TextView chatBio;
     }
 
 }

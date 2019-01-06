@@ -125,15 +125,15 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/group_image_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        app:elevation="6dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|left|end"
-        app:pressedTranslationZ="12dp" />
-    android:src="@drawable/new_image"
+      android:id="@+id/add_user_to_group"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      app:elevation="6dp"
+      app:layout_anchor="@id/app_bar_layout"
+      app:layout_anchorGravity="bottom|left|end"
+      app:pressedTranslationZ="12dp"
+      android:src="@drawable/inviteuser"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -184,7 +184,7 @@ public class ChannelMenu implements PermissionsPopupMenu.IOnMenuPrepareListener,
                         }
                     }
                 });
-                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setNegativeButton("لغو", null);
                 builder.show();
 
                 break;

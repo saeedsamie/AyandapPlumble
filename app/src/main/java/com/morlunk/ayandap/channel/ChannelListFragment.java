@@ -275,26 +275,26 @@ public class ChannelListFragment extends JumbleServiceFragment implements OnChan
 
         IJumbleSession session = getService().getSession();
         switch (item.getItemId()) {
-            case R.id.menu_mute_button: {
-                IUser self = session.getSessionUser();
-
-                boolean muted = !self.isSelfMuted();
-                boolean deafened = self.isSelfDeafened();
-                deafened &= muted; // Undeafen if mute is off
-                session.setSelfMuteDeafState(muted, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
-            case R.id.menu_deafen_button: {
-                IUser self = session.getSessionUser();
-
-                boolean deafened = !self.isSelfDeafened();
-                session.setSelfMuteDeafState(deafened, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
+//            case R.id.menu_mute_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean muted = !self.isSelfMuted();
+//                boolean deafened = self.isSelfDeafened();
+//                deafened &= muted; // Undeafen if mute is off
+//                session.setSelfMuteDeafState(muted, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
+//            case R.id.menu_deafen_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean deafened = !self.isSelfDeafened();
+//                session.setSelfMuteDeafState(deafened, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
             case R.id.menu_requests:
                 Log.i("ddjkncdscdsdkjcd","BAZZZINGA");
                 return false;

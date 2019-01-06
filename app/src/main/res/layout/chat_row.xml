@@ -22,7 +22,7 @@
           android:layout_marginRight="7dp"
           android:layout_marginTop="7dp"
           android:padding="1dp"
-          android:src="@drawable/ic_launcher"/>
+          android:src="@drawable/group_c"/>
 
 
         <LinearLayout
@@ -41,11 +41,31 @@
               android:layout_weight="0.54"
               android:gravity="right|center"
               android:maxLines="1"
-              android:padding="3dp"
+              android:paddingBottom="1dp"
+              android:paddingLeft="3dp"
+              android:paddingRight="3dp"
+              android:paddingTop="1dp"
               android:text="Chat Title"
               android:textColor="#000"
-              android:textSize="20sp"
-              />
+              android:textSize="20sp"/>
+
+            <TextView
+              android:id="@+id/chatBio"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_alignParentTop="true"
+              android:layout_toEndOf="@+id/appIconIV"
+              android:layout_toRightOf="@+id/appIconIV"
+              android:layout_weight="0.54"
+              android:gravity="right|center"
+              android:maxLines="1"
+              android:paddingBottom="1dp"
+              android:paddingLeft="3dp"
+              android:paddingRight="3dp"
+              android:paddingTop="1dp"
+              android:text="chatBio"
+              android:textColor="#555"
+              android:textSize="20sp"/>
 
         </LinearLayout>
 

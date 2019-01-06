@@ -193,15 +193,21 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                             intent.putExtra("fullname", (listValues.get(position).get("title")));
                             intent.putExtra("image", (listValues.get(position).get("image")));
                             intent.putExtra("type", (listValues.get(position).get("type")));
+                            intent.putExtra("property", (listValues.get(position).get("property")));
+                            intent.putExtra("access", (listValues.get(position).get("access")));
                             ArrayList<IChannel> channels = iChannels;
                             int channelId = -2;
-                            for (int i = 0; i < channels.size(); i++) {
-                                if (channels.get(i).getName().trim().equals(String.valueOf(chatId).trim())) {
-                                    channelId = channels.get(i).getId();
-                                    break;
-                                }
-                                Log.i("channels", channels.get(i).getName());
-                            }
+synchronized (this) {
+    for (int i = 0; i < channels.size(); i++) {
+        channels = iChannels;
+        if (channels.get(i).getName().trim().equals(String.valueOf(chatId).trim())) {
+            channelId = channels.get(i).getId();
+            break;
+        }
+        channels = iChannels;
+        Log.i("channels", channels.get(i).getName());
+    }
+}
                             if (channelId == -2 && PlumbleActivity.mService.getSession() != null) {
                                 try {
 //                                    final Handler handler = new Handler();
@@ -229,7 +235,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                         @Override
                                         public void run() {
                                             PlumbleActivity.mService.getSession().joinChannel(finalChannelId);
-                                            handler.postDelayed(this, 100);
+                                            handler.postDelayed(this, 1500);
                                             if (isUserJoined(finalChannelId)) {
                                                 handler.removeCallbacksAndMessages(null);
                                                 progressDialog.hide();
@@ -237,7 +243,7 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                             }
                                         }
                                     };
-                                    handler.postDelayed(runnable, 100);
+                                    handler.postDelayed(runnable, 1500);
                                     progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                                         @Override
                                         public void onCancel(DialogInterface dialog) {
@@ -291,6 +297,46 @@ public class RecentChatsFragment extends JumbleServiceFragment {
                                             }
                                         }).show();
                             }
+
+
+
+                            if (listValues.get(pos).get("type").equals("group")) {
+                                Snackbar.make(arg1, "آیا میخواهید از این گروه خارج شوید ؟", Snackbar.LENGTH_LONG)
+                                  .setAction("بلی", new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+
+                                          nameValuePairs = new ArrayList<NameValuePair>();
+                                          nameValuePairs.add(new BasicNameValuePair("func", "leaveGroup"));
+                                          nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
+                                          nameValuePairs.add(new BasicNameValuePair("userId",  getActivity().getSharedPreferences("MyPref", MODE_PRIVATE).getString(getString(R.string.PREF_TAG_userid), "-2")));
+
+                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                              @Override
+                                              public void onTaskCompleted(JSONObject jsonObject) {
+                                                  try {
+                                                      if (jsonObject.getString("GROUP").equals("left")) {
+
+                                                          Snackbar.make(arg1, "شما گروه را ترک کردید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                          updateListView();
+                                                      } else {
+                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      }
+
+                                                  } catch (JSONException e1) {
+                                                      e1.printStackTrace();
+                                                  }
+                                              }
+                                          }).execute();
+                                      }
+                                  }).show();
+                            }
+
+
+
+
                             return true;
                         }
                     });
@@ -410,26 +456,26 @@ public class RecentChatsFragment extends JumbleServiceFragment {
 
         IJumbleSession session = getService().getSession();
         switch (item.getItemId()) {
-            case R.id.menu_mute_button: {
-                IUser self = session.getSessionUser();
-
-                boolean muted = !self.isSelfMuted();
-                boolean deafened = self.isSelfDeafened();
-                deafened &= muted; // Undeafen if mute is off
-                session.setSelfMuteDeafState(muted, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
-            case R.id.menu_deafen_button: {
-                IUser self = session.getSessionUser();
-
-                boolean deafened = !self.isSelfDeafened();
-                session.setSelfMuteDeafState(deafened, deafened);
-
-                getActivity().supportInvalidateOptionsMenu();
-                return true;
-            }
+//            case R.id.menu_mute_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean muted = !self.isSelfMuted();
+//                boolean deafened = self.isSelfDeafened();
+//                deafened &= muted; // Undeafen if mute is off
+//                session.setSelfMuteDeafState(muted, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
+//            case R.id.menu_deafen_button: {
+//                IUser self = session.getSessionUser();
+//
+//                boolean deafened = !self.isSelfDeafened();
+//                session.setSelfMuteDeafState(deafened, deafened);
+//
+//                getActivity().supportInvalidateOptionsMenu();
+//                return true;
+//            }
             case R.id.menu_requests:
                 return false;
 //            case R.id.menu_bluetooth:

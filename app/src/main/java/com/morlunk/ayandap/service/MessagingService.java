@@ -63,7 +63,6 @@ public class MessagingService extends FirebaseMessagingService {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.notify(new Random().nextInt(), mBuilder.build());
         }
-
     }
 
     @Override

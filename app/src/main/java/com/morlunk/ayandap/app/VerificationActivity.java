@@ -80,6 +80,9 @@ public class VerificationActivity extends AppCompatActivity implements OnTaskCom
         user_phone_number = intent.getStringExtra("Phone_number");
         verificationActivity = this;
 
+
+
+
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("func", "verification"));
         new ServerFetchAsync(nameValuePairs, this).execute();

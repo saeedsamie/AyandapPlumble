@@ -7,11 +7,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,9 +45,10 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
     ImageView image;
     TextView title;
     TextView bio;
-    Button mute;
     private boolean resume = false;
     private LinearLayout group_info_layout;
+    private ImageView mute_image;
+    private LinearLayout mute_linear;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -56,10 +57,32 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
+
+
         setContentView(R.layout.activity_chat);
         int chatId = getIntent().getIntExtra("chatId", -1);
         String chatTitle = getIntent().getStringExtra("ChatTitle");
         cmTimer = findViewById(id.cmTimer);
+
+        mute_image = findViewById(id.mute_image);
+        mute_linear = findViewById(id.mute_button);
+
+        Log.i("IHFIUH",getIntent().getStringExtra("property"));
+
+        if (getIntent().getStringExtra("property").equals("0")) {
+            setMuteDeafenFirstTime();
+        }
+        else
+        {
+            mute_image.setImageResource(drawable.muted);
+            final int sdk = android.os.Build.VERSION.SDK_INT;
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_speaker) );
+            } else {
+                mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_speaker));
+            }
+            mute_linear.setClickable(false);
+        }
 
         group_info_layout = findViewById(id.group_info_layout);
         group_info_layout.setOnClickListener(new View.OnClickListener() {
@@ -69,24 +92,44 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
                 intent.putExtra("bio", getIntent().getStringExtra("bio"));
                 intent.putExtra("chatId", getIntent().getStringExtra("chatId"));
                 intent.putExtra("ChatTitle", getIntent().getStringExtra("fullname"));
+                intent.putExtra("property", getIntent().getStringExtra("property"));
+                intent.putExtra("access", getIntent().getStringExtra("access"));
                 if (getIntent().getStringExtra("type").equals("group")) {
                     startActivity(intent);
                 }
-
             }
         });
-        mute = findViewById(id.mute_button);
-        mute.setOnClickListener(new View.OnClickListener() {
+        mute_linear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final IJumbleSession session = PlumbleActivity.mService.getSession();
                 IUser self = session.getSessionUser();
                 final boolean deafened = !self.isSelfDeafened();
                 session.setSelfMuteDeafState(deafened, deafened);
-                if (deafened)
-                    mute.setText("UnMute");
-                else
-                    mute.setText("Mute");
+                if (deafened) {
+                    mute_image.setImageResource(drawable.speakermuted);
+                    final int sdk = android.os.Build.VERSION.SDK_INT;
+                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_muted_speaker) );
+                    } else {
+                        mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_muted_speaker));
+                    }
+//                    Snackbar
+//                      .make(findViewById(android.R.id.content), "حالت بیصدا فعال شد", Snackbar.LENGTH_SHORT)
+//                      .show();
+                }
+                else {
+                    mute_image.setImageResource(drawable.speaker);
+                    final int sdk = android.os.Build.VERSION.SDK_INT;
+                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_speaker) );
+                    } else {
+                        mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_speaker));
+                    }
+//                    Snackbar
+//                      .make(findViewById(android.R.id.content), "حالت بیصدا غیرفعال شد", Snackbar.LENGTH_SHORT)
+//                      .show();
+                }
 
                 final Handler handler = new Handler();
                 Runnable runnable = new Runnable() {
@@ -227,5 +270,38 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+        }
+
+        public void setMuteDeafenFirstTime() {
+
+            final IJumbleSession session = PlumbleActivity.mService.getSession();
+            IUser self = session.getSessionUser();
+            final boolean deafened = self.isSelfDeafened();
+            session.setSelfMuteDeafState(deafened, deafened);
+            if (deafened) {
+                mute_image.setImageResource(drawable.speakermuted);
+                final int sdk = android.os.Build.VERSION.SDK_INT;
+                if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_muted_speaker) );
+                } else {
+                    mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_muted_speaker));
+                }
+//                    Snackbar
+//                      .make(findViewById(android.R.id.content), "حالت بیصدا فعال شد", Snackbar.LENGTH_SHORT)
+//                      .show();
+            }
+            else {
+                mute_image.setImageResource(drawable.speaker);
+                final int sdk = android.os.Build.VERSION.SDK_INT;
+                if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_speaker) );
+                } else {
+                    mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_speaker));
+                }
+//                    Snackbar
+//                      .make(findViewById(android.R.id.content), "حالت بیصدا غیرفعال شد", Snackbar.LENGTH_SHORT)
+//                      .show();
+            }
+        }
+
 }

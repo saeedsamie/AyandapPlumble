@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import com.morlunk.ayandap.OnTaskCompletedListener;
 import com.morlunk.ayandap.R;
 import com.morlunk.ayandap.ServerFetchAsync;
+import com.morlunk.ayandap.calligraphy.CalligraphyContextWrapper;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -39,11 +39,6 @@ public class FinishUpGroupActivity extends AppCompatActivity{
     finish_up = findViewById(R.id.group_finish_up_button);
     groupName = findViewById(R.id.finishup_groupname);
     groupBio = findViewById(R.id.finishup_groupbio);
-
-    finish_up.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Log.i("HVDJHBDVHJBHJ",toUsers);
 
         finish_up.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -73,7 +68,9 @@ public class FinishUpGroupActivity extends AppCompatActivity{
             }).execute();
           }
         });
-      }
-    });
+  }
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 }

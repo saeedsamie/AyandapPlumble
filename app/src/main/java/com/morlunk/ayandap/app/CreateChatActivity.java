@@ -174,6 +174,7 @@ public class CreateChatActivity extends AppCompatActivity {
                                                                     intent.putExtra("bio", (listValues.get(p).get("bio")));
                                                                     intent.putExtra("fullname", (listValues.get(p).get("fullname")));
                                                                     intent.putExtra("image", (listValues.get(p).get("image")));
+                                                                    intent.putExtra("property" , "0");
                                                                     intent.putExtra("type", ("pv"));
                                                                     startActivity(intent);
                                                                     break;

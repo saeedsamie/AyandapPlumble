@@ -285,11 +285,7 @@ public class PlumbleActivity extends AppCompatActivity implements
                 MessageDigest digest = MessageDigest.getInstance("SHA-1");
                 byte[] certDigest = digest.digest(x509.getEncoded());
                 String hexDigest = new String(Hex.encode(certDigest));
-                adb.setMessage(getString(R.string.certificate_info) +
-                        x509.getSubjectDN().getName() +
-                        x509.getNotBefore().toString() +
-                        x509.getNotAfter().toString() +
-                        hexDigest);
+                adb.setMessage(getString(R.string.certificate_info));
 //                adb.setMessage(getString(R.string.certificate_info,
 //                        x509.getSubjectDN().getName(),
 //                        x509.getNotBefore().toString(),

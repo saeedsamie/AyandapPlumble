@@ -120,6 +120,8 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompletedL
 
         loginContinue = findViewById(R.id.login_continue);
         phone = findViewById(R.id.login_phone);
+
+
         phone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

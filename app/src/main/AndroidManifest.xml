@@ -34,6 +34,7 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.**permission.INTERNET"/>
 
     <application
         android:name="com.morlunk.ayandap.FontChanger"
@@ -208,6 +209,12 @@
             android:name="com.morlunk.ayandap.app.CreateGroupActivity"
             android:theme="@style/Theme.CreateChat"
             android:screenOrientation="portrait"/>
+
+        <activity
+          android:name="com.morlunk.ayandap.app.AddUserToGroup"
+          android:theme="@style/Theme.CreateChat"
+          android:screenOrientation="portrait"/>
+
         <activity
             android:name="com.morlunk.ayandap.app.FinishUpGroupActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
