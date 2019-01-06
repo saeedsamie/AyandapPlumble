@@ -77,11 +77,15 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
             mute_image.setImageResource(drawable.muted);
             final int sdk = android.os.Build.VERSION.SDK_INT;
             if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_speaker) );
+                mute_linear.setBackgroundDrawable(ContextCompat.getDrawable(ChatActivity.this, drawable.rounded_speaker));
             } else {
                 mute_linear.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.rounded_speaker));
             }
-            mute_linear.setClickable(false);
+//            mute_linear.setClickable(false);
+            final IJumbleSession session = PlumbleActivity.mService.getSession();
+            final boolean deafened = true;
+            session.setSelfMuteDeafState(deafened, deafened);
+            mute_linear.setEnabled(false);
         }
 
         group_info_layout = findViewById(id.group_info_layout);
@@ -276,7 +280,7 @@ public class ChatActivity extends AppCompatActivity implements JumbleServiceProv
 
             final IJumbleSession session = PlumbleActivity.mService.getSession();
             IUser self = session.getSessionUser();
-            final boolean deafened = self.isSelfDeafened();
+            final boolean deafened = false;
             session.setSelfMuteDeafState(deafened, deafened);
             if (deafened) {
                 mute_image.setImageResource(drawable.speakermuted);

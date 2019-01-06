@@ -1,12 +1,16 @@
 package com.morlunk.ayandap.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,17 +32,33 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 
-public class CreateChannelActivity extends AppCompatActivity {
+
+public class  CreateChannelActivity extends AppCompatActivity {
   MaterialSearchView searchView;
   ListView lstView;
   List<NameValuePair> nameValuePairs;
   Boolean chatCreated = false;
   private ListView listView;
-  private Button continue_button;
-  private ArrayList<String> members = new ArrayList<>();
+  private static Button continue_button;
+  String old;
+  public static int position = -2;
+  public static ArrayList<HashMap<String, String>> choosen = new ArrayList<>();
+  RecyclerView mRecyclerView;
+  RecyclerView.LayoutManager mLayoutManager;
+  static RecyclerView.Adapter mAdapter;
+
+
+  private static final String TAG = "MainActivity";
+
+  //vars
+  private ArrayList<String> mNames = new ArrayList<>();
+  private ArrayList<String> mImageUrls = new ArrayList<>();
+
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +67,34 @@ public class CreateChannelActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
     }
+
+    choosen.clear();
+
+    mRecyclerView = findViewById(R.id.recycler_view);
+    mRecyclerView.setHasFixedSize(true);
+    // The number of Columns
+    mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+    mRecyclerView.setLayoutManager(mLayoutManager);
+    mAdapter = new RecyclerViewAdapter(CreateChannelActivity.this, choosen);
+    mRecyclerView.setAdapter(mAdapter);
+
+    mRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+      @Override
+      public boolean onLongClick(View view) {
+        finish();
+        return false;
+      }
+    });
+
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle("جستجوی نام کاربری");
     toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
 
-    listView = findViewById(R.id.create_channel_search_listview);
+    listView = findViewById(R.id.create_group_search_listview);
 
     searchView = findViewById(R.id.search_view);
-    continue_button = findViewById(R.id.create_channel_continue);
+    continue_button = findViewById(R.id.create_group_continue);
     continue_button.setVisibility(View.GONE);
     searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
       @Override
@@ -65,9 +104,23 @@ public class CreateChannelActivity extends AppCompatActivity {
 
       @Override
       public void onSearchViewClosed() {
-
         //If closed Search View , lstView will return default
-
+      }
+    });
+    continue_button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        List<String> userIds = getPropertyList(choosen,"id");
+        String toUsers = "";
+        for (int i = 0 ; i < userIds.size()-1;i++)
+        {
+          toUsers += userIds.get(i) + ",";
+        }
+        toUsers += userIds.get(userIds.size()-1);
+        Intent intent = new Intent(CreateChannelActivity.this,FinishUpChannelActivity.class);
+        intent.putExtra("toUsers",toUsers);
+        startActivity(intent);
+        finish();
       }
     });
 
@@ -78,138 +131,87 @@ public class CreateChannelActivity extends AppCompatActivity {
       }
 
       @Override
-      public boolean onQueryTextChange(String newText) {
+      public boolean onQueryTextChange(final String newText) {
         if (newText != null && !newText.isEmpty()) {
-          nameValuePairs = new ArrayList<NameValuePair>();
-          nameValuePairs.add(new BasicNameValuePair("func", "search"));
-          nameValuePairs.add(new BasicNameValuePair("username", newText));
-          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+          old = newText;
+          new Handler().postDelayed(new Runnable() {
             @Override
-            public void onTaskCompleted(JSONObject jsonObject) {
-              final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
-              try {
-                JSONArray jsonArray;
-                jsonArray = jsonObject.getJSONArray("search");
+            public void run() {
+              if(old.equals(newText)) {
+                final String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+                  .getString(getString(R.string.PREF_TAG_userid), "-2");
+                nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("func", "search"));
+                nameValuePairs.add(new BasicNameValuePair("username", newText));
+                new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                  @Override
+                  public void onTaskCompleted(JSONObject jsonObject) {
+                    final ArrayList<HashMap<String, String>> listValues = new ArrayList<>();
+                    try {
+                      JSONArray jsonArray;
+                      jsonArray = jsonObject.getJSONArray("search");
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                  HashMap hashMap = new HashMap();
-                  JSONObject c = jsonArray.getJSONObject(i);
+                      for (int i = 0; i < jsonArray.length(); i++) {
+                        HashMap hashMap = new HashMap();
+                        JSONObject c = jsonArray.getJSONObject(i);
 
-                  hashMap.put("fullname", c.getString("fullname"));
-                  hashMap.put("username", c.getString("username"));
-                  hashMap.put("image", LoginActivity.URL+"profile_image/" + c.getString("image"));
-                  hashMap.put("id", c.getString("id"));
-                  hashMap.put("selected", "0");
+                        hashMap.put("fullname", c.getString("fullname"));
+                        hashMap.put("username", c.getString("username"));
+                        hashMap.put("image", LoginActivity.URL + "profile_image/" + c.getString("image"));
+                        hashMap.put("id", c.getString("id"));
+                        List<String> userIds = getPropertyList(choosen,"id");
+                        if (userIds.contains(c.getString("id")) ) {
+                          hashMap.put("selected", "1");
+                        }
+                        else
+                        {
+                          hashMap.put("selected", "0");
+                        }
 
-                  listValues.add(hashMap);
-                }
 
-              } catch (Exception e) {
-                e.printStackTrace();
+                        if (!c.getString("id").equals(userId))
+                        {
+                          listValues.add(hashMap);
+                        }
+                      }
+
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+
+                    final SearchListAdapter adapter = new SearchListAdapter(CreateChannelActivity.this, listValues);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                      @RequiresApi(api = Build.VERSION_CODES.N)
+                      @Override
+                      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        HashMap h = new HashMap();
+                        h.put("fullname",listValues.get(position).get("fullname"));
+                        h.put("id",listValues.get(position).get("id"));
+                        h.put("image",listValues.get(position).get("image"));
+
+                        List<String> userIds = getPropertyList(choosen,"id");
+                        if (!userIds.contains(listValues.get(position).get("id")))
+                        {
+                          choosen.add(h);
+                          mAdapter.notifyDataSetChanged();
+                        }
+
+                        if (choosen.size() == 0) {
+                          continue_button.setVisibility(View.GONE);
+                        } else {
+                          continue_button.setVisibility(View.VISIBLE);
+                        }
+                      }
+                    });
+                  }
+                }).execute();
               }
-
-              for (int i = 0 ; i<listValues.size()-1 ; i++)
-              {
-                for (int j= 0; j<members.size()-1 ; j++)
-                {
-                  if (listValues.get(i).get("id").equals(members.get(j)))
-                  {
-                    listValues.get(i).put("selected","1");
-                  }
-                }
-              }
-
-              final SearchListAdapter adapter = new SearchListAdapter(CreateChannelActivity.this, listValues);
-              listView.setAdapter(adapter);
-              adapter.notifyDataSetChanged();
-
-              listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                  if (listValues.get(position).get("selected").equals("0")) {
-                    members.add(listValues.get(position).get("id"));
-                    listValues.get(position).put("selected", "1");
-                  }
-                  else if (listValues.get(position).get("selected").equals("1")) {
-                    members.remove(listValues.get(position).get("id"));
-                    listValues.get(position).put("selected", "0");
-                  }
-
-                  adapter.notifyDataSetChanged();
-
-                  Log.i("MEBERSSSSSS",members.toString());
-                  Log.i("LISTTTTTTTT",listValues.toString());
-
-                  if (members.size() == 0)
-                  {
-                    continue_button.setVisibility(View.GONE);
-                  }
-                  else {
-                    continue_button.setVisibility(View.VISIBLE);
-                  }
-//                  nameValuePairs = new ArrayList<NameValuePair>();
-//                  nameValuePairs.add(new BasicNameValuePair("func", "createPV"));
-//                  String userId = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
-//                    .getString(getString(R.string.PREF_TAG_userid), "-2");
-//                  String fullName = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
-//                    .getString(getString(R.string.PREF_TAG_fullname), "--3");
-//                  nameValuePairs.add(new BasicNameValuePair("fromName", fullName));
-//                  nameValuePairs.add(new BasicNameValuePair("toName", listValues.get(position).get("fullname")));
-//                  nameValuePairs.add(new BasicNameValuePair("fromId", userId));
-//                  nameValuePairs.add(new BasicNameValuePair("toId", listValues.get(position).get("id")));
-//                  Log.e("channels", PlumbleActivity.iChannels.toString());
-//
-//                  final int p = position;
-//                  new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
-//
-//                    @Override
-//                    public void onTaskCompleted(JSONObject jsonObject) {
-//                      IPlumbleService iPlumbleService = PlumbleActivity.mService;
-//                      try {
-//                        switch (jsonObject.getString("PV")) {
-//                          case "DB ERROR":
-//                            Toast.makeText(CreateChatActivity.this, "DataBase problem Chat didn't create!", Toast.LENGTH_LONG).show();
-//                            break;
-//                          case "CHAT NOT FOUND":
-//                            Toast.makeText(CreateChatActivity.this, "Chat Not found!", Toast.LENGTH_LONG).show();
-//                            break;
-//                          case "CREATED":
-//                            int chatId = Integer.valueOf(jsonObject.getString("chatId"));
-//                            try {
-//                              iPlumbleService.getSession()
-//                                .createChannel(0, String.valueOf(chatId), "felan", 0, true);//todo delete description
-//                              Log.e("CreateChat", "channel created");
-//                            } catch (Exception e) {
-//                              e.printStackTrace();
-//                              Log.e("CreateChat", "channel Didn't create in jumble request!");
-//                            }
-//                            Intent intent = new Intent(CreateChatActivity.this, ChatActivity.class);
-//                            intent.putExtra("chatId", chatId);
-//                            intent.putExtra("bio", (listValues.get(p).get("bio")));
-//                            intent.putExtra("fullname", (listValues.get(p).get("fullname")));
-//                            intent.putExtra("image", (listValues.get(p).get("image")));
-//                            intent.putExtra("type", ("private"));
-//                            startActivity(intent);
-//                            break;
-//                          case "EXIST":
-//                            Log.e("Ex", "Exist");
-//                            Toast.makeText(CreateChatActivity.this, "Chat Exist", Toast.LENGTH_LONG).show();
-//                            break;
-//                          default:
-//                            Toast.makeText(CreateChatActivity.this, "Didn't Create!!", Toast.LENGTH_LONG).show();
-//                            break;
-//                        }
-//                      } catch (Exception e) {
-//                        e.printStackTrace();
-//                      }
-//                    }
-//                  }).execute();
-
-                }
-              });
             }
-          }).execute();
+          }, 200);
         } else {
           listView.setAdapter(null);
         }
@@ -229,6 +231,25 @@ public class CreateChannelActivity extends AppCompatActivity {
   @Override
   protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
+
+  public static List<String> getPropertyList(ArrayList<HashMap<String,String>> users, String key)
+  {
+    List<String> result = new ArrayList<String>();
+    for (Map<String,String> map : users) {
+      result.add(map.get(key));
+    }
+    return result;
+  }
+
+  public static void listRemover(int position) {
+    choosen.remove(position);
+    mAdapter.notifyDataSetChanged();
+    if (choosen.size() == 0) {
+      continue_button.setVisibility(View.GONE);
+    }
+
+
   }
 
 }

@@ -19,7 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:ignore="NewApi">
     
-    <style name="Theme.Plumble" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Plumble" parent="@style/Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:textColorPrimary">#000</item>
         <item name="android:textColorSecondary">#666</item>
         <item name="android:textColorPrimaryInverse">#FFF</item>
@@ -162,7 +162,7 @@
         <item name="colorAccent">#616161</item>
     </style>
 
-    <style name="FirstRunAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="FirstRunAppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

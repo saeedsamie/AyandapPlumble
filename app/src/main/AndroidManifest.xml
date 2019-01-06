@@ -211,6 +211,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+          android:name="com.morlunk.ayandap.app.CreateChannelActivity"
+          android:theme="@style/Theme.CreateChat"
+          android:screenOrientation="portrait"/>
+
+        <activity
           android:name="com.morlunk.ayandap.app.AddUserToGroup"
           android:theme="@style/Theme.CreateChat"
           android:screenOrientation="portrait"/>
@@ -219,6 +224,12 @@
             android:name="com.morlunk.ayandap.app.FinishUpGroupActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
+
+        <activity
+          android:name="com.morlunk.ayandap.app.FinishUpChannelActivity"
+          android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+          android:screenOrientation="portrait"/>
+
         <activity
             android:name="com.morlunk.ayandap.app.RequestActivity"
             android:launchMode="singleTop"

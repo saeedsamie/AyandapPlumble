@@ -182,7 +182,7 @@ public class RequestActivity extends AppCompatActivity {
                                         value.add(new BasicNameValuePair("func", "declinePV"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    } else if (listValues.get(position).get("type").equals("group")) {
+                                    } else if (listValues.get(position).get("type").equals("group") || listValues.get(position).get("type").equals("channel")) {
                                         value.add(new BasicNameValuePair("func", "declineCG"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
@@ -193,7 +193,7 @@ public class RequestActivity extends AppCompatActivity {
                                         value.add(new BasicNameValuePair("func", "declinePV"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
-                                    } else if (listValues.get(position).get("type").equals("group")) {
+                                    } else if (listValues.get(position).get("type").equals("group") || listValues.get(position).get("type").equals("channel")) {
                                         value.add(new BasicNameValuePair("func", "declineCG"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
@@ -208,6 +208,10 @@ public class RequestActivity extends AppCompatActivity {
                                         value.add(new BasicNameValuePair("func", "acceptGroup"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    } else if (listValues.get(position).get("type").equals("channel")){
+                                        value.add(new BasicNameValuePair("func", "acceptChannel"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     }
                                     break;
                                 case DIRECTION_NORMAL_RIGHT:
@@ -217,6 +221,10 @@ public class RequestActivity extends AppCompatActivity {
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     } else if (listValues.get(position).get("type").equals("group")) {
                                         value.add(new BasicNameValuePair("func", "acceptGroup"));
+                                        value.add(new BasicNameValuePair("userId", userId));
+                                        value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
+                                    } else if (listValues.get(position).get("type").equals("channel")){
+                                        value.add(new BasicNameValuePair("func", "acceptChannel"));
                                         value.add(new BasicNameValuePair("userId", userId));
                                         value.add(new BasicNameValuePair("chatId", listValues.get(position).get("chatId")));
                                     }

@@ -197,20 +197,25 @@ public class GroupInfoActivity extends AppCompatActivity {
 //                  if (myaccess.get("addAdmin") || creator)
 //                    arrayAdapter.add("make admin");
 
+                final String KICK_USER = "اخراج از گروه";
+                final String MUTE_USER = "تغییر وضعیت کاربر به بیصدا";
+                final String UNMUTE_USER = "تغییر وضعیت کاربر به عادی";
+                final String ADD_ADMIN = "تغییر سطح دسترسی کاربر";
+
                 if (creator) {
-                  arrayAdapter.add("kick");
-                  arrayAdapter.add("mute");
-                  arrayAdapter.add("deafen");
-                  arrayAdapter.add("make admin");
+                  arrayAdapter.add(KICK_USER);
+                  arrayAdapter.add(MUTE_USER);
+                  arrayAdapter.add(UNMUTE_USER);
+                  arrayAdapter.add(ADD_ADMIN);
                 } else {
                   if (myaccess.get("kickUser"))
-                    arrayAdapter.add("kick");
+                    arrayAdapter.add(KICK_USER);
                   if (myaccess.get("muteUser"))
-                    arrayAdapter.add("mute");
-                  if (myaccess.get("deafenUser"))
-                    arrayAdapter.add("deafen");
+                    arrayAdapter.add(MUTE_USER);
+                  if (myaccess.get("muteUser"))
+                    arrayAdapter.add(UNMUTE_USER);
                   if (myaccess.get("addAdmin"))
-                    arrayAdapter.add("make admin");
+                    arrayAdapter.add(ADD_ADMIN);
                 }
 
 
@@ -219,7 +224,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                   public void onClick(DialogInterface dialog, final int which) {
 //                        String strName = arrayAdapter.getItem(which);
                     switch (arrayAdapter.getItem(which)) {
-                      case "make admin":
+                      case ADD_ADMIN:
                         final CharSequence[] items = {"اضافه کردن کاربر", "حذف کردن کاربر", "تغییر عکس", "Mute کردن کاربر", "Deafen کردن کاربر", "اضافه کردن ادمین"};
                         final ArrayList selectedItems = new ArrayList();
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -287,7 +292,66 @@ public class GroupInfoActivity extends AppCompatActivity {
 
                         break;
 
-                      case "kick":
+                      case MUTE_USER:
+                        nameValuePairs = new ArrayList<NameValuePair>();
+                        nameValuePairs.add(new BasicNameValuePair("func", "muteUser"));
+                        nameValuePairs.add(new BasicNameValuePair("userId", listValues.get(position).get("id")));
+                        nameValuePairs.add(new BasicNameValuePair("chatId", getIntent().getStringExtra("chatId")));
+
+                        new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                          @Override
+                          public void onTaskCompleted(JSONObject jsonObject) {
+                            try {
+                              if (jsonObject.getString("USER").equals("MUTED")) {
+                                Snackbar.make(findViewById(android.R.id.content), "وضعیت کاربر مورد نظر به بیضدا تغییر یافت", Snackbar.LENGTH_SHORT)
+                                  .show();
+                                listValues.remove(position);
+                                adapter.notifyDataSetChanged();
+                              } else {
+                                Snackbar
+                                  .make(findViewById(android.R.id.content), "خطایی پیش آمده ، مجددا تلاش کنید", Snackbar.LENGTH_SHORT)
+                                  .show();
+                              }
+
+                            } catch (JSONException e1) {
+                              e1.printStackTrace();
+                            }
+                          }
+                        }).execute();
+                        break;
+
+
+                      case UNMUTE_USER:
+                        nameValuePairs = new ArrayList<NameValuePair>();
+                        nameValuePairs.add(new BasicNameValuePair("func", "unmuteUser"));
+                        nameValuePairs.add(new BasicNameValuePair("userId", listValues.get(position).get("id")));
+                        nameValuePairs.add(new BasicNameValuePair("chatId", getIntent().getStringExtra("chatId")));
+
+                        new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                          @Override
+                          public void onTaskCompleted(JSONObject jsonObject) {
+                            try {
+                              if (jsonObject.getString("USER").equals("UNMUTED")) {
+                                Snackbar.make(findViewById(android.R.id.content), "وضعیت کاربر مورد نظر به عادی تغییر یافت", Snackbar.LENGTH_SHORT)
+                                  .show();
+                                listValues.remove(position);
+                                adapter.notifyDataSetChanged();
+                              } else {
+                                Snackbar
+                                  .make(findViewById(android.R.id.content), "خطایی پیش آمده ، مجددا تلاش کنید", Snackbar.LENGTH_SHORT)
+                                  .show();
+                              }
+
+                            } catch (JSONException e1) {
+                              e1.printStackTrace();
+                            }
+                          }
+                        }).execute();
+                        break;
+
+
+
+                      case KICK_USER:
                         nameValuePairs = new ArrayList<NameValuePair>();
                         nameValuePairs.add(new BasicNameValuePair("func", "kickUser"));
                         nameValuePairs.add(new BasicNameValuePair("userId", listValues.get(position).get("id")));

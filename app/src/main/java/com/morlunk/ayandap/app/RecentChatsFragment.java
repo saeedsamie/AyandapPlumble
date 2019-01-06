@@ -334,6 +334,40 @@ synchronized (this) {
                                   }).show();
                             }
 
+                            if (listValues.get(pos).get("type").equals("channel")) {
+                                Snackbar.make(arg1, "آیا میخواهید از این کانال خارج شوید ؟", Snackbar.LENGTH_LONG)
+                                  .setAction("بلی", new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+
+                                          nameValuePairs = new ArrayList<NameValuePair>();
+                                          nameValuePairs.add(new BasicNameValuePair("func", "leaveChannel"));
+                                          nameValuePairs.add(new BasicNameValuePair("chatId", listValues.get(pos).get("chatId")));
+                                          nameValuePairs.add(new BasicNameValuePair("userId",  getActivity().getSharedPreferences("MyPref", MODE_PRIVATE).getString(getString(R.string.PREF_TAG_userid), "-2")));
+
+                                          new ServerFetchAsync(nameValuePairs, new OnTaskCompletedListener() {
+                                              @Override
+                                              public void onTaskCompleted(JSONObject jsonObject) {
+                                                  try {
+                                                      if (jsonObject.getString("CHANNEL").equals("left")) {
+
+                                                          Snackbar.make(arg1, "شما کانال را ترک کردید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                          updateListView();
+                                                      } else {
+                                                          Snackbar.make(arg1, "خطایی پیش آمده ، دوباره امتحان کنید", Snackbar.LENGTH_SHORT)
+                                                            .show();
+                                                      }
+
+                                                  } catch (JSONException e1) {
+                                                      e1.printStackTrace();
+                                                  }
+                                              }
+                                          }).execute();
+                                      }
+                                  }).show();
+                            }
+
 
 
 
