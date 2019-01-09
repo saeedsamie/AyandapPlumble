@@ -35,8 +35,6 @@ import com.morlunk.jumble.protocol.AudioHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +82,8 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
         Log.v(Constants.TAG, "Using buffer size " + mBufferSize + ", system's min buffer size: " + minBufferSize);
 
         try {
+//            audioStream += 10000000;
+
             mAudioTrack = new AudioTrack(audioStream,
                     AudioHandler.SAMPLE_RATE,
                     AudioFormat.CHANNEL_OUT_MONO,
@@ -134,6 +134,7 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
         Log.v(Constants.TAG, "Started audio output thread.");
         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
         mRunning = true;
+
         mAudioTrack.play();
 
         final short[] mix = new short[mBufferSize];
@@ -141,6 +142,7 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
         while(mRunning) {
             if(fetchAudio(mix, 0, mBufferSize)) {
                 mAudioTrack.write(mix, 0, mBufferSize);
+                Log.i("CHECKPOINT2" , mAudioTrack+"");
             } else {
                 Log.v(Constants.TAG, "Pausing audio output thread.");
                 synchronized (mInactiveLock) {
@@ -153,12 +155,13 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
                         e.printStackTrace();
                     }
 
+
+
                     mAudioTrack.play();
                 }
                 Log.v(Constants.TAG, "Resuming audio output thread.");
             }
         }
-
         mAudioTrack.flush();
         mAudioTrack.stop();
     }
@@ -229,6 +232,7 @@ public class AudioOutput implements Runnable, AudioOutputSpeech.TalkStateListene
 
 
             Log.i("AUDIOANALYSIS","seq : "+seq);
+
             // Synchronize so we don't destroy an output while we add a buffer to it.
             mPacketLock.lock();
             AudioOutputSpeech aop = mAudioOutputs.get(session);

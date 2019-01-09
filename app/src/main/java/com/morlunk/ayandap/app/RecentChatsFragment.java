@@ -368,9 +368,6 @@ synchronized (this) {
                                   }).show();
                             }
 
-
-
-
                             return true;
                         }
                     });

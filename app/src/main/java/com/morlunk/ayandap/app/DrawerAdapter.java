@@ -85,7 +85,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.DrawerRow> {
 //        add(new DrawerAdapter.DrawerItem(ITEM_CHAT, "chat", R.drawable.ic_action_chat));
         add(new DrawerAdapter.DrawerItem(ITEM_RECENTS, "صفحه ی اصلی", R.drawable.ic_action_favourite_on));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHAT, "ایجاد گفتگو", R.drawable.ic_action_favourite_on));
-        add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHANNEL, "ایجاد کانال", R.drawable.channel_c));
+//        add(new DrawerAdapter.DrawerItem(ITEM_CREATE_CHANNEL, "ایجاد کانال", R.drawable.channel_c));
         add(new DrawerAdapter.DrawerItem(ITEM_CREATE_GROUP, "ایجاد گروه", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerItem(ITEM_LOGCAT, "Logcat", R.drawable.ic_action_favourite_on));
 //        add(new DrawerAdapter.DrawerItem(ITEM_SERVER, context.getString(R.string.drawer_server), R.drawable.ic_action_channels));

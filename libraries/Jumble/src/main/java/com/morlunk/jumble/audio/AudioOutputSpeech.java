@@ -17,6 +17,8 @@
 
 package com.morlunk.jumble.audio;
 
+import android.util.Log;
+
 import com.googlecode.javacpp.IntPointer;
 import com.morlunk.jumble.audio.javacpp.CELT11;
 import com.morlunk.jumble.audio.javacpp.CELT7;
@@ -382,6 +384,9 @@ public class AudioOutputSpeech implements Callable<AudioOutputSpeech.Result> {
             mAlive = alive;
             mSamples = samples;
             mNumSamples = numSamples;
+            Log.i("CHECKPOINT","Samples Length is : "+samples.length+"");
+            Log.i("CHECKPOINT","Buffer Length is : "+speechOutput.mBuffer.length+"");
+            Log.i("CHECKPOINT","Frame Size is : "+speechOutput.mFrames.size()+"");
         }
 
         public AudioOutputSpeech getSpeechOutput() {

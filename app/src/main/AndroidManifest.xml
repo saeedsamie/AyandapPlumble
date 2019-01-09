@@ -200,7 +200,7 @@
         <activity
             android:name="com.morlunk.ayandap.app.ChatActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/MyMaterialTheme" />
         <activity
             android:name="com.morlunk.ayandap.app.CreateChatActivity"
             android:theme="@style/Theme.CreateChat"

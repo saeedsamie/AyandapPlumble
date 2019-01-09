@@ -175,5 +175,18 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/m_primary</item>
+        <item name="colorPrimaryDark">@color/m_primary_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
 
 </resources>
